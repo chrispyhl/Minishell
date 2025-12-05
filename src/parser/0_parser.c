@@ -6,7 +6,14 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:34 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/05 16:38:35 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/05 17:57:14 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../includes/minishell.h"
+
+int	main(void)
+{
+	write(1, "Hello", 6);
+	return (0);
+}
