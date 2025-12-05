@@ -1,0 +1,36 @@
+part 1) execution
+- good for pipex veteran
+- build-ins (cd, ... standard functions)
+	- externals can be accessed (/bin/.../...) and do not have to be replicated
+- environment variable handling (expansions)
+	- among other tasks: isolate environmental variables to their forked child
+	--> childs inherit from parents, but not vice versa
+	--> new variable created on level 3 should not be in level 2
+- redirections (<)
+- heredoc (<<)
+- error code handling (echo $? prints last error code, similar to perror)
+
+
+part 2) parsing
+- signal handling
+- create struct list with:
+	- **char cmd (saves all commands from input, possibly connected by pipes; each string gets own string in 2d array)
+	- int type (or another numerical variable with code for type of command (buildin, external, ...))
+	- *next (link to next node until NULL)
+- expansions
+	- export var=Hello 
+	- saved in export list (cmd: export)
+	- gets created for current child
+- differentiate single quotes + double quotes
+- ctrl + D and ctrl + C handling
+
+
+general notes:
+- is a mechanic build-in or external? --> "answer via command: which [mechanic]"
+- garbage collector to circumvent memory leak minefield
+	--> custom malloc function that remembers all the allocated memories 
+	+ custom tailored freeing-function working with the collected data
+- alternative by nweber:
+	- data struct, storing everything that needs to be freed later
+- readline floods leak messages for valgrind; readline leaks always unavailable 
+	--> suppression files necessary
