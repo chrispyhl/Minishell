@@ -6,13 +6,13 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 17:38:23 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/05 18:05:58 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/08 13:59:45 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "garbage_collector.h"
 
-void	ft_malloc(size_t count, size_t size)
+void	*ft_malloc(size_t count, size_t size)
 {
 	void	*ptr;
 

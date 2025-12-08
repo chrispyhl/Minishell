@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:05:11 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/05 18:11:10 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/08 13:59:47 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,14 @@ typedef struct s_gc_list
 	t_gc_node	*tail;
 	size_t		size;	
 }				t_gc_list;
+
+// ft_malloc.c
+void	*ft_malloc(size_t count, size_t size);
+
+//	gc_utils.c
+void	gc_add(void *ptr);
+
+//	gc_libft.c
+char	*gc_itoa(int n);
 
 #endif
