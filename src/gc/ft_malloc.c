@@ -3,17 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 17:55:19 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/05 17:58:16 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/08 14:26:35 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	main(void)
-{
-	write(1, "Test", 5);
-	return (0);
-}
+
