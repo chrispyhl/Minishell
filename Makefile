@@ -6,7 +6,7 @@
 #    By: gries <gries@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/08 15:48:14 by gries            ###   ########.fr        #
+#    Updated: 2025/12/08 16:22:43 by gries            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,16 +16,20 @@ CC = cc
 CFLAGS = -Wextra -Wall -Werror -Iincludes
 RM = rm -f
 
-INC_DIR = src
-PAR_DIR = $(INC_DIR)/parser
-EXE_DIR = $(INC_DIR)/executor
-GC_DIR = $(INC_DIR)/gc
-LIBFT_DIR = libft
-OBJ_DIR = obj
+INC_DIR = src/
+PAR_DIR = $(INC_DIR)/parser/
+EXE_DIR = $(INC_DIR)/executor/
+GC_DIR = $(INC_DIR)/gc/
+LIBFT_DIR = libft/
+OBJ_DIR = obj/
 
-PAR_SRC = $(PAR_DIR)/0_parser.c
-EXE_SRC =
-GC_SRC =
+PAR_FILES = 0_parser.c
+EXE_FILES =
+GC_FILES =
+
+PAR_SRC = $(addprefix $(PAR_DIR), $(PAR_FILES))
+EXE_SRC = $(addprefix $(EXE_DIR), $(EXE_FILES))
+GC_SRC = $(addprefix $(GC+DIR), $(GC_FILES))
 
 SRC = $(PAR_SRC) $(EXE_SRC) $(GC_SRC)
 
