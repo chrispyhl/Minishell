@@ -3,13 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/05 17:55:19 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/08 14:26:35 by gries            ###   ########.fr       */
+/*   Created: 2025/12/05 17:38:23 by cpohl             #+#    #+#             */
+/*   Updated: 2025/12/08 13:59:45 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "garbage_collector.h"
 
+void	*ft_malloc(size_t count, size_t size)
+{
+	void	*ptr;
 
+	ptr = ft_calloc(count, size);
+	if (!ptr)
+		return (NULL);
+	gc_add(ptr);
+	return (ptr);
+}
