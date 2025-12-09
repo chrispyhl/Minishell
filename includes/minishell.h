@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/09 16:38:59 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/09 22:35:50 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,8 @@ typedef struct s_cmd_list
 	ssize_t				size;
 }						t_cmd_list;
 // -------------------
+
+// maybe the only parser function we need in this header
+t_cmd_list				*parser(char *input);
 
 #endif

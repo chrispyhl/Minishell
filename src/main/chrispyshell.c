@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/09 16:28:47 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/09 22:14:07 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 
 int	main(void)
 {
-	char	*input;
+	char		*input;
+	t_cmd_list	*cmd_list;
 
 	while (1)
 	{
@@ -36,9 +37,14 @@ int	main(void)
 		{
 			add_history(input);
 			// input to parser here
+			cmd_list = parser(input);
+			if (cmd_list)
+			{
 			// exit condition for potential parser failure (?)
 			// input of parsed data to executor here
 			// exit condition for potential executor failure (?)}
+			// free cmd_list
+			}
 			free(input);
 		}
 	}
