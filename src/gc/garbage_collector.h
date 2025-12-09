@@ -6,18 +6,18 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:05:11 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/09 14:30:18 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/09 16:20:58 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GARBAGE_COLLECTOR_H
 # define GARBAGE_COLLECTOR_H
 
-# include "../libft/src/libft.h"
+# include "../../libft/src/libft.h"
 
 typedef struct s_gc_node
 {
-	void				*data;
+	void				*ptr;
 	struct s_gc_node	*next;
 }						t_gc_node;
 
@@ -32,7 +32,11 @@ typedef struct s_gc_list
 void	*ft_malloc(size_t count, size_t size);
 
 //	gc_utils.c
+void	clean_up(void);
+void	get_gc(void);
+void	gc_init(void);
 void	gc_add(void *ptr);
+void	gc_free(void);
 
 //	gc_libft.c
 char	*gc_itoa(int n);
