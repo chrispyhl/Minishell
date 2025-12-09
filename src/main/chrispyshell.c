@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/09 15:17:02 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/09 16:28:47 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <stdio.h>
 
-
-// handles sigint = ctrl + D signal
+// handles sigint = ctrl + C signal
 // void signal_handler(int code)
 // {
 
@@ -28,6 +26,7 @@ int	main(void)
 	{
 		// prompt string needs to be refined (include path? newline?)
 		input = readline("chrispyshell: ");
+		// handles ctrl + D
 		if (input == NULL)
 		{
 			ft_putstr_fd("exit\n", 1);
