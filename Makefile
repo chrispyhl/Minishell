@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gries <gries@student.42.fr>                +#+  +:+       +#+         #
+#    By: craabe <craabe@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/08 16:22:43 by gries            ###   ########.fr        #
+#    Updated: 2025/12/09 11:53:07 by craabe           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,10 +44,12 @@ OBJ = $(PAR_OBJ) $(EXE_OBJ) $(GC_OBJ)
 
 all: $(NAME)
 
+# to be removed for final submission
 pars: $(LIBFT_A) $(PAR_OBJ) $(GC_OBJ)
 	@$(CC) $(CFLAGS) $(PAR_OBJ) $(GC_OBJ) $(LIBFT_A) -o pars
 	@echo "Built parser."
 
+# to be removed for final submission
 exec: $(LIBFT_A) $(EXE_OBJ) $(GC_OBJ)
 	@$(CC) $(CFLAGS) $(EXE_OBJ) $(GC_OBJ) $(LIBFT_A) -o exec
 	@echo "Built executor."
@@ -69,8 +71,9 @@ clean:
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) clean
 	@echo "Cleaned up object files."
 
+# explicit mention of pars and exec can be remoed later
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(NAME) pars exec
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) fclean
 	@echo "Cleaned up program."
 
