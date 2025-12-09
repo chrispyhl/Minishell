@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 13:49:53 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/08 14:03:31 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/09 14:23:51 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	**gc_split(char const *s, char c)
 		return (NULL);
 	if (!extract_words(s, c, god_array))
 	{
-		free (god_array) // Do I need to free here or does gc handle it???
+		free (god_array); // Do I need to free here or does gc handle it???
 		return (NULL);
 	}
 	return (god_array);

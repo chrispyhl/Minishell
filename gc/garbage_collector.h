@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:05:11 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/08 13:59:47 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/09 14:30:18 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,10 @@ void	gc_add(void *ptr);
 
 //	gc_libft.c
 char	*gc_itoa(int n);
+char	**gc_split(char const *s, char c);
+char	*gc_substr(char const *s, unsigned int start, size_t len);
+char	*gc_strdup(const char *s1);
+char	*gc_strjoin(char const *s1, char const *s2);
+
 
 #endif
