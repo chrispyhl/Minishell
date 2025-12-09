@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: craabe <craabe@student.42.fr>              +#+  +:+       +#+         #
+#    By: gries <gries@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/09 12:55:49 by craabe           ###   ########.fr        #
+#    Updated: 2025/12/09 16:37:52 by gries            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = chrispytalk
 
 CC = cc
 CFLAGS = -Wextra -Wall -Werror -Iincludes
+LDFLAGS = -lreadline
 RM = rm -f
 
 INC_DIR = src/
@@ -32,7 +33,7 @@ GC_FILES =
 MAIN_SRC = $(addprefix $(MAIN_DIR), $(MAIN_FILES))
 PAR_SRC = $(addprefix $(PAR_DIR), $(PAR_FILES))
 EXE_SRC = $(addprefix $(EXE_DIR), $(EXE_FILES))
-GC_SRC = $(addprefix $(GC+DIR), $(GC_FILES))
+GC_SRC = $(addprefix $(GC_DIR), $(GC_FILES))
 
 # SRC = $(MAIN_SRC) $(PAR_SRC) $(EXE_SRC) $(GC_SRC)
 
@@ -59,7 +60,7 @@ exec: $(LIBFT_A) $(EXE_OBJ) $(GC_OBJ)
 	@echo "Built executor."
 
 $(NAME): $(LIBFT_A) $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT_A) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT_A) $(LDFLAGS) -o $(NAME)
 	@echo "Built full program."
 
 $(LIBFT_A):
