@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   0_parser.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:34 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/05 16:38:35 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/08 15:48:37 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../includes/minishell.h"
+
+int	main(void)
+{
+	write(1, "Hello\n", 6);
+	return (0);
+}
