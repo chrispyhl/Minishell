@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/09 15:15:55 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/09 22:35:50 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,74 @@
 # define MINISHELL_H
 
 # include "../libft/src/libft.h"
-# include "./executor.h"
-# include "./parser.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>  // readline, perror
 # include <stdlib.h> // malloc, free, exit
 
+// FILE STRUCTS
+// -------------------
+// this is not part of Daniel's guide but nice to have imo
 typedef enum e_redir_mode
 {
 	NODE_INPUT,  // <
 	NODE_OUTPUT, // >
 	NODE_APPEND, // >>
 	NODE_HEREDOC // <<
-}					t_redir_mode;
+}						t_redir_mode;
 
-typedef struct s_redir
+typedef struct s_file_node
 {
-	t_redir_mode	mode;
-	char			*file;
-	struct s_redir	*next;
-}					t_redir;
-// file = file name or heredoc delimiter
+	char				*filename;
+	enum e_redir_mode	redir_type;
+	struct s_file_node	*next;
+}						t_file_node;
+/*
+filename = string with filename
+redir_type = shows what kind of operator
+next = pointer to next node
+*/
+typedef struct s_file_list
+{
+	t_file_node			*head;
+	t_file_node			*tail;
+	ssize_t				size;
+}						t_file_list;
+// -------------------
 
-typedef struct s_cmd
+// COMMAND STRUCTS
+// -------------------
+// this is not part of Daniel's guide but nice to have imo
+typedef enum e_cmd_type
 {
-	t_list			*args;
-	int arg_c;		// perhaps not necessary, might want to remove later
-	int	*redirs;
-	struct s_cmd	*next;
-}					t_cmd;
-// t_list *args needs to be converted to a string array
-// before it can be passed to executor
+	BUILDIN,
+	EXTERNAL,
+	PIPE,    // perhaps not necessary since handled by next pointers
+	REDIRECT // perhaps not necessary since handled by t_file_list/t_file_node
+}						t_cmd_type;
+
+typedef struct s_cmd_node
+{
+	enum e_cmd_type		cmd_type;
+	char				**cmd;
+	t_file_list			*files;
+	struct s_cmd_node	*next;
+}						t_cmd_node;
+/*
+cmd_type = specifies type of command
+cmd = array of strings for command arguments
+files = pointer to meta struct
+next = pointer to next node in list
+*/
+typedef struct s_cmd_list
+{
+	t_cmd_node			*head;
+	t_cmd_node			*tail;
+	ssize_t				size;
+}						t_cmd_list;
+// -------------------
+
+// maybe the only parser function we need in this header
+t_cmd_list				*parser(char *input);
 
 #endif
