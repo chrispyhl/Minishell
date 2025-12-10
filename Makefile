@@ -6,7 +6,7 @@
 #    By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/10 14:46:54 by cpohl            ###   ########.fr        #
+#    Updated: 2025/12/10 15:54:18 by cpohl            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ OBJ_DIR = obj/
 
 MAIN_FILES = chrispyshell.c
 PAR_FILES = 0_parser.c
-EXE_FILES = dummy_tester.c 0_executer.c
+EXE_FILES = dummy_tester.c 0_executer.c 1_io_handler.c
 GC_FILES =
 
 MAIN_SRC = $(addprefix $(MAIN_DIR), $(MAIN_FILES))
