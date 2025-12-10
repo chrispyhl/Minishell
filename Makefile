@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: craabe <craabe@student.42.fr>              +#+  +:+       +#+         #
+#    By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/09 12:55:49 by craabe           ###   ########.fr        #
+#    Updated: 2025/12/10 14:22:09 by cpohl            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ OBJ_DIR = obj/
 
 MAIN_FILES = chrispyshell.c
 PAR_FILES = 0_parser.c
-EXE_FILES =
+EXE_FILES = dummy_tester.c \
+			0_executer.c
 GC_FILES =
 
 MAIN_SRC = $(addprefix $(MAIN_DIR), $(MAIN_FILES))
