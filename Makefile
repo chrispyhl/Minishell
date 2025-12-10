@@ -6,7 +6,7 @@
 #    By: gries <gries@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/09 16:37:52 by gries            ###   ########.fr        #
+#    Updated: 2025/12/10 14:50:31 by gries            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ LIBFT_DIR = libft/
 OBJ_DIR = obj/
 
 MAIN_FILES = chrispyshell.c
-PAR_FILES = 0_parser.c
+PAR_FILES = 0_parser.c 1_lexer.c
 EXE_FILES =
 GC_FILES =
 
