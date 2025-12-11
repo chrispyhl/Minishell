@@ -51,3 +51,5 @@ libft/src/libft_basic/ft_strtrim.o
 libft/src/libft_basic/ft_substr.o
 libft/src/libft_basic/ft_tolower.o
 libft/src/libft_basic/ft_toupper.o
+obj/parser/0_parser.o
+obj/parser/1_lexer.o
