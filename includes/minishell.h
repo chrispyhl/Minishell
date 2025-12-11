@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/09 22:35:50 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/11 17:54:46 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/src/libft.h"
+# include "garbage_collector.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>  // readline, perror
@@ -54,7 +55,7 @@ typedef struct s_file_list
 // this is not part of Daniel's guide but nice to have imo
 typedef enum e_cmd_type
 {
-	BUILDIN,
+	BUILTIN,
 	EXTERNAL,
 	PIPE,    // perhaps not necessary since handled by next pointers
 	REDIRECT // perhaps not necessary since handled by t_file_list/t_file_node
@@ -81,7 +82,32 @@ typedef struct s_cmd_list
 }						t_cmd_list;
 // -------------------
 
+// OUR OWN STRUCTS
+// ~~~~~~~~~~~~~~~~~~~
+typedef struct s_env_node
+{
+	char				*key;
+	char				*value;
+	struct s_env_node	*next;
+}						t_env_node;
+
+typedef struct s_env_list
+{
+	t_env_node			*head;
+	t_env_node			*tail;
+	int					size;
+
+}						t_env_list;
+// ~~~~~~~~~~~~~~~~~~~
+
+// PARSER
 // maybe the only parser function we need in this header
-t_cmd_list				*parser(char *input);
+t_cmd_list				*parser(char *input, t_env_list *env_list);
+
+// ENVIRONMENTAL VARIABLES LIST
+t_env_node				*create_env_node(char *info);
+void					env_list_add_back(t_env_list *list,
+							t_env_node *new_node);
+void					free_env_list(t_env_list *env_list);
 
 #endif
