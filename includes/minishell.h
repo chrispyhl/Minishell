@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/11 14:23:36 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/11 16:29:00 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,23 @@ typedef struct s_cmd_list
 }						t_cmd_list;
 // -------------------
 
+// OUR OWN STRUCTS
+// ~~~~~~~~~~~~~~~~~~~
+typedef struct s_env_node
+{
+	char				*key;
+	char				*value;
+	struct s_env_node	*next;
+}						t_env_node;
+
+typedef struct s_env_list
+{
+	t_env_node			*head;
+	t_env_node			*tail;
+	int					size;
+
+}						t_env_list;
+// ~~~~~~~~~~~~~~~~~~~
 // maybe the only parser function we need in this header
 t_cmd_list				*parser(char *input);
 
