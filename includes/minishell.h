@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/11 16:29:00 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/11 16:33:58 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/src/libft.h"
+# include "garbage_collector.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>  // readline, perror
