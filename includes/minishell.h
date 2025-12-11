@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/11 16:33:58 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/11 17:54:46 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,15 @@ typedef struct s_env_list
 
 }						t_env_list;
 // ~~~~~~~~~~~~~~~~~~~
+
+// PARSER
 // maybe the only parser function we need in this header
-t_cmd_list				*parser(char *input);
+t_cmd_list				*parser(char *input, t_env_list *env_list);
+
+// ENVIRONMENTAL VARIABLES LIST
+t_env_node				*create_env_node(char *info);
+void					env_list_add_back(t_env_list *list,
+							t_env_node *new_node);
+void					free_env_list(t_env_list *env_list);
 
 #endif
