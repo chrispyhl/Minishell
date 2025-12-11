@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 12:47:22 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/09 16:21:05 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/11 18:26:43 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	gc_add(void *ptr)
 
 	gc = get_gc();
 	if (!gc || !ptr)
-		return (NULL);
+		return ;
 	new_node = ft_calloc(1, sizeof(t_gc_node));
 	if (!new_node)
-		return (NULL);
+		return ;
 	if (gc->head == NULL)
 	{
 		new_node->next = NULL;

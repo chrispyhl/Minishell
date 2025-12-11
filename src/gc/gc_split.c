@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gc_libft_more.c                                    :+:      :+:    :+:   */
+/*   gc_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 13:49:53 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/09 14:23:51 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/11 18:27:30 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	**gc_split(char const *s, char c)
 		return (NULL);
 	i = 0;
 	counter = 0;
-	words = word_count(*s, c);
+	words = word_count(s, c);
 	god_array = ft_malloc(sizeof(char *) * (words + 1), 1);
 	if (!god_array)
 		return (NULL);

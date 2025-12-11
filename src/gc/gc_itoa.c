@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 12:57:20 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/08 13:32:26 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/11 18:28:05 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ static unsigned int	handle_neg(int n, char *result)
 
 static char	*handle_zero(int n, char *result)
 {
-	result[0] = '0';
-	result[1] = '\0';
+	if (n == 0)
+	{
+		result[0] = '0';
+		result[1] = '\0';
+	}
 	return (result);
 }
 

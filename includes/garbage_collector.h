@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:05:11 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/11 16:17:11 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/11 18:25:22 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ typedef struct s_gc_list
 void	*ft_malloc(size_t count, size_t size);
 
 //	gc_utils.c
-void	clean_up(void);
-void	get_gc(void);
-void	gc_init(void);
-void	gc_add(void *ptr);
-void	gc_free(void);
+void		clean_up(void);
+void		gc_init(void);
+void		gc_add(void *ptr);
+void		gc_free(void);
+t_gc_list	*get_gc(void);
 
 //	gc_libft.c
 char	*gc_itoa(int n);
