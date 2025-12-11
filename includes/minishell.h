@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/09 22:35:50 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/11 14:23:36 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_file_list
 // this is not part of Daniel's guide but nice to have imo
 typedef enum e_cmd_type
 {
-	BUILDIN,
+	BUILTIN,
 	EXTERNAL,
 	PIPE,    // perhaps not necessary since handled by next pointers
 	REDIRECT // perhaps not necessary since handled by t_file_list/t_file_node
