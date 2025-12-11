@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/11 18:12:17 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/11 19:03:39 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,29 @@
 	
 // }
 
-// int	handle_echo(t_cmd_node *node)
-// {
-	
-// }
+int	handle_echo(t_cmd_node *node)
+{
+	int		i;
+	int		n;
+
+	n = 1;
+	i = 1;
+	while (node->cmd[i] && !ft_strncmp(node->cmd[i], "-n", 3))
+	{
+		n = 0;
+		i++;
+	}
+	while (node->cmd[i])
+	{
+		ft_putstr_fd(node->cmd[i], 1);
+		if (node->cmd[i + 1])
+			ft_putstr_fd(" ", 1);
+		i++;
+	}
+	if (n == 1)
+		ft_putstr_fd("\n", 1);
+	return (0);
+}
 
 int	handle_pwd(void)
 {

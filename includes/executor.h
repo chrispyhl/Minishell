@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/11 18:15:01 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/11 19:03:00 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int			handle_single_cmd(t_cmd_node *node);
 int			execute_builtin(t_cmd_node *node);
 
 
-
+int			handle_echo(t_cmd_node *node);
 int			handle_pwd(void);
 
 
