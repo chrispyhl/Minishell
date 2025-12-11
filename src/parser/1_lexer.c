@@ -2,19 +2,27 @@
 #include "../../includes/parser.h"
 
 // TODO: does not handle open quote (echo "Hello ); should it?
-static void	find_quote_end(char *seg, int *j)
+// for now, this ft prints and returns error when quote is unclosed
+static int	find_quote_end(char *seg, int *j)
 {
+	char	type;
+
+	type = seg[*j];
 	(*j)++;
-	while (seg[*j] && seg[*j] != '\"')
+	while (seg[*j] && seg[*j] != type)
 		(*j)++;
 	// increment once more so that ft_substr includes the double quote
-	if (seg[*j] == '\"')
+	if (seg[*j] == type)
 		(*j)++;
+	else
+	{
+		ft_putstr_fd("Error:\n", 2);
+		ft_putstr_fd("Quote not closed.\n", 2);
+		return (-1);
+	}
+	return (0);
 }
 
-// TODO: edge case handling for (example) echo "A"B
-// currently, it creates three nodes: echo, "A", B
-// it should create two nodes: echo, AB
 static int	handle_token_word(char *input, t_token_list **token_list, int *i)
 {
 	char			*node_content;
@@ -26,12 +34,21 @@ static int	handle_token_word(char *input, t_token_list **token_list, int *i)
 	j = 0;
 	// skip until something that does not belong to the word is encountered
 	while (seg[j] && seg[j] != '|' && seg[j] != '<' && seg[j] != '>'
-		&& seg[j] != ' ' && seg[j] != '\t' && seg[j] != '\"')
-		j++;
-	// if the loop found a double quote, we enter quote mode
-	// --> all characters are escaped up until the next
-	if (seg[j] == '\"')
-		find_quote_end(seg, &j);
+		&& seg[j] != ' ' && seg[j] != '\t')
+	{
+		// if the loop found a double/single quote, we enter quote mode
+		// --> all characters are escaped up until the next quote
+		// includes edge case handling for (example) echo "A"B
+		// --> creates two nodes: echo, "A"B
+		// --> bash would output AB --> "A"B will be refined in expander
+		if (seg[j] == '\"' || seg[j] == '\'')
+		{
+			if (find_quote_end(seg, &j) == -1)
+				return (-1);
+		}
+		else
+			j++;
+	}
 	// create a new node containing seg up until the undesired character
 	// since ft_substr copies with the condition (i < len), it stops before j
 	node_content = ft_substr(seg, 0, j);
