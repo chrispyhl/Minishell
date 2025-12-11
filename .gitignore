@@ -53,3 +53,6 @@ libft/src/libft_basic/ft_tolower.o
 libft/src/libft_basic/ft_toupper.o
 obj/parser/0_parser.o
 obj/parser/1_lexer.o
+obj/main/chrispyshell.o
+obj/parser/99_list_utils.o
+chrispytalk
