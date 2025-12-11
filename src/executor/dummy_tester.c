@@ -5,151 +5,111 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/10 15:15:13 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/10 15:18:06 by cpohl            ###   ########.fr       */
+/*   Created: 2025/12/11 13:31:42 by cpohl             #+#    #+#             */
+/*   Updated: 2025/12/11 14:32:53 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/executor.h"
 
-t_file_list	*init_file_list(void)
-{
-	t_file_list	*list;
-	list = (t_file_list *)ft_malloc(sizeof(t_file_list));
-	if (!list)
-		return (NULL);
-	list->head = NULL;
-	list->tail = NULL;
-	list->size = 0;
-	return (list);
-}
-
-t_cmd_list	*init_cmd_list(void)
+t_cmd_list	*setup_single_command_test(t_cmd_node *node)
 {
 	t_cmd_list	*list;
-	list = (t_cmd_list *)ft_malloc(sizeof(t_cmd_list));
-	if (!list)
-		return (NULL);
-	list->head = NULL;
-	list->tail = NULL;
-	list->size = 0;
-	return (list);
-}
 
-// --- NUR DIE HARDCODED BEISPIELFUNKTION ---
-
-/**
- * @brief Hardcoded Beispiel für: "cat file.c | grep include > header_use.txt"
- * * @return t_cmd_list* Die fertig aufgebaute Struktur.
- */
-t_cmd_list	*get_hardcoded_pipeline_dummy(void)
-{
-	t_cmd_list	*list;
-	t_cmd_node	*cmd1;
-	t_cmd_node	*cmd2;
-	t_file_list	*files2;
-
-	// Init der Hauptliste
-	list = init_cmd_list();
+	list = (t_cmd_list *)ft_malloc(sizeof(t_cmd_list), 1);
 	if (!list)
 		return (NULL);
 
-	// --- 1. Befehl: cat file.c ---
-	// Achtung: Wir verwenden Stack-Literale für char**. Diese NICHT free'n!
-	cmd1 = (t_cmd_node *)ft_malloc(sizeof(t_cmd_node));
-	if (!cmd1)
-		return (NULL);
-	cmd1->cmd_type = EXTERNAL;
-	cmd1->cmd = (char *[]){"cat", "file.c", NULL};
-	cmd1->files = NULL;
-	cmd1->next = NULL;
-	list->head = cmd1; // Kopf setzen
+	list->head = node;
+	list->tail = node;
 	list->size = 1;
 
-	// --- 2. Befehl: grep include > header_use.txt ---
-	// a) Redirection Liste erstellen
-	files2 = init_file_list();
-	if (!files2)
-		return (NULL);
-	t_file_node *redir_node = (t_file_node *)ft_malloc(sizeof(t_file_node));
-	if (!redir_node)
-		return (NULL);
-	redir_node->filename = "header_use.txt";
-	redir_node->redir_type = NODE_OUTPUT;
-	redir_node->next = NULL;
-	files2->head = redir_node;
-	files2->tail = redir_node;
-	files2->size = 1;
-
-	// b) Befehlsknoten erstellen
-	cmd2 = (t_cmd_node *)ft_malloc(sizeof(t_cmd_node));
-	if (!cmd2)
-		return (NULL);
-	cmd2->cmd_type = EXTERNAL;
-	cmd2->cmd = (char *[]){"grep", "include", NULL};
-	cmd2->files = files2; // Redirection anhängen
-	cmd2->next = NULL;
-	
-	// c) Verknüpfung (Pipe)
-	cmd1->next = cmd2;
-	list->tail = cmd2; // Ende setzen
-	list->size = 2;
-
 	return (list);
 }
 
-// --------------------------------------------------------------------------
+char	**duplicate_cmd_args(const char **src)
+{
+	int		i;
+	int		len;
+	char	**dest;
+
+	len = 0;
+	while (src[len])
+		len++;
+	dest = (char **)ft_malloc(sizeof(char *) * (len + 1), 1);
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = gc_strdup(src[i]);
+		if (!dest[i])
+			return (NULL);
+		i++;
+	}
+	dest[i] = NULL;
+	return (dest);
+}
+
+t_cmd_node	*create_test_node(enum e_cmd_type type, const char **args)
+{
+	t_cmd_node	*node;
+	char		**cmd_array;
+	int			i;
+
+	i = 0;
+	while (args[i])
+		i++;
+	cmd_array = (char **)ft_malloc(sizeof(char *) * (i + 1), 1);
+	if (!cmd_array)
+		return (NULL);
+	i = -1;
+	while (args[++i])
+		cmd_array[i] = gc_strdup(args[i]);
+	cmd_array[i] = NULL;
+	node->cmd_type = type;
+	node->cmd = cmd_array;
+	node->files = NULL;
+	node->next = NULL;
+	return (node);
+}
+
+void	test_case_1_external(void)
+{
+	const char	*ls_args[] = {"ls", "-l", NULL};
+	t_cmd_node	*node = create_test_node(EXTERNAL, ls_args);
+	t_cmd_list	*list = setup_single_command_test(node);
+
+	if (list)
+	{
+		printf("\n[TEST 1] Aufruf: execute_command_list(ls -l, size=1, EXTERNAL_CMD)\n");
+		// Der Aufruf, den Sie testen möchten
+		execute_command_list(list);
+	}
+}
+
+void	test_case_2_builtin(void)
+{
+	// Setup: echo hallo welt (Built-in Ausführung -> Direkter Funktionsaufruf im Parent)
+	const char	*echo_args[] = {"echo", "hallo welt", NULL};
+	t_cmd_node	*node = create_test_node(BUILDIN, echo_args);
+	t_cmd_list	*list = setup_single_command_test(node);
+
+	if (list)
+	{
+		printf("\n[TEST 2] Aufruf: execute_command_list(echo hallo welt, size=1, BUILTIN)\n");
+		// Der Aufruf, den Sie testen möchten
+		execute_command_list(list);
+	}
+}
 
 int	main(void)
 {
-	t_cmd_list	*pipeline;
-
-	printf("Starte Executor-Test mit Dummy-Pipeline: \"cat file.c | grep include > header_use.txt\"\n\n");
-
-	// Hole die hartecodierte Struktur
-	pipeline = get_hardcoded_pipeline_dummy();
-	if (!pipeline)
-		return (1);
-
-	// HIER BEGINNT DEIN EXECUTOR CODE (z.B. executor_start(pipeline); )
-	t_cmd_node *current_cmd = pipeline->head;
-	printf("Executor startet mit %zd Befehlen:\n", pipeline->size);
-
-	while (current_cmd)
-	{
-		printf("-------------------------------------------\n");
-		printf("Befehl: %s\n", current_cmd->cmd[0]);
-
-		// 1. Argumente verarbeiten:
-		// Beispiel: Den kompletten Pfad zu 'cat' oder 'grep' finden und execve vorbereiten
-		printf("  -> Auszuführendes Programm und Argumente: ");
-		int i = 0;
-		while (current_cmd->cmd[i])
-			printf("%s ", current_cmd->cmd[i++]);
-		printf("\n");
-
-		// 2. Redirections verarbeiten:
-		// Beispiel: Fd's setzen (open, dup2)
-		if (current_cmd->files)
-		{
-			t_file_node *file = current_cmd->files->head;
-			printf("  -> Redirection gefunden: %s (%s)\n", 
-				file->filename, file->redir_type == NODE_OUTPUT ? "OUTPUT >" : "UNKNOWN");
-		}
-
-		// 3. Pipe-Logik verarbeiten:
-		// Beispiel: Wenn current_cmd->next nicht NULL ist, muss ein Pipe erstellt werden.
-		if (current_cmd->next)
-			printf("  -> PIPE zur nächsten t_cmd_node erforderlich.\n");
-		else
-			printf("  -> Letzter Befehl in der Pipeline.\n");
-
-		current_cmd = current_cmd->next;
-	}
-	printf("-------------------------------------------\n");
-	
-	// HIER WÜRDEST DU DEINEN FREE CALLEN
-	// free_cmd_list(pipeline); 
-
+	gc_init();
+	printf("--- Minishell Executor Tester Start ---\n");
+	test_case_1_external();
+	test_case_2_builtin();
+	printf("--- Minishell Executor Test End ---\n");
+	gc_free();
 	return (0);
 }
