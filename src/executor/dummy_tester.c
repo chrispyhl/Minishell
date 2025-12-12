@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:31:42 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 21:25:18 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 21:53:47 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,52 @@ void test_case_6_exit(void)
     run_exit_child("exit 1 2", args5, 1);
 }
 
+void test_case_7_export(t_env_list *env)
+{
+    printf("\n[TEST 7] Testing export command\n");
+    printf("--------------------------\n");
+
+    // 1. Neue Variable anlegen: "MY_VAR=hello"
+    printf("1. Exporting 'MY_VAR=hello' ...\n");
+    const char *args1[] = {"export", "MY_VAR=hello", NULL};
+    t_cmd_list *cmd1 = setup_single_command_test(create_test_node(BUILTIN, args1));
+    execute_command_list(cmd1, env);
+    
+    // Check: Ist sie da?
+    char *val1 = get_env_value(env, "MY_VAR");
+    if (val1 && !ft_strncmp(val1, "hello", 6))
+        printf("   ✅ OK: MY_VAR ist '%s'\n", val1);
+    else
+        printf("   ❌ FAIL: MY_VAR nicht gefunden oder falsch (%s)\n", val1);
+
+    // 2. Variable überschreiben: "MY_VAR=world"
+    printf("2. Overwriting 'MY_VAR=world' ...\n");
+    const char *args2[] = {"export", "MY_VAR=world", NULL};
+    t_cmd_list *cmd2 = setup_single_command_test(create_test_node(BUILTIN, args2));
+    execute_command_list(cmd2, env);
+
+    // Check: Ist sie neu?
+    char *val2 = get_env_value(env, "MY_VAR");
+    if (val2 && !ft_strncmp(val2, "world", 6))
+        printf("   ✅ OK: MY_VAR ist jetzt '%s'\n", val2);
+    else
+        printf("   ❌ FAIL: MY_VAR wurde nicht geupdatet (%s)\n", val2);
+
+    // 3. Fehlerfall: Ungültiger Identifier "1TEST=fail"
+    printf("3. Testing invalid identifier '1TEST=fail' (Sollte Error drucken)...\n");
+    const char *args3[] = {"export", "1TEST=fail", NULL};
+    t_cmd_list *cmd3 = setup_single_command_test(create_test_node(BUILTIN, args3));
+    
+    // Hier erwarten wir Rückgabewert 1 und eine Fehlermeldung auf STDERR
+    execute_command_list(cmd3, env);
+    
+    // Check: Darf NICHT in der Liste sein
+    if (get_env_value(env, "1TEST") == NULL)
+        printf("   ✅ OK: '1TEST' wurde nicht zur Liste hinzugefügt.\n");
+    else
+        printf("   ❌ FAIL: '1TEST' wurde trotz Fehler hinzugefügt!\n");
+}
+
 int	main(void)
 {
 	t_env_list	*env_list;
@@ -271,6 +317,7 @@ int	main(void)
 	test_case_4_env();
 	test_case_5_cd(env_list);
 	test_case_6_exit();
+	test_case_7_export(env_list);
 	printf("--- Minishell Executor Test End ---\n");
 	gc_free();
 	return (0);
