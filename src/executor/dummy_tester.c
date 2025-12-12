@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:31:42 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 14:51:02 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 21:02:20 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_env_list  *create_dummy_env_list(void)
 	t_env_node 	*n1;
 	t_env_node 	*n2;
 	t_env_node 	*n3;
+	t_env_node *n4;
 
 	list = ft_malloc(sizeof(t_env_list), 1);
 	if (!list)
@@ -55,12 +56,14 @@ t_env_list  *create_dummy_env_list(void)
 	n1 = create_test_env_node("USER", "cpohl");
 	n2 = create_test_env_node("SHELL", "minishell");
 	n3 = create_test_env_node("PATH", "/bin:/usr/bin");
-
+	n4 = create_test_env_node("HOME", "/tmp");
+	
 	// Liste verknüpfen (manuell, weil wir noch keine add_back haben)
 	list->head = n1;
 	n1->next = n2;
 	n2->next = n3;
-	n3->next = NULL; // Ende der Liste
+	n3->next = n4;
+	n4->next = NULL;
 
 	list->tail = n3; // Optional, falls du tail nutzt
 	list->size = 3;
@@ -154,14 +157,49 @@ void	test_case_4_env(void)
 	execute_command_list(cmd_list, env_list);
 }
 
+void test_case_5_cd(t_env_list *env)
+{
+    printf("\n[TEST 5] Testing cd command\n");
+    printf("--------------------------\n");
+
+    // TEST A: "cd .."
+    const char *args_up[] = {"cd", "..", NULL};
+    t_cmd_list *cmd_up = setup_single_command_test(create_test_node(BUILTIN, args_up));
+
+    printf("1. Start PWD:   "); 
+    handle_pwd(); // Zeigt wo wir sind
+
+    printf("   Running 'cd ..' ...\n");
+    execute_command_list(cmd_up, env);
+
+    printf("2. PWD after:   "); 
+    handle_pwd(); // Sollte eins höher sein
+
+    printf("--------------------------\n");
+
+    // TEST B: "cd" (HOME)
+    const char *args_home[] = {"cd", NULL};
+    t_cmd_list *cmd_home = setup_single_command_test(create_test_node(BUILTIN, args_home));
+
+    printf("   Running 'cd' (to HOME=/tmp) ...\n");
+    execute_command_list(cmd_home, env);
+
+    printf("3. PWD at Home: "); 
+    handle_pwd(); // Sollte /tmp sein
+}
+
 int	main(void)
 {
+	t_env_list	*env_list;
+	
 	gc_init();
 	printf("--- Minishell Executor Tester Start ---\n");
+	env_list = create_dummy_env_list();
 	test_case_1_external();
 	test_case_2_builtin();
 	test_case_3_builtin();
 	test_case_4_env();
+	test_case_5_cd(env_list);
 	printf("--- Minishell Executor Test End ---\n");
 	gc_free();
 	return (0);

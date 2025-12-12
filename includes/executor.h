@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 14:52:17 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 21:00:42 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ int			execute_builtin(t_cmd_node *node, t_env_list *env);
 int			handle_echo(t_cmd_node *node);
 int			handle_pwd(void);
 int			handle_env(t_env_list *env);
+int			handle_cd(t_cmd_node *node, t_env_list *env);
+
+char		*get_env_value(t_env_list *env, char *key);
 
 
 #endif

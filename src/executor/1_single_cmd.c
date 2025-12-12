@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 14:33:51 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 20:43:16 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 int	execute_builtin(t_cmd_node *node, t_env_list *env)
 {
-	// if (ft_strncmp(*node->cmd, "cd", 3) == 0)
-	// 	return (handle_cd(node));
+	 if (ft_strncmp(*node->cmd, "cd", 3) == 0)
+	 	return (handle_cd(node, env));
 	if (ft_strncmp(*node->cmd, "echo", 5) == 0)
 		return (handle_echo(node));
 	if (ft_strncmp(*node->cmd, "pwd", 4) == 0)
