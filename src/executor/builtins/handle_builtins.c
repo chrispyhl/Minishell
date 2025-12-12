@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 21:53:14 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 21:59:44 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,17 @@ int	handle_export(t_cmd_node *node, t_env_list *env)
 	return (exit_status);
 }
 
-// int	handle_unset(t_cmd_node *node)
-// {
-	
-// }
+int	handle_unset(t_cmd_node *node, t_env_list *env)
+{
+	int	i;
+
+	if (!node->cmd[1])
+		return (0);
+	i = 1;
+	while (node->cmd[i])
+	{
+		remove_env_node(env, node->cmd[i]);
+		i++;
+	}
+	return (0);
+}

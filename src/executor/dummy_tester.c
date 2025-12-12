@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:31:42 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 21:53:47 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 22:00:09 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,6 +304,41 @@ void test_case_7_export(t_env_list *env)
         printf("   ❌ FAIL: '1TEST' wurde trotz Fehler hinzugefügt!\n");
 }
 
+void test_case_8_unset(t_env_list *env)
+{
+    printf("\n[TEST 8] Testing unset command\n");
+    printf("--------------------------\n");
+
+    // 1. Vorbereitung: Wir exportieren eine Variable "TO_DELETE=bye"
+    const char *args_export[] = {"export", "TO_DELETE=bye", NULL};
+    t_cmd_list *cmd_exp = setup_single_command_test(create_test_node(BUILTIN, args_export));
+    execute_command_list(cmd_exp, env);
+
+    // Check, ob sie da ist
+    if (get_env_value(env, "TO_DELETE"))
+        printf("   (Setup) Variable TO_DELETE erstellt.\n");
+
+    // 2. Löschen: "unset TO_DELETE"
+    printf("1. Running 'unset TO_DELETE' ...\n");
+    const char *args_unset[] = {"unset", "TO_DELETE", NULL};
+    t_cmd_list *cmd_unset = setup_single_command_test(create_test_node(BUILTIN, args_unset));
+    execute_command_list(cmd_unset, env);
+
+    // 3. Beweis: Suche sie nochmal
+    char *val = get_env_value(env, "TO_DELETE");
+    if (val == NULL)
+        printf("   ✅ OK: Variable ist weg.\n");
+    else
+        printf("   ❌ FAIL: Variable ist immer noch da: %s\n", val);
+
+    // 4. Test: Löschen von etwas, das nicht existiert (sollte nicht crashen)
+    printf("2. Running 'unset GIBTS_NICHT' (Should do nothing) ...\n");
+    const char *args_void[] = {"unset", "GIBTS_NICHT", NULL};
+    t_cmd_list *cmd_void = setup_single_command_test(create_test_node(BUILTIN, args_void));
+    execute_command_list(cmd_void, env);
+    printf("   ✅ OK: Kein Crash.\n");
+}
+
 int	main(void)
 {
 	t_env_list	*env_list;
@@ -318,6 +353,7 @@ int	main(void)
 	test_case_5_cd(env_list);
 	test_case_6_exit();
 	test_case_7_export(env_list);
+	test_case_8_unset(env_list);
 	printf("--- Minishell Executor Test End ---\n");
 	gc_free();
 	return (0);
