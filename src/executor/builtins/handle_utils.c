@@ -6,11 +6,11 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:17:16 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 20:57:48 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 21:28:22 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
+#include "../../../includes/executor.h"
 
 char	*get_env_value(t_env_list *env, char *key)
 {
@@ -28,4 +28,39 @@ char	*get_env_value(t_env_list *env, char *key)
 		current = current->next;
 	}
 	return (NULL);
+}
+
+int	is_valid_env_key(char *key)
+{
+	int	i;
+	
+	i = 0;
+	if (!ft_isalpha(key[i]) && key[i] != '_')
+	return (0);
+i++;
+while (key[i])
+{
+	if (!ft_isalnum(key[i]) && key[i] != '_')
+	return (0);
+i++;
+}	
+return (1);
+}
+
+int	is_numeric(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	if (!str[i])
+		return (0);
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }

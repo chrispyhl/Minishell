@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:31:42 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 21:02:20 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 21:25:18 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,49 @@ t_cmd_node	*create_test_node(enum e_cmd_type type, const char **args)
 	node->files = NULL;
 	node->next = NULL;
 	return (node);
+}
+
+// Hilfsfunktion: Führt einen Exit-Test in einem Kind-Prozess aus
+void run_exit_child(char *desc, const char **args, int expected_code)
+{
+    pid_t       pid;
+    int         status;
+    t_cmd_list  *list;
+    int         ret;
+
+    printf("   Test: %-30s -> ", desc);
+    
+    pid = fork();
+    if (pid == 0) 
+    {
+        // --- KIND PROZESS ---
+        // Wir erstellen hier den Befehl
+        list = setup_single_command_test(create_test_node(BUILTIN, args));
+        
+        // Wir rufen handle_exit auf (das sollte eigentlich das Programm beenden)
+        // Achtung: Wir übergeben NULL als env, da exit es nicht braucht
+        ret = handle_exit(list->head);
+        
+        // Falls handle_exit NICHT beendet (z.B. bei "too many args"),
+        // beenden wir den Kindprozess manuell mit dem Rückgabewert.
+        exit(ret); 
+    }
+    
+    // --- ELTERN PROZESS ---
+    waitpid(pid, &status, 0); // Warten bis Kind tot ist
+
+    if (WIFEXITED(status))
+    {
+        int actual_code = WEXITSTATUS(status);
+        if (actual_code == expected_code)
+            printf("✅ OK (Code: %d)\n", actual_code);
+        else
+            printf("❌ FAIL (Erwartet: %d, Bekommen: %d)\n", expected_code, actual_code);
+    }
+    else
+    {
+        printf("⚠️ CRASH (Segfault o.ä.)\n");
+    }
 }
 
 void	test_case_1_external(void)
@@ -188,6 +231,33 @@ void test_case_5_cd(t_env_list *env)
     handle_pwd(); // Sollte /tmp sein
 }
 
+void test_case_6_exit(void)
+{
+    printf("\n[TEST 6] Testing exit command (mit fork)\n");
+    printf("----------------------------------------\n");
+
+    // 1. Normaler Exit
+    const char *args1[] = {"exit", NULL};
+    run_exit_child("exit (no args)", args1, 0);
+
+    // 2. Exit mit Code
+    const char *args2[] = {"exit", "42", NULL};
+    run_exit_child("exit 42", args2, 42);
+
+    // 3. Exit mit Modulo (300 % 256 = 44)
+    const char *args3[] = {"exit", "300", NULL};
+    run_exit_child("exit 300", args3, 44);
+
+    // 4. Nicht-Numerisch (soll 255 sein + Fehlermeldung)
+    const char *args4[] = {"exit", "hello", NULL};
+    run_exit_child("exit hello", args4, 255);
+
+    // 5. Zu viele Argumente (soll NICHT exit machen, sondern return 1)
+    // Da unser Kind-Wrapper bei return manuell exited, erwarten wir Code 1
+    const char *args5[] = {"exit", "1", "2", NULL};
+    run_exit_child("exit 1 2", args5, 1);
+}
+
 int	main(void)
 {
 	t_env_list	*env_list;
@@ -200,6 +270,7 @@ int	main(void)
 	test_case_3_builtin();
 	test_case_4_env();
 	test_case_5_cd(env_list);
+	test_case_6_exit();
 	printf("--- Minishell Executor Test End ---\n");
 	gc_free();
 	return (0);

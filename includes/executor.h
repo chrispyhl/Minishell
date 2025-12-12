@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 21:00:42 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 21:28:12 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ int			handle_echo(t_cmd_node *node);
 int			handle_pwd(void);
 int			handle_env(t_env_list *env);
 int			handle_cd(t_cmd_node *node, t_env_list *env);
+int			handle_exit(t_cmd_node *node);
 
 char		*get_env_value(t_env_list *env, char *key);
-
+int			is_valid_env_key(char *key);
+int			is_numeric(char *str);
 
 #endif
