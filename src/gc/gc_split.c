@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 13:49:53 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/11 18:27:30 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/12 14:42:03 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,10 @@ static int	extract_words(const char *s, char c, char **god)
 char	**gc_split(char const *s, char c)
 {
 	char	**god_array;
-	size_t	i;
-	size_t	counter;
 	size_t	words;
 
 	if (!s)
 		return (NULL);
-	i = 0;
-	counter = 0;
 	words = word_count(s, c);
 	god_array = ft_malloc(sizeof(char *) * (words + 1), 1);
 	if (!god_array)
