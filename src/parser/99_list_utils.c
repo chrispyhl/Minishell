@@ -33,3 +33,19 @@ void	token_list_add_back(t_token_list **head, t_token_list *new_node)
 		new_node->prev = current;
 	}
 }
+
+void	free_token_list(t_token_list *token_list)
+{
+	t_token_list	*temp;
+
+	if (!token_list)
+		return ;
+	while (token_list)
+	{
+		temp = token_list->next;
+		if (token_list->token)
+			free(token_list->token);
+		free(token_list);
+		token_list = temp;
+	}
+}
