@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_lexer.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:37:01 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/11 16:37:02 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/15 08:59:54 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,6 @@
 
 // TODO: does not handle open quote (echo "Hello ); should it?
 // for now, this ft prints and returns error when quote is unclosed
-static int	find_quote_end(char *seg, int *j)
-{
-	char	type;
-
-	type = seg[*j];
-	(*j)++;
-	while (seg[*j] && seg[*j] != type)
-		(*j)++;
-	// increment once more so that ft_substr includes the double quote
-	if (seg[*j] == type)
-		(*j)++;
-	else
-	{
-		ft_putstr_fd("Error:\n", 2);
-		ft_putstr_fd("Quote not closed.\n", 2);
-		return (-1);
-	}
-	return (0);
-}
 
 static int	handle_token_word(char *input, t_token_list **token_list, int *i)
 {
@@ -96,34 +77,6 @@ static int	handle_token_pipe(t_token_list **token_list, int *i)
 	}
 	(*i)++;
 	token_list_add_back(token_list, new_node);
-	return (0);
-}
-
-static int	create_redir_node_content(char *seg, char **node_content,
-		t_token_type *redir_type)
-{
-	if (seg[0] == '<' && seg[1] == '<')
-	{
-		*node_content = ft_strdup("<<");
-		*redir_type = T_HEREDOC;
-	}
-	else if (seg[0] == '>' && seg[1] == '>')
-	{
-		*node_content = ft_strdup(">>");
-		*redir_type = T_REDIR_APP;
-	}
-	else if (seg[0] == '<')
-	{
-		*node_content = ft_strdup("<");
-		*redir_type = T_REDIR_IN;
-	}
-	else if (seg[0] == '>')
-	{
-		*node_content = ft_strdup(">");
-		*redir_type = T_REDIR_OUT;
-	}
-	if ((!*node_content))
-		return (-1);
 	return (0);
 }
 

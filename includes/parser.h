@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/11 11:41:49 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/15 08:55:58 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,10 @@ t_token_list			*create_token_node(char *content,
 							enum e_token_type type);
 void					token_list_add_back(t_token_list **head,
 							t_token_list *new_node);
+
+// lexer util
+int						find_quote_end(char *seg, int *j);
+int						create_redir_node_content(char *seg,
+							char **node_content, t_token_type *redir_type);
 
 #endif
