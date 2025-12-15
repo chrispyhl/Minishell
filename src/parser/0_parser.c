@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:34 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/15 08:57:56 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/15 09:48:04 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ t_cmd_list	*parser(char *input, t_env_list *env_list)
 	(void)input;
 	cmd_list = NULL;
 	token_list = lexer(input);
-	(void)token_list;
-	(void)env_list;
-	// call expander with token_list and env_list here!
+	if (!token_list)
+		return (NULL); // TODO: additional error handling required
+	if (expander(token_list, env_list) == -1)
+		return (NULL); // TODO: additional error handling required
 	ft_putstr_fd("parser called successfully\n", 1);
 	return (cmd_list);
 }
