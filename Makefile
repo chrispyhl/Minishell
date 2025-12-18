@@ -6,7 +6,7 @@
 #    By: gries <gries@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/15 08:58:38 by gries            ###   ########.fr        #
+#    Updated: 2025/12/18 17:16:34 by gries            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,8 @@ GC_DIR = $(INC_DIR)/gc/
 LIBFT_DIR = libft/
 OBJ_DIR = obj/
 
-MAIN_FILES = chrispyshell.c env_list_utils.c
-PAR_FILES = 0_parser.c 1_lexer.c 2_expander.c 98_lexer_utils.c 99_list_utils.c
+MAIN_FILES = chrispyshell.c cmd_utils.c env_list_utils.c general_utils.c
+PAR_FILES = 0_parser.c 1_lexer.c 2_expander.c 3_cmd_list.c 98_lexer_utils.c 99_list_utils.c
 EXE_FILES =
 GC_FILES =
 
