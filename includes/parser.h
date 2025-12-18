@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/15 10:53:21 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/18 12:14:06 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,8 @@ t_token_list			*create_token_node(char *content,
 void					token_list_add_back(t_token_list **head,
 							t_token_list *new_node);
 void					free_token_list(t_token_list *token_list);
+
+// cmd list creation
+t_cmd_list				*create_cmd_list(t_token_list *token_list);
 
 #endif
