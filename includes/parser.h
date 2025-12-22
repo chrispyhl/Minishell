@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/18 12:14:06 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/22 16:21:08 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,15 @@ int						expander(t_token_list *token_list,
 int						find_quote_end(char *seg, int *j);
 int						create_redir_node_content(char *seg,
 							char **node_content, t_token_type *redir_type);
+
+// expander util
+char					*find_env_value(t_env_list *env_list, char *token,
+							int len);
+int						get_key_len(char *token);
+int						insert_value(t_token_list *current, char *key_pt,
+							char *value, int key_len);
+int						process_token(t_token_list *current,
+							t_env_list *env_list, int *i);
 
 // token list util
 t_token_list			*create_token_node(char *content,
