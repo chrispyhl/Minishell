@@ -25,13 +25,16 @@ int	get_key_len(char *token)
 	int	i;
 
 	i = 1; // start at 1 to skip $
+	// edge cases $? and $1, $2, $3 ...
+	if (token[i] == '?' || ft_isdigit(token[i]) == 1)
+		return (1);
+	// aside from ?, envars consist of num. and alph. chars
 	while (ft_isalnum(token[i]) == 1 || token[i] == '_')
 		i++;
 	return (i - 1); // -1 since we do not want to include null term
 }
 
-int	insert_value(t_token_list *current, char *key_pt, char *value,
-		int key_len)
+int	insert_value(t_token_list *current, char *key_pt, char *value, int key_len)
 {
 	char	*affix;
 	char	*pre_val;
@@ -60,22 +63,17 @@ int	insert_value(t_token_list *current, char *key_pt, char *value,
 	return (0);
 }
 
-int	process_token(t_token_list *current, t_env_list *env_list, int *i)
+int	expand_token(t_token_list *current, t_env_list *env_list, int *i)
 {
 	char	*value;
 	int		key_len;
 
-	if (current->token[*i] == '$')
-	{
-		key_len = get_key_len(&current->token[*i]);
-		value = find_env_value(env_list, &current->token[*i] + 1, key_len);
-		if (!value)
-			value = "";
-		if (insert_value(current, &current->token[*i], value, key_len) == -1)
-			return (-1);
-		*i += ft_strlen(value);
-	}
-	else
-		(*i)++;
+	key_len = get_key_len(&current->token[*i]);
+	value = find_env_value(env_list, &current->token[*i] + 1, key_len);
+	if (!value)
+		value = "";
+	if (insert_value(current, &current->token[*i], value, key_len) == -1)
+		return (-1);
+	*i += ft_strlen(value);
 	return (0);
 }
