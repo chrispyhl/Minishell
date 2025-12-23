@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_utils.c                                     :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:17:16 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 21:52:23 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/23 20:46:24 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,30 +29,11 @@ char	*get_env_value(t_env_list *env, char *key)
 	}
 	return (NULL);
 }
-
-int	is_valid_env_key(char *key)
-{
-	int	i;
-	
-	i = 0;
-	if (!ft_isalpha(key[i]) && key[i] != '_')
-	return (0);
-i++;
-while (key[i])
-{
-	if (!ft_isalnum(key[i]) && key[i] != '_')
-	return (0);
-i++;
-}	
-return (1);
-}
-
 void	env_add_back(t_env_list *env, char *key, char *value)
 {
-	t_env_node *new_node;
-	t_env_node *current;
-	
-	new_node = ft_malloc(sizeof(t_env_node), 1);
+	t_env_node	*new_node;
+
+	new_node = ft_malloc(1, sizeof(t_env_node));
 	if (!new_node)
 		return ;
 	new_node->key = key;
@@ -65,77 +46,52 @@ void	env_add_back(t_env_list *env, char *key, char *value)
 	}
 	else
 	{
-		if (env->tail)
-		{
-			env->tail->next = new_node;
-			env->tail = new_node;
-		}
-		else
-		{
-			current = env->head;
-			while (current->next)
-				current = current->next;
-			current->next = new_node;
-		}
+		env->tail->next = new_node;
+		env->tail = new_node;
 	}
 	env->size++;
 }
 
-int	process_export_arg(t_env_list *env, char *arg)
+void	remove_env_node(t_env_list *env, char *key)
 {
-	char		*key;
-	char		*value;
-	char		*equals_pos;
-	size_t		key_len;
 	t_env_node	*current;
+	t_env_node	*prev;
+	size_t		len;
 
-	equals_pos = ft_strchr(arg, '=');
-	if (equals_pos)
-	{
-		key_len = equals_pos - arg;
-		key = ft_malloc(key_len + 1, 1);
-		ft_strlcpy(key, arg, key_len + 1);
-		value = gc_strdup(equals_pos + 1);
-	}
-	else
-	{
-		key = gc_strdup(arg);
-		value = NULL;
-	}
-	if (!is_valid_env_key(key))
-	{
-		ft_putstr_fd("minishell: export: ", 2);
-		ft_putstr_fd(arg, 2);
-		ft_putstr_fd(" - is not a valid identifier\n", 2);
-		return (1);
-	}
+	if (!env || !env->head || !key)
+		return ;
 	current = env->head;
+	prev = NULL;
+	len = ft_strlen(key);
 	while (current)
 	{
-		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
+		if (ft_strncmp(current->key, key, len + 1) == 0)
 		{
-			if (value != NULL)
-				current->value = value;
-			return (0);
+			if (prev == NULL)
+				env->head = current->next;
+			else
+				prev->next = current->next;
+			if (current == env->tail)
+				env->tail = prev;
+			env->size--;
+			return ;
 		}
+		prev = current;
 		current = current->next;
 	}
-	env_add_back(env, key, value);
-	return (0);
 }
 
-int	is_numeric(char *str)
+int	is_valid_env_key(char *key)
 {
 	int	i;
 
 	i = 0;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	if (!str[i])
+	if (!ft_isalpha(key[i]) && key[i] != '_')
 		return (0);
-	while (str[i])
+	i++;
+	while (key[i])
 	{
-		if (!ft_isdigit(str[i]))
+		if (!ft_isalnum(key[i]) && key[i] != '_')
 			return (0);
 		i++;
 	}

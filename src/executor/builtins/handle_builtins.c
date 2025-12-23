@@ -6,12 +6,11 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 21:59:44 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/23 19:04:13 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/executor.h"
-#include <limits.h>
 
 int	handle_cd(t_cmd_node *node, t_env_list *env)
 {
