@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 22:01:14 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/23 20:41:37 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,15 @@ t_env_node	*create_test_env_node(char *key, char *value);
 t_env_list  *create_dummy_env_list(void);
 t_cmd_list	*setup_single_command_test(t_cmd_node *node);
 
+// EXECUTOR CORE
 
 int			execute_command_list(t_cmd_list *list, t_env_list *env);
 
 int			handle_single_cmd(t_cmd_node *node, t_env_list *env);
 int			execute_builtin(t_cmd_node *node, t_env_list *env);
+int			execute_external(t_cmd_node *node, t_env_list *env);
 
+// BUILTINS
 
 int			handle_echo(t_cmd_node *node);
 int			handle_pwd(void);
@@ -42,11 +45,28 @@ int			handle_exit(t_cmd_node *node);
 int			handle_export(t_cmd_node *node, t_env_list *env);
 int			handle_unset(t_cmd_node *node, t_env_list *env);
 
+// EXTERNALS
+
+int			handle_external_cmd(t_cmd_node *node, t_env_list *env);
+
+// ENV UTILITIES
+
 char		*get_env_value(t_env_list *env, char *key);
-int			is_valid_env_key(char *key);
 void		env_add_back(t_env_list *env, char *key, char *value);
+void 		remove_env_node(t_env_list *env, char *key);
+int			is_valid_env_key(char *key);
+char		**env_list_to_array(t_env_list *env);
+
+
+// EXTERNAL UTILITIES
+char		*get_cmd_path(char *cmd, t_env_list *env);
+
+// OTHER UTILITIES
+
 int			process_export_arg(t_env_list *env, char *arg);
 int			is_numeric(char *str);
-void 		remove_env_node(t_env_list *env, char *key);
+int			err_msg(char *cmd, char *msg, int status);
+int			get_exit_status(int status);
+
 
 #endif
