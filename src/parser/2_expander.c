@@ -6,14 +6,11 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/24 13:48:26 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/24 13:49:23 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
-
-// small helper ft to avoid clutter in if statement in expander ft
-
 
 static t_expander_state	get_state(char letter, t_expander_state mode_curr)
 {

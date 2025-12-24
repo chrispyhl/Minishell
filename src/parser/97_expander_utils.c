@@ -78,6 +78,7 @@ int	expand_token(t_token_list *current, t_env_list *env_list, int *i)
 	return (0);
 }
 
+// small helper ft to avoid clutter in if statement in expander ft
 int	check_var_start(char c)
 {
 	if (ft_isalnum(c) == 1 || c == '_' || c == '?')
