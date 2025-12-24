@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/24 14:34:21 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/24 15:39:47 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ typedef struct s_env_list
 {
 	t_env_node			*head;
 	t_env_node			*tail;
-	int					size;
+	ssize_t				size;
 
 }						t_env_list;
 // ~~~~~~~~~~~~~~~~~~~
