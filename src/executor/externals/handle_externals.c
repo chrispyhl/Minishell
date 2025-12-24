@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:19:44 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/23 20:48:08 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/24 12:52:14 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,5 @@ int	handle_external_cmd(t_cmd_node *node, t_env_list *env)
 	if (pid == 0)
 		child_process(path, node, env);
 	waitpid(pid, &status, 0);
-	gc_free();
 	return (get_exit_status(status));
 }

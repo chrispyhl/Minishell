@@ -6,17 +6,11 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 13:49:53 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 14:42:03 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/24 12:46:53 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "garbage_collector.h"
-
-static void	cleanup_on_error(char **god, size_t i)
-{
-	while (i > 0)
-		free(god[--i]);
-}
 
 static size_t	word_count(const char *s, char c)
 {
@@ -78,10 +72,7 @@ static int	extract_words(const char *s, char c, char **god)
 			counter++;
 		god[i] = create_word(s, start, counter - start);
 		if (!god[i])
-		{
-			cleanup_on_error(god, i);
 			return (0);
-		}
 		i++;
 	}
 	god[i] = NULL;
@@ -100,9 +91,6 @@ char	**gc_split(char const *s, char c)
 	if (!god_array)
 		return (NULL);
 	if (!extract_words(s, c, god_array))
-	{
-		free (god_array); // Do I need to free here or does gc handle it???
 		return (NULL);
-	}
 	return (god_array);
 }

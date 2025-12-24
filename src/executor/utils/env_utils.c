@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:17:16 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/23 20:46:24 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/24 12:31:17 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	env_add_back(t_env_list *env, char *key, char *value)
 	new_node = ft_malloc(1, sizeof(t_env_node));
 	if (!new_node)
 		return ;
-	new_node->key = key;
-	new_node->value = value;
+	new_node->key = gc_strdup(key);
+	new_node->value = gc_strdup(value);
 	new_node->next = NULL;
 	if (!env->head)
 	{
@@ -51,33 +51,37 @@ void	env_add_back(t_env_list *env, char *key, char *value)
 	}
 	env->size++;
 }
+static void	unlink_env_node(t_env_list *env, t_env_node *curr, t_env_node *prev)
+{
+	if (!prev)
+		env->head = curr->next;
+	else
+		prev->next = curr->next;
+	if (curr == env->tail)
+		env->tail = prev;
+	env->size--;
+}
 
 void	remove_env_node(t_env_list *env, char *key)
 {
-	t_env_node	*current;
+	t_env_node	*curr;
 	t_env_node	*prev;
 	size_t		len;
 
 	if (!env || !env->head || !key)
 		return ;
-	current = env->head;
+	curr = env->head;
 	prev = NULL;
 	len = ft_strlen(key);
-	while (current)
+	while (curr)
 	{
-		if (ft_strncmp(current->key, key, len + 1) == 0)
+		if (ft_strncmp(curr->key, key, len + 1) == 0)
 		{
-			if (prev == NULL)
-				env->head = current->next;
-			else
-				prev->next = current->next;
-			if (current == env->tail)
-				env->tail = prev;
-			env->size--;
+			unlink_env_node(env, curr, prev);
 			return ;
 		}
-		prev = current;
-		current = current->next;
+		prev = curr;
+		curr = curr->next;
 	}
 }
 
