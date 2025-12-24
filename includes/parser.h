@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/22 16:51:21 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/24 13:48:33 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,13 @@ char					*find_env_value(t_env_list *env_list, char *token,
 int						get_key_len(char *token);
 int						insert_value(t_token_list *current, char *key_pt,
 							char *value, int key_len);
-int	expand_token(t_token_list *current, t_env_list *env_list, int *i);
+int						expand_token(t_token_list *current,
+							t_env_list *env_list, int *i);
+int						check_var_start(char c);
 
-	// token list util
-	t_token_list *create_token_node(char *content, enum e_token_type type);
+// token list util
+t_token_list			*create_token_node(char *content,
+							enum e_token_type type);
 void					token_list_add_back(t_token_list **head,
 							t_token_list *new_node);
 void					free_token_list(t_token_list *token_list);

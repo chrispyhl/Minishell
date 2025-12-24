@@ -6,19 +6,14 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/23 15:18:00 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/24 13:48:26 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 
 // small helper ft to avoid clutter in if statement in expander ft
-static int	check_var_start(char c)
-{
-	if (ft_isalnum(c) == 1 || c == '_' || c == '?')
-		return (1);
-	return (0);
-}
+
 
 static t_expander_state	get_state(char letter, t_expander_state mode_curr)
 {
