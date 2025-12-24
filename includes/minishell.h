@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/18 12:54:51 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/24 14:34:21 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@
 // FILE STRUCTS
 // -------------------
 // this is not part of Daniel's guide but nice to have imo
-typedef enum e_redir_mode
+typedef enum e_redir_type
 {
 	NODE_INPUT,  // <
 	NODE_OUTPUT, // >
 	NODE_APPEND, // >>
 	NODE_HEREDOC // <<
-}						t_redir_mode;
+}						t_redir_type;
 
 typedef struct s_file_node
 {
 	char				*filename;
-	enum e_redir_mode	redir_type;
+	enum e_redir_type	redir_type;
 	struct s_file_node	*next;
 }						t_file_node;
 /*
