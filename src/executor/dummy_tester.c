@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:31:42 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 22:00:09 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/24 12:48:04 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void run_exit_child(char *desc, const char **args, int expected_code)
     }
 }
 
-void	test_case_1_external(void)
+void	test_case_1_external(t_env_list *env)
 {
 	const char	*ls_args[] = {"ls", "-l", NULL};
 	t_cmd_node	*node = create_test_node(EXTERNAL, ls_args);
@@ -148,7 +148,7 @@ void	test_case_1_external(void)
 	{
 		printf("\n[TEST 1] Aufruf: execute_command_list(ls -l, size=1, EXTERNAL_CMD)\n");
 		// Der Aufruf, den Sie testen möchten
-		execute_command_list(list, NULL);
+		execute_command_list(list, env);
 	}
 }
 
@@ -346,7 +346,7 @@ int	main(void)
 	gc_init();
 	printf("--- Minishell Executor Tester Start ---\n");
 	env_list = create_dummy_env_list();
-	test_case_1_external();
+	test_case_1_external(env_list);
 	test_case_2_builtin();
 	test_case_3_builtin();
 	test_case_4_env();
@@ -355,6 +355,6 @@ int	main(void)
 	test_case_7_export(env_list);
 	test_case_8_unset(env_list);
 	printf("--- Minishell Executor Test End ---\n");
-	gc_free();
+	clean_up();
 	return (0);
 }
