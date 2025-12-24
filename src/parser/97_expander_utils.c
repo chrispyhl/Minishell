@@ -2,7 +2,7 @@
 
 #include "../../includes/parser.h"
 
-// helper is needed to find the value corresponding to the key in the token_list
+// helper is needed to find the value corresponding to the key in the token_node
 char	*find_env_value(t_env_list *env_list, char *token, int len)
 {
 	t_env_node	*current;
@@ -34,7 +34,7 @@ int	get_key_len(char *token)
 	return (i - 1); // -1 since we do not want to include null term
 }
 
-int	insert_value(t_token_list *current, char *key_pt, char *value, int key_len)
+int	insert_value(t_token_node *current, char *key_pt, char *value, int key_len)
 {
 	char	*affix;
 	char	*pre_val;
@@ -63,7 +63,7 @@ int	insert_value(t_token_list *current, char *key_pt, char *value, int key_len)
 	return (0);
 }
 
-int	expand_token(t_token_list *current, t_env_list *env_list, int *i)
+int	expand_token(t_token_node *current, t_env_list *env_list, int *i)
 {
 	char	*value;
 	int		key_len;

@@ -1,14 +1,14 @@
 
 #include "../../includes/parser.h"
 
-static char	**tokens_to_array(t_token_list *token_list)
+static char	**tokens_to_array(t_token_node *token_node)
 {
-	t_token_list	*current;
+	t_token_node	*current;
 	ssize_t			node_nbr;
 	int				i;
 	char			**cmds;
 
-	current = token_list;
+	current = token_node;
 	node_nbr = 0;
 	while (current && current->token_type != T_PIPE)
 	{
@@ -20,7 +20,7 @@ static char	**tokens_to_array(t_token_list *token_list)
 	if (!cmds)
 		// TODO: implement gc!
 		return (NULL);
-	current = token_list;
+	current = token_node;
 	while (current && current->token_type != T_PIPE)
 	{
 		cmds[i] = ft_strdup(current->token);
@@ -38,14 +38,14 @@ static char	**tokens_to_array(t_token_list *token_list)
 
 // TODO: does not handle redirs/heredoc and files etc. yet
 // TODO: gc implementation!
-t_cmd_list	*create_cmd_list(t_token_list *token_list)
+t_cmd_list	*create_cmd_list(t_token_node *token_node)
 {
 	char			**cmds;
 	t_cmd_list		*cmd_list;
 	t_cmd_node		*cmd_node;
-	t_token_list	*current;
+	t_token_node	*current;
 
-	current = token_list;
+	current = token_node;
 	cmd_list = malloc(sizeof(t_cmd_list));
 	cmd_list->head = NULL;
 	cmd_list->tail = NULL;

@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:37:01 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/15 08:59:54 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/24 15:02:53 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 // TODO: does not handle open quote (echo "Hello ); should it?
 // for now, this ft prints and returns error when quote is unclosed
 
-static int	handle_token_word(char *input, t_token_list **token_list, int *i)
+static int	handle_token_word(char *input, t_token_node **token_node, int *i)
 {
 	char			*node_content;
 	int				j;
-	t_token_list	*new_node;
+	t_token_node	*new_node;
 	char			*seg;
 
 	seg = input + *i; // seg = segment of the string, starting from index i
@@ -57,14 +57,14 @@ static int	handle_token_word(char *input, t_token_list **token_list, int *i)
 	// i gets incremeted by j so the lexer ft continues after the word
 	*i += j;
 	// the node gets added to the master list
-	token_list_add_back(token_list, new_node);
+	token_node_add_back(token_node, new_node);
 	return (0);
 }
 
-static int	handle_token_pipe(t_token_list **token_list, int *i)
+static int	handle_token_pipe(t_token_node **token_node, int *i)
 {
 	char			*node_content;
-	t_token_list	*new_node;
+	t_token_node	*new_node;
 
 	node_content = ft_strdup("|");
 	if (!node_content)
@@ -76,14 +76,14 @@ static int	handle_token_pipe(t_token_list **token_list, int *i)
 		return (-1);
 	}
 	(*i)++;
-	token_list_add_back(token_list, new_node);
+	token_node_add_back(token_node, new_node);
 	return (0);
 }
 
-static int	handle_token_redir(char *input, t_token_list **token_list, int *i)
+static int	handle_token_redir(char *input, t_token_node **token_node, int *i)
 {
 	char			*node_content;
-	t_token_list	*new_node;
+	t_token_node	*new_node;
 	char			*seg;
 	t_token_type	redir_type;
 
@@ -98,7 +98,7 @@ static int	handle_token_redir(char *input, t_token_list **token_list, int *i)
 		return (-1);
 	}
 	(*i) += ft_strlen(node_content);
-	token_list_add_back(token_list, new_node);
+	token_node_add_back(token_node, new_node);
 	return (0);
 }
 
@@ -107,13 +107,13 @@ this function is supposed to split the input string into tokens and return a lis
 tokens = categorized (word, pipe, redir) constituents of the original string
 --> enables parser and later executor to work with categorized user input instead of having to intepret everything --> later processes will know what to do with input snippets based on assigned categories
 */
-t_token_list	*lexer(char *input)
+t_token_node	*lexer(char *input)
 {
 	int				i;
-	t_token_list	*token_list;
+	t_token_node	*token_node;
 
 	i = 0;
-	token_list = NULL;
+	token_node = NULL;
 	while (input[i])
 	{
 		// skip whitespaces
@@ -121,28 +121,28 @@ t_token_list	*lexer(char *input)
 			i++;
 		// catch redirs
 		if (input[i] == '<' || input[i] == '>')
-		// this helper function populates token_list and increments i
+		// this helper function populates token_node and increments i
 		{
-			if (handle_token_redir(input, &token_list, &i) == -1)
+			if (handle_token_redir(input, &token_node, &i) == -1)
 				// TODO: CLEANUP NECESSARY HERE OR IN MAIN FT! (GC?)
 				return (NULL);
 		}
 		// catch pipes
 		else if (input[i] == '|')
 		{
-			// this helper function populates token_list and increments i
-			if (handle_token_pipe(&token_list, &i) == -1)
+			// this helper function populates token_node and increments i
+			if (handle_token_pipe(&token_node, &i) == -1)
 				// TODO: CLEANUP NECESSARY HERE OR IN MAIN FT! (GC?)
 				return (NULL);
 		}
 		// catch everything else
 		else if (input[i] != '\0')
 		{
-			// this helper function populates token_list and increments i
-			if (handle_token_word(input, &token_list, &i) == -1)
+			// this helper function populates token_node and increments i
+			if (handle_token_word(input, &token_node, &i) == -1)
 				// TODO: CLEANUP NECESSARY HERE OR IN MAIN FT! (GC?)
 				return (NULL);
 		}
 	}
-	return (token_list);
+	return (token_node);
 }

@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/24 13:48:33 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/24 15:02:52 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ typedef enum e_token_type
 	T_HEREDOC    // <<
 }						t_token_type;
 
-typedef struct s_token_list
+typedef struct s_token_node
 {
 	char				*token;
 	enum e_token_type	token_type;
-	struct s_token_list	*next;
-	struct s_token_list	*prev;
-}						t_token_list;
+	struct s_token_node	*next;
+	struct s_token_node	*prev;
+}						t_token_node;
 
 typedef enum e_expander_state
 {
@@ -41,10 +41,10 @@ typedef enum e_expander_state
 }						t_expander_state;
 
 // lexer
-t_token_list			*lexer(char *input);
+t_token_node			*lexer(char *input);
 
 // expander
-int						expander(t_token_list *token_list,
+int						expander(t_token_node *token_node,
 							t_env_list *env_list);
 
 // lexer util
@@ -56,20 +56,20 @@ int						create_redir_node_content(char *seg,
 char					*find_env_value(t_env_list *env_list, char *token,
 							int len);
 int						get_key_len(char *token);
-int						insert_value(t_token_list *current, char *key_pt,
+int						insert_value(t_token_node *current, char *key_pt,
 							char *value, int key_len);
-int						expand_token(t_token_list *current,
+int						expand_token(t_token_node *current,
 							t_env_list *env_list, int *i);
 int						check_var_start(char c);
 
 // token list util
-t_token_list			*create_token_node(char *content,
+t_token_node			*create_token_node(char *content,
 							enum e_token_type type);
-void					token_list_add_back(t_token_list **head,
-							t_token_list *new_node);
-void					free_token_list(t_token_list *token_list);
+void					token_node_add_back(t_token_node **head,
+							t_token_node *new_node);
+void					free_node_list(t_token_node *token_node);
 
 // cmd list creation
-t_cmd_list				*create_cmd_list(t_token_list *token_list);
+t_cmd_list				*create_cmd_list(t_token_node *token_node);
 
 #endif

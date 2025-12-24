@@ -1,15 +1,15 @@
 
 #include "../../includes/parser.h"
 
-t_token_list	*create_token_node(char *content, enum e_token_type type)
+t_token_node	*create_token_node(char *content, enum e_token_type type)
 {
-	t_token_list	*node;
+	t_token_node	*node;
 
 	/*
 	malloc: calculates the total bytes needed for your 4 fields:
 	pointer *token, enum type, pointer *next, pointer *prev.
 	*/
-	node = (t_token_list *)malloc(sizeof(t_token_list));
+	node = (t_token_node *)malloc(sizeof(t_token_node));
 	if (!node)
 		return (NULL);
 	node->token = content;
@@ -18,9 +18,9 @@ t_token_list	*create_token_node(char *content, enum e_token_type type)
 	node->prev = NULL;
 	return (node);
 }
-void	token_list_add_back(t_token_list **head, t_token_list *new_node)
+void	token_node_add_back(t_token_node **head, t_token_node *new_node)
 {
-	t_token_list	*current;
+	t_token_node	*current;
 
 	if (*head == NULL)
 		*head = new_node;
@@ -34,18 +34,18 @@ void	token_list_add_back(t_token_list **head, t_token_list *new_node)
 	}
 }
 
-void	free_token_list(t_token_list *token_list)
+void	free_token_node(t_token_node *token_node)
 {
-	t_token_list	*temp;
+	t_token_node	*temp;
 
-	if (!token_list)
+	if (!token_node)
 		return ;
-	while (token_list)
+	while (token_node)
 	{
-		temp = token_list->next;
-		if (token_list->token)
-			free(token_list->token);
-		free(token_list);
-		token_list = temp;
+		temp = token_node->next;
+		if (token_node->token)
+			free(token_node->token);
+		free(token_node);
+		token_node = temp;
 	}
 }
