@@ -38,14 +38,14 @@ static char	**tokens_to_array(t_token_node *token_node)
 
 // TODO: does not handle redirs/heredoc and files etc. yet
 // TODO: gc implementation!
-t_cmd_list	*create_cmd_list(t_token_node *token_node)
+t_cmd_list	*create_cmd_list(t_token_list *token_list)
 {
 	char			**cmds;
 	t_cmd_list		*cmd_list;
 	t_cmd_node		*cmd_node;
 	t_token_node	*current;
 
-	current = token_node;
+	current = token_list->head;
 	cmd_list = malloc(sizeof(t_cmd_list));
 	cmd_list->head = NULL;
 	cmd_list->tail = NULL;
@@ -65,10 +65,18 @@ t_cmd_list	*create_cmd_list(t_token_node *token_node)
 			free_cmd_list(cmd_list);
 			return (NULL);
 		}
+		cmd_node->files = init_file_list();
+		// TODO: implement gc!
+		if (!cmd_node->files)
+		{
+			free_array(cmds);
+			free(cmd_node);
+			free_cmd_list(cmd_list);
+			return (NULL);
+		}
 		cmd_node->cmd_type = UNDEF;
 		cmd_node->cmd = cmds;
 		cmd_node->next = NULL;
-		cmd_node->files = NULL;
 		if (!cmd_list->head)
 		{
 			cmd_list->head = cmd_node;

@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/24 15:02:52 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/24 15:59:40 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@ typedef struct s_token_node
 	struct s_token_node	*prev;
 }						t_token_node;
 
+typedef struct s_token_list
+{
+	t_token_node		*head;
+	t_token_node		*tail;
+	ssize_t				size;
+}						t_token_list;
+
 typedef enum e_expander_state
 {
 	STATE_DEFAULT,
@@ -41,10 +48,10 @@ typedef enum e_expander_state
 }						t_expander_state;
 
 // lexer
-t_token_node			*lexer(char *input);
+t_token_list			*lexer(char *input);
 
 // expander
-int						expander(t_token_node *token_node,
+int						expander(t_token_list *token_list,
 							t_env_list *env_list);
 
 // lexer util
@@ -63,13 +70,20 @@ int						expand_token(t_token_node *current,
 int						check_var_start(char c);
 
 // token list util
-t_token_node			*create_token_node(char *content,
-							enum e_token_type type);
-void					token_node_add_back(t_token_node **head,
+t_token_list			*init_token_list(void);
+t_token_node			*create_token_node(char *content, t_token_type type);
+void					token_list_add_back(t_token_list *list,
 							t_token_node *new_node);
-void					free_node_list(t_token_node *token_node);
+void					free_token_node(t_token_node *token_node);
 
 // cmd list creation
-t_cmd_list				*create_cmd_list(t_token_node *token_node);
+t_cmd_list				*create_cmd_list(t_token_list *token_list);
+
+// file list util (Add this near the bottom)
+t_file_list				*init_file_list(void);
+void					file_list_add_back(t_file_list *head,
+							t_file_node *file_node);
+t_file_node				*create_file_node(char *filename,
+							t_redir_type redir_type);
 
 #endif

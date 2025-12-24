@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/24 15:02:53 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/24 15:32:12 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,13 @@ static int	remove_quotes(t_token_node *node)
 	return (0);
 }
 
-int	expander(t_token_node *token_node, t_env_list *env_list)
+int	expander(t_token_list *token_list, t_env_list *env_list)
 {
 	t_token_node		*current;
 	int					i;
 	t_expander_state	state;
 
-	current = token_node;
+	current = token_list->head;
 	while (current)
 	{
 		if (current->token_type == T_WORD)
