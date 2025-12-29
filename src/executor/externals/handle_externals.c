@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:19:44 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/24 12:52:14 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/29 21:13:09 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@ static void	child_process(char *path, t_cmd_node *node, t_env_list *env)
 {
 	char	**envp;
 
+	if (handle_redirections(node, env) == -1)
+	{
+		gc_free();
+		exit(1);	
+	}
 	envp = env_list_to_array(env);
 	if (!envp || execve(path, node->cmd, envp) == -1)
 	{
