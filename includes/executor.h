@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/23 20:41:37 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/24 14:44:18 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@
 # include <fcntl.h>
 # include <limits.h>
 
+// TESTER HELPERS
+
 t_cmd_node	*create_test_node(enum e_cmd_type type, const char **args);
 t_env_node	*create_test_env_node(char *key, char *value);
 t_env_list  *create_dummy_env_list(void);
 t_cmd_list	*setup_single_command_test(t_cmd_node *node);
+t_file_node	*create_test_file_node(char *filename, t_redir_mode type);
 
 // EXECUTOR CORE
 
@@ -49,6 +52,14 @@ int			handle_unset(t_cmd_node *node, t_env_list *env);
 
 int			handle_external_cmd(t_cmd_node *node, t_env_list *env);
 
+// EXTERNAL UTILITIES
+char		*get_cmd_path(char *cmd, t_env_list *env);
+
+// Piping
+
+int			handle_piped_cmd(t_cmd_list *list, t_env_list *env);
+int			handle_redirections(t_cmd_node *node, t_env_list *env);
+
 // ENV UTILITIES
 
 char		*get_env_value(t_env_list *env, char *key);
@@ -56,10 +67,6 @@ void		env_add_back(t_env_list *env, char *key, char *value);
 void 		remove_env_node(t_env_list *env, char *key);
 int			is_valid_env_key(char *key);
 char		**env_list_to_array(t_env_list *env);
-
-
-// EXTERNAL UTILITIES
-char		*get_cmd_path(char *cmd, t_env_list *env);
 
 // OTHER UTILITIES
 
