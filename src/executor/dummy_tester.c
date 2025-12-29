@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:31:42 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/24 12:48:04 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/29 20:34:49 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,19 @@ void run_exit_child(char *desc, const char **args, int expected_code)
     {
         printf("⚠️ CRASH (Segfault o.ä.)\n");
     }
+}
+
+t_file_node	*create_test_file_node(char *filename, t_redir_mode type)
+{
+	t_file_node	*node;
+
+	node = ft_malloc(sizeof(t_file_node), 1);
+	if (!node)
+		return (NULL);
+	node->filename = gc_strdup(filename);
+	node->redir_type = type;
+	node->next = NULL;
+	return (node);
 }
 
 void	test_case_1_external(t_env_list *env)
@@ -339,6 +352,72 @@ void test_case_8_unset(t_env_list *env)
     printf("   ✅ OK: Kein Crash.\n");
 }
 
+void	test_case_9_redirection(t_env_list *env)
+{
+	const char	*ls_args[] = {"ls", "-l", NULL};
+	t_cmd_node	*node;
+	t_cmd_list	*list;
+
+	printf("\n[TEST 9] Aufruf: ls -l > out.txt\n");
+	printf("--------------------------\n");
+	node = create_test_node(EXTERNAL, ls_args); //
+	if (!node)
+		return ;
+	// Dateiumleitung hinzufügen (REDIR_OUT entspricht '>')
+	node->files = ft_malloc(sizeof(t_file_list), 1);
+	node->files->head = create_test_file_node("out.txt", NODE_OUTPUT);
+	node->files->size = 1;
+	list = setup_single_command_test(node); //
+	if (list)
+	{
+		execute_command_list(list, env); //
+		printf("✅ Befehl ausgeführt. Prüfe 'out.txt' in deinem Ordner.\n");
+	}
+}
+
+void	test_case_10_heredoc(t_env_list *env)
+{
+	const char	*cat_args[] = {"cat", NULL};
+	t_cmd_node	*node;
+	t_cmd_list	*list;
+
+	printf("\n[TEST 10] Aufruf: cat << EOF\n");
+	printf("Gib Text ein und beende mit 'EOF'\n");
+	printf("--------------------------\n");
+	node = create_test_node(EXTERNAL, cat_args);
+	if (!node)
+		return ;
+	node->files = ft_malloc(sizeof(t_file_list), 1);
+	node->files->head = create_test_file_node("EOF", NODE_HEREDOC); //
+	node->files->size = 1;
+	list = setup_single_command_test(node);
+	if (list)
+		execute_command_list(list, env);
+}
+
+void	test_case_11_heredoc_expansion(t_env_list *env)
+{
+	const char	*cat_args[] = {"cat", NULL};
+	t_cmd_node	*node;
+	t_cmd_list	*list;
+
+	printf("\n[TEST 11] Aufruf: cat << EOF (mit Expansion)\n");
+	printf("Anleitung: Gib 'Hallo $USER' ein und beende mit 'EOF'\n");
+	printf("Erwartetes Ergebnis: cat gibt 'Hallo cpohl' aus.\n");
+	printf("--------------------------\n");
+	node = create_test_node(EXTERNAL, cat_args);
+	if (!node)
+		return ;
+	// Here-Doc Setup
+	node->files = ft_malloc(sizeof(t_file_list), 1);
+	node->files->head = create_test_file_node("EOF", NODE_HEREDOC);
+	node->files->size = 1;
+	
+	list = setup_single_command_test(node);
+	if (list)
+		execute_command_list(list, env);
+}
+
 int	main(void)
 {
 	t_env_list	*env_list;
@@ -354,6 +433,9 @@ int	main(void)
 	test_case_6_exit();
 	test_case_7_export(env_list);
 	test_case_8_unset(env_list);
+	test_case_9_redirection(env_list);
+	test_case_10_heredoc(env_list);
+	test_case_11_heredoc_expansion(env_list);
 	printf("--- Minishell Executor Test End ---\n");
 	clean_up();
 	return (0);
