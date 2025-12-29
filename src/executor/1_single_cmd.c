@@ -6,11 +6,34 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/23 20:24:37 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/29 21:13:42 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
+
+static int	builtin_redir(t_cmd_node *node, t_env_list *env)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+	int	ret;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	
+	if (handle_redirections(node, env) == -1)
+	{
+		close(saved_stdin);
+		close(saved_stdout);
+		return (1);	
+	}
+	ret = execute_builtin(node, env);
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+	return (ret);
+}
 
 int execute_external(t_cmd_node *node, t_env_list *env)
 {
@@ -39,7 +62,7 @@ int	execute_builtin(t_cmd_node *node, t_env_list *env)
 int	handle_single_cmd(t_cmd_node *node, t_env_list *env)
 {
 	if (node->cmd_type == BUILTIN)
-		return (execute_builtin(node, env));
+		return (builtin_redir(node, env));
 	 if (node->cmd_type == EXTERNAL)
 	 	return (execute_external(node, env));
 	return (0);
