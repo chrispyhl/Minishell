@@ -6,22 +6,22 @@
 #    By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/30 15:37:57 by cpohl            ###   ########.fr        #
+#    Updated: 2025/12/30 16:09:21 by cpohl            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = chrispytalk
+NAME = chrispyshell
 
 CC = cc
-CFLAGS = -Wextra -Wall -Werror -Iincludes
+CFLAGS = -Wextra -Wall -Werror -I includes
 LDFLAGS = -lreadline
 RM = rm -f
 
-INC_DIR = src/
-MAIN_DIR = $(INC_DIR)/main/
-PAR_DIR = $(INC_DIR)/parser/
-EXE_DIR = $(INC_DIR)/executor/
-GC_DIR = $(INC_DIR)/gc/
+SRC_DIR = src/
+MAIN_DIR = $(SRC_DIR)/main/
+PAR_DIR = $(SRC_DIR)/parser/
+EXE_DIR = $(SRC_DIR)/executor/
+GC_DIR = $(SRC_DIR)/gc/
 LIBFT_DIR = libft/
 OBJ_DIR = obj/
 
@@ -45,10 +45,10 @@ GC_SRC = $(addprefix $(GC_DIR), $(GC_FILES))
 
 LIBFT_A = $(LIBFT_DIR)/libft.a
 
-MAIN_OBJ = $(patsubst $(INC_DIR)/%.c, $(OBJ_DIR)/%.o, $(MAIN_SRC))
-PAR_OBJ	= $(patsubst $(INC_DIR)/%.c, $(OBJ_DIR)/%.o, $(PAR_SRC))
-EXE_OBJ	= $(patsubst $(INC_DIR)/%.c, $(OBJ_DIR)/%.o, $(EXE_SRC))
-GC_OBJ	= $(patsubst $(INC_DIR)/%.c, $(OBJ_DIR)/%.o, $(GC_SRC))
+MAIN_OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(MAIN_SRC))
+PAR_OBJ	= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(PAR_SRC))
+EXE_OBJ	= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(EXE_SRC))
+GC_OBJ	= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(GC_SRC))
 # patsubst replaces src/ with obj/ for every file in list
 # not a wildcard since it takes pre-typed file names from SRC variables
 OBJ = $(MAIN_OBJ) $(PAR_OBJ) $(EXE_OBJ) $(GC_OBJ)

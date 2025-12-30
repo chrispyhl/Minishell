@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_externals.c                                 :+:      :+:    :+:   */
+/*   e_handle_externals.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:19:44 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 15:23:54 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 16:08:53 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/executor.h"
+#include "../../includes/executor.h"
 
 static void	child_process(char *path, t_cmd_node *node, t_env_list *env)
 {

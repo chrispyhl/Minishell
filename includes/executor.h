@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/24 14:44:18 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 15:42:03 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,18 @@
 
 # include "./minishell.h"
 # include "./garbage_collector.h"
-# include <stdio.h>
-# include <stdlib.h>
 # include <unistd.h>
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <limits.h>
 
-// TESTER HELPERS
+// // TESTER HELPERS
 
-t_cmd_node	*create_test_node(enum e_cmd_type type, const char **args);
-t_env_node	*create_test_env_node(char *key, char *value);
-t_env_list  *create_dummy_env_list(void);
-t_cmd_list	*setup_single_command_test(t_cmd_node *node);
-t_file_node	*create_test_file_node(char *filename, t_redir_mode type);
+// t_cmd_node	*create_test_node(enum e_cmd_type type, const char **args);
+// t_env_node	*create_test_env_node(char *key, char *value);
+// t_env_list	*create_dummy_env_list(void);
+// t_cmd_list	*setup_single_command_test(t_cmd_node *node);
+// t_file_node	*create_test_file_node(char *filename, t_redir_type type);
 
 // EXECUTOR CORE
 

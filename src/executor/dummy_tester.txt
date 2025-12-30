@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dummy_tester.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:31:42 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/29 20:34:49 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 15:41:36 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void run_exit_child(char *desc, const char **args, int expected_code)
     }
 }
 
-t_file_node	*create_test_file_node(char *filename, t_redir_mode type)
+t_file_node	*create_test_file_node(char *filename, t_redir_type type)
 {
 	t_file_node	*node;
 

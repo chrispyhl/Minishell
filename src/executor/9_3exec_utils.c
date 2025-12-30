@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   9_3exec_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:17:15 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/23 20:46:27 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 16:08:42 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/executor.h"
+#include "../../includes/executor.h"
 
 static char	*find_path_in_dirs(char **dirs, char *cmd)
 {

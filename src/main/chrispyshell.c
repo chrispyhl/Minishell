@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 15:19:19 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/30 16:20:25 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		// prompt string needs to be refined (include path? newline?)
 		input = readline("chrispyshell: ");
+		ft_printf("DEBUG: readline result: %s\n", input);
 		// handles ctrl + D
 		if (input == NULL)
 		{
@@ -71,7 +72,10 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			cmd_list = parser(input, env_list);
 			// TODO: ERROR HANDLING HERE
-			executor(cmd_list, env_list);
+			ft_printf("DEBUG: cmd_list print: %s\n", cmd_list->head->cmd[0]);
+			ft_printf("DEBUG: list size is: %d\n", cmd_list->size);
+			ft_printf("DEBUG: cmd_type is: %s\n", cmd_list->head->cmd_type);
+			execute_command_list(cmd_list, env_list);
 			// ERROR HANDLING HERE
 			free_cmd_list(cmd_list); // if not used by executor
 			free(input);

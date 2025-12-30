@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_builtins.c                                  :+:      :+:    :+:   */
+/*   b_handle_builtins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/23 19:04:13 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 16:08:45 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/executor.h"
+#include "../../includes/executor.h"
 
 int	handle_cd(t_cmd_node *node, t_env_list *env)
 {

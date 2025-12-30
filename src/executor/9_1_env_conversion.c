@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_conversion.c                                   :+:      :+:    :+:   */
+/*   9_1_env_conversion.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:01:24 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/23 20:46:21 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 16:08:36 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/executor.h"
+#include "../../includes/executor.h"
 
 static char	*combine_env_str(t_env_node *node)
 {

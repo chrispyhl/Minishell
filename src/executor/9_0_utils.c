@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0_utils.c                                          :+:      :+:    :+:   */
+/*   9_0_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:29:10 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/23 20:46:31 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 16:08:26 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/executor.h"
+#include "../../includes/executor.h"
 
 static int	update_env_if_exists(t_env_list *env, char *key, char *value)
 {

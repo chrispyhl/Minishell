@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_more_builtins.c                             :+:      :+:    :+:   */
+/*   b_handle_more_builtins.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:14:29 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/12 21:17:15 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 16:08:47 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/executor.h"
+#include "../../includes/executor.h"
 
 int	handle_env(t_env_list *env)
 {

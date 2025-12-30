@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 15:34:02 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 15:43:09 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>  // readline, perror
-# include <stdlib.h> // malloc, free, exit
+# include <stdlib.h> // malloc, free, exit	
 
 // FILE STRUCTS
 // -------------------
@@ -104,6 +104,9 @@ typedef struct s_env_list
 // PARSER
 // maybe the only parser function we need in this header
 t_cmd_list				*parser(char *input, t_env_list *env_list);
+
+// EXECUTOR
+int						execute_command_list(t_cmd_list *list, t_env_list *env);
 
 // ENVIRONMENTAL VARIABLES LIST
 t_env_node				*create_env_node(char *info);
