@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/18 17:16:09 by gries            ###   ########.fr       */
+/*   Updated: 2025/12/30 15:19:19 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)cmd_list;
 	cmd_list = NULL;
+	env_list = init_env_list(envp);
 	while (1)
 	{
 		// prompt string needs to be refined (include path? newline?)
@@ -68,40 +69,9 @@ int	main(int argc, char **argv, char **envp)
 		else if (input[0] != '\0')
 		{
 			add_history(input);
-			env_list = init_env_list(envp);
 			cmd_list = parser(input, env_list);
 			// TODO: ERROR HANDLING HERE
-			/*
-
-			CMD_LIST FROM PROTOTYPICAL PARSER
-			SHOULD BE USABLE FOR EXECUTOR HERE!
-
-			SUPPORTED:
-			+ tokenization:
-					raw input string is split into tokens ("words",
-					pipes,redirs)
-			+ expander
-					environmental variables should be handled correctly
-			+ grouping
-					sectors between pipes are grouped in command nodes; those get added to command list;
-					each command node has a NULL-terminated **char array
-			NOT YET SUPPORTED:
-			- redirs, heredoc and files not yet supported
-			- BUILDIN-detection not yet supported
-			- quote protection not yet supported (characters escaped by "/')
-			- syntax validation not yet implemented; might cause undefined behavior
-
-			STUFF THAT'S POSSIBLE FOR THE EXECUTOR ACCORDING TO GEMINI:
-			+ looping throug the t_cmd_list
-			+ setting up pipes between nodes
-			+ forking processes
-			+ executing ommands using the **cmd array
-			STUFF THAT'S NOT YET POSSIBLE ACCORDING TO GEMINI:
-			- implementing input/output redirection logic (since files are not assigned yet)
-			- differentiating between buildings and executables
-
-			*/
-			// EXECUTOR HERE
+			executor(cmd_list, env_list);
 			// ERROR HANDLING HERE
 			free_cmd_list(cmd_list); // if not used by executor
 			free(input);
