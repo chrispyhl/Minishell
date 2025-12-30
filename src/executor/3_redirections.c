@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_redirections.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/29 21:06:57 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 14:56:22 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	handle_heredoc(char *delimiter, t_env_list *env)
 	char	*expanded;
 	int		pipe_fds[2];
 	size_t	d_len;
-	
+
 	if (pipe(pipe_fds) == -1)
 		return (perror("minishell: pipe heredoc"));
 	d_len = ft_strlen(delimiter);
