@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/11 17:54:46 by craabe           ###   ########.fr       */
+/*   Updated: 2025/12/30 15:34:02 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@
 // FILE STRUCTS
 // -------------------
 // this is not part of Daniel's guide but nice to have imo
-typedef enum e_redir_mode
+typedef enum e_redir_type
 {
 	NODE_INPUT,  // <
 	NODE_OUTPUT, // >
 	NODE_APPEND, // >>
 	NODE_HEREDOC // <<
-}						t_redir_mode;
+}						t_redir_type;
 
 typedef struct s_file_node
 {
 	char				*filename;
-	enum e_redir_mode	redir_type;
+	enum e_redir_type	redir_type;
 	struct s_file_node	*next;
 }						t_file_node;
 /*
@@ -55,6 +55,7 @@ typedef struct s_file_list
 // this is not part of Daniel's guide but nice to have imo
 typedef enum e_cmd_type
 {
+	UNDEF, // placeholder for initialization before data was aquired
 	BUILTIN,
 	EXTERNAL,
 	PIPE,    // perhaps not necessary since handled by next pointers
@@ -95,7 +96,7 @@ typedef struct s_env_list
 {
 	t_env_node			*head;
 	t_env_node			*tail;
-	int					size;
+	ssize_t				size;
 
 }						t_env_list;
 // ~~~~~~~~~~~~~~~~~~~
@@ -109,5 +110,11 @@ t_env_node				*create_env_node(char *info);
 void					env_list_add_back(t_env_list *list,
 							t_env_node *new_node);
 void					free_env_list(t_env_list *env_list);
+
+// cmd utility
+void					free_cmd_list(t_cmd_list *cmd_list);
+
+// general utility
+void					free_array(char **array);
 
 #endif

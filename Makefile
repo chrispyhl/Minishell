@@ -6,7 +6,7 @@
 #    By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/10 15:54:18 by cpohl            ###   ########.fr        #
+#    Updated: 2025/12/30 15:32:18 by cpohl            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = chrispytalk
 
 CC = cc
 CFLAGS = -Wextra -Wall -Werror -Iincludes
+LDFLAGS = -lreadline
 RM = rm -f
 
 INC_DIR = src/
@@ -24,15 +25,17 @@ GC_DIR = $(INC_DIR)/gc/
 LIBFT_DIR = libft/
 OBJ_DIR = obj/
 
-MAIN_FILES = chrispyshell.c
-PAR_FILES = 0_parser.c
-EXE_FILES = dummy_tester.c 0_executer.c 1_io_handler.c
+MAIN_FILES = chrispyshell.c cmd_utils.c env_list_utils.c general_utils.c
+PAR_FILES = 0_parser.c 1_lexer.c 2_expander.c 3_cmd_list.c \
+			96_file_list_utils.c 97_expander_utils.c \
+			98_lexer_utils.c 99_token_list_utils.c
+EXE_FILES =
 GC_FILES =
 
 MAIN_SRC = $(addprefix $(MAIN_DIR), $(MAIN_FILES))
 PAR_SRC = $(addprefix $(PAR_DIR), $(PAR_FILES))
 EXE_SRC = $(addprefix $(EXE_DIR), $(EXE_FILES))
-GC_SRC = $(addprefix $(GC+DIR), $(GC_FILES))
+GC_SRC = $(addprefix $(GC_DIR), $(GC_FILES))
 
 # SRC = $(MAIN_SRC) $(PAR_SRC) $(EXE_SRC) $(GC_SRC)
 
@@ -59,7 +62,7 @@ exec: $(LIBFT_A) $(EXE_OBJ) $(GC_OBJ)
 	@echo "Built executor."
 
 $(NAME): $(LIBFT_A) $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT_A) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT_A) $(LDFLAGS) -o $(NAME)
 	@echo "Built full program."
 
 $(LIBFT_A):
