@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 15:43:09 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 16:57:39 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>  // readline, perror
-# include <stdlib.h> // malloc, free, exit	
+# include <stdlib.h> // malloc, free, exit
 
 // FILE STRUCTS
 // -------------------
@@ -55,11 +55,9 @@ typedef struct s_file_list
 // this is not part of Daniel's guide but nice to have imo
 typedef enum e_cmd_type
 {
-	UNDEF, // placeholder for initialization before data was aquired
 	BUILTIN,
 	EXTERNAL,
-	PIPE,    // perhaps not necessary since handled by next pointers
-	REDIRECT // perhaps not necessary since handled by t_file_list/t_file_node
+	EMPTY
 }						t_cmd_type;
 
 typedef struct s_cmd_node
