@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:17:16 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/24 12:31:17 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 15:06:15 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char	*get_env_value(t_env_list *env, char *key)
 	}
 	return (NULL);
 }
+
 void	env_add_back(t_env_list *env, char *key, char *value)
 {
 	t_env_node	*new_node;
@@ -51,6 +52,7 @@ void	env_add_back(t_env_list *env, char *key, char *value)
 	}
 	env->size++;
 }
+
 static void	unlink_env_node(t_env_list *env, t_env_node *curr, t_env_node *prev)
 {
 	if (!prev)
