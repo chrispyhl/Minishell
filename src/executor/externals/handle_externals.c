@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_externals.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:19:44 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/29 21:13:09 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 15:23:54 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	child_process(char *path, t_cmd_node *node, t_env_list *env)
 	if (handle_redirections(node, env) == -1)
 	{
 		gc_free();
-		exit(1);	
+		exit(1);
 	}
 	envp = env_list_to_array(env);
 	if (!envp || execve(path, node->cmd, envp) == -1)

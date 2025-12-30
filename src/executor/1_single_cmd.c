@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 14:54:34 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 15:24:34 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@ static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-
 	if (handle_redirections(node, env) == -1)
 	{
 		close(saved_stdin);
 		close(saved_stdout);
-		return (1);	
+		return (1);
 	}
 	ret = execute_builtin(node, env);
 	dup2(saved_stdin, STDIN_FILENO);

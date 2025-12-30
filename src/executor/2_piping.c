@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2_piping.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/29 20:25:52 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 15:25:04 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	setup_pipes(int *pipe_fds, int prev_read, t_cmd_node *node)
 static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_list *env)
 {
 	int	status;
-	
+
 	if (prev_read != -1) // Wenn es nicht der erste Befehl ist...
 	{
 		dup2(prev_read, STDIN_FILENO); // ...nimm den Input vom vorherigen Befehl
