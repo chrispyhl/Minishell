@@ -6,7 +6,7 @@
 #    By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/30 15:32:18 by cpohl            ###   ########.fr        #
+#    Updated: 2025/12/30 15:37:57 by cpohl            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,12 +25,16 @@ GC_DIR = $(INC_DIR)/gc/
 LIBFT_DIR = libft/
 OBJ_DIR = obj/
 
-MAIN_FILES = chrispyshell.c cmd_utils.c env_list_utils.c general_utils.c
-PAR_FILES = 0_parser.c 1_lexer.c 2_expander.c 3_cmd_list.c \
-			96_file_list_utils.c 97_expander_utils.c \
-			98_lexer_utils.c 99_token_list_utils.c
-EXE_FILES =
-GC_FILES =
+# REMOVE WILDCARDS !!!
+# REMOVE WILDCARDS !!!
+# REMOVE WILDCARDS !!!
+MAIN_FILES = $(notdir $(wildcard $(MAIN_DIR)*.c))
+PAR_FILES  = $(notdir $(wildcard $(PAR_DIR)*.c))
+EXE_FILES  = $(notdir $(wildcard $(EXE_DIR)*.c))
+GC_FILES   = $(notdir $(wildcard $(GC_DIR)*.c))
+# REMOVE WILDCARDS !!!
+# REMOVE WILDCARDS !!!
+# REMOVE WILDCARDS !!!
 
 MAIN_SRC = $(addprefix $(MAIN_DIR), $(MAIN_FILES))
 PAR_SRC = $(addprefix $(PAR_DIR), $(PAR_FILES))
