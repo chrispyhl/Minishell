@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 15:25:04 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 16:26:11 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ static int	pipe_parent(int *pipe_fds, int *prev_read, t_cmd_node *node)
 
 int	handle_piped_cmd(t_cmd_list *list, t_env_list *env)
 {
+	pid_t		pid;
 	t_cmd_node	*current;
 	int			pipe_fds[2]; // 0: read end, 1: write end
 	int			prev_read;
-	pid_t		pid;
 
 	current = list->head;
 	prev_read = -1;

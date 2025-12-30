@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 14:56:22 by cpohl            ###   ########.fr       */
+/*   Updated: 2025/12/30 16:26:26 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	handle_redirections(t_cmd_node *node, t_env_list *env)
 				dup2(fd, STDIN_FILENO);
 			else
 				dup2(fd, STDOUT_FILENO);
-			close(fd);	
+			close(fd);
 		}
 		current = current->next;
 	}
