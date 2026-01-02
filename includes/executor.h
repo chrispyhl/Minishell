@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 15:42:03 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/02 17:04:35 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "./garbage_collector.h"
 # include <unistd.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <fcntl.h>
 # include <limits.h>
 
@@ -65,13 +66,20 @@ void		env_add_back(t_env_list *env, char *key, char *value);
 void 		remove_env_node(t_env_list *env, char *key);
 int			is_valid_env_key(char *key);
 char		**env_list_to_array(t_env_list *env);
+void		print_sorted_env(t_env_list *env);
 
 // OTHER UTILITIES
 
+void		print_export_line(char *line);
 int			process_export_arg(t_env_list *env, char *arg);
 int			is_numeric(char *str);
 int			err_msg(char *cmd, char *msg, int status);
 int			get_exit_status(int status);
+
+// Vorrübergehend
+
+long long	ft_atoll(const char *str, int *error);
+int			ft_strcmp(const char *s1, const char *s2);
 
 
 #endif
