@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_more_builtins.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:14:29 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 16:08:47 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/02 17:29:26 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,29 +35,56 @@ int	handle_env(t_env_list *env)
 
 int	handle_exit(t_cmd_node *node)
 {
-	int	num;
+	long long	status;
+	int			error;
 
-	ft_putstr_fd("exit\n", 2);
-	if (node->cmd[1] == NULL)
+	error = 0;
+	ft_putendl_fd("exit", 2);
+	if (!node->cmd[1])
 	{
 		gc_free();
 		exit(0);
 	}
-	else if (is_numeric(node->cmd[1]) == 0)
+	status = ft_atoll(node->cmd[1], &error);
+	if (!is_numeric(node->cmd[1]) || error)
 	{
-		ft_putstr_fd("minishell: exit: non number arg\n", 2);
+		err_msg("exit", "numeric argument required", 255);
 		gc_free();
 		exit (255);
 	}
 	else if (node->cmd[2])
+		return (err_msg("exit", "too many arguments", 1));
+	gc_free();
+	exit(status % 256);
+}
+
+int	handle_unset(t_cmd_node *node, t_env_list *env)
+{
+	int	i;
+
+	if (!node->cmd[1])
+		return (0);
+	i = 1;
+	while (node->cmd[i])
 	{
-		ft_putstr_fd("minishell: exit: too many exit args\n", 2);
-		return (1);
+		remove_env_node(env, node->cmd[i]);
+		i++;
+	}
+	return (0);
+}
+
+int	handle_pwd(void)
+{
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (cwd != NULL)
+	{
+		ft_putstr_fd(cwd, 1);
+		free (cwd);
+		ft_putstr_fd("\n", 1);
 	}
 	else
-	{
-		num = ft_atoi(node->cmd[1]);
-		gc_free();
-		exit(num % 256);
-	}
+		ft_putstr_fd("getcwd failed to get working directory\n", 2);
+	return (0);
 }

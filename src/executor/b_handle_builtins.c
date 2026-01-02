@@ -3,37 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_builtins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 16:08:45 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/02 16:59:09 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
+static void	update_env_pwd(t_env_list *env, char *old_pwd)
+{
+	char	new_pwd[1024];
+
+	process_export_arg(env, gc_strjoin("OLDPWD=", old_pwd));
+	if (getcwd(new_pwd, sizeof(new_pwd)))
+		process_export_arg(env, gc_strjoin("PWD=", new_pwd));
+}
+
+void	print_export_line(char *line)
+{
+	int	i;
+
+	i = 0;
+	ft_putstr_fd("declare -x ", 1);
+	while (line[i] && line[i] != '=')
+		ft_putchar_fd(line[i++], 1);
+	if (line[i] == '=')
+	{
+		ft_putstr_fd("=\"", 1);
+		ft_putstr_fd(&line[i + 1], 1);
+		ft_putstr_fd("\"", 1);
+	}
+	ft_putchar_fd('\n', 1);
+}
+
 int	handle_cd(t_cmd_node *node, t_env_list *env)
 {
 	char	*path;
+	char	old_pwd[1024];
 
+	if (!getcwd(old_pwd, sizeof(old_pwd)))
+		return (1);
 	if (!node->cmd[1])
 	{
 		path = get_env_value(env, "HOME");
-		if (path == NULL)
+		if (!path)
 		{
 			ft_putstr_fd("minishell: cd: Env->HOME not set\n", 2);
 			return (1); // error msg
 		}
 	}
 	else
-	{
 		path = node->cmd[1];
-	}
 	if (chdir(path) != 0)
-	{
-		perror("minishell: cd");
-		return (1);
-	}
+		return (perror("minishell: cd"), 1);
+	update_env_pwd(env, old_pwd);
 	return (0);
 }
 
@@ -61,22 +86,6 @@ int	handle_echo(t_cmd_node *node)
 	return (0);
 }
 
-int	handle_pwd(void)
-{
-	char	*cwd;
-
-	cwd = getcwd(NULL, 0);
-	if (cwd != NULL)
-	{
-		ft_putstr_fd(cwd, 1);
-		free (cwd);
-		ft_putstr_fd("\n", 1);
-	}
-	else
-		ft_putstr_fd("getcwd failed to get working directory\n", 2);
-	return (0);
-}
-
 int	handle_export(t_cmd_node *node, t_env_list *env)
 {
 	int	i;
@@ -84,7 +93,10 @@ int	handle_export(t_cmd_node *node, t_env_list *env)
 
 	exit_status = 0;
 	if (!node->cmd[1])
-		return (handle_env(env));
+	{
+		print_sorted_env(env);
+		return (0);
+	}
 	i = 1;
 	while (node->cmd[i])
 	{
@@ -93,19 +105,4 @@ int	handle_export(t_cmd_node *node, t_env_list *env)
 		i++;
 	}
 	return (exit_status);
-}
-
-int	handle_unset(t_cmd_node *node, t_env_list *env)
-{
-	int	i;
-
-	if (!node->cmd[1])
-		return (0);
-	i = 1;
-	while (node->cmd[i])
-	{
-		remove_env_node(env, node->cmd[i]);
-		i++;
-	}
-	return (0);
 }
