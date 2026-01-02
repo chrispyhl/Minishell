@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 16:57:39 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/02 18:53:59 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void					free_env_list(t_env_list *env_list);
 
 // cmd utility
 void					free_cmd_list(t_cmd_list *cmd_list);
+void					free_file_list(t_file_list *file_list);
 
 // general utility
 void					free_array(char **array);
