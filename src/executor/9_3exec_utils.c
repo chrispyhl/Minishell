@@ -32,13 +32,16 @@ static char	*find_path_in_dirs(char **dirs, char *cmd)
 
 char	*get_cmd_path(char *cmd, t_env_list *env)
 {
-	char	*path_var;
-	char	**dirs;
+	char		*path_var;
+	char		**dirs;
+	struct stat	path_stat;
 
 	if (!cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
+		if (stat(cmd, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+			return (NULL);
 		if (access(cmd, F_OK | X_OK) == 0)
 			return (gc_strdup(cmd));
 		return (NULL);

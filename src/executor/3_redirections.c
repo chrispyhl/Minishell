@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_redirections.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 16:26:26 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/02 15:49:29 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,25 @@ static char	*expand_heredoc_line(char *line, t_env_list *env)
 
 static int	open_file(char *filename, int type)
 {
-	int	fd;
+	int			fd;
+	struct stat	info;
 
-	fd = -1;
+	if (type == NODE_OUTPUT || type == NODE_APPEND)
+	{
+		if (stat(filename, &info) == 0 && S_ISDIR(info.st_mode))
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(filename, 2);
+			ft_putendl_fd(": Is a directory", 2);
+			return (-1);
+		}
+	}
 	if (type == NODE_INPUT)
 		fd = open(filename, O_RDONLY);
 	else if (type == NODE_OUTPUT)
 		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (type == NODE_APPEND)
 		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd == -1)
-		perror("minishell: open");
 	return (fd);
 }
 
