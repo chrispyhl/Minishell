@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/24 15:59:40 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/02 18:36:16 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,17 @@ void					free_token_node(t_token_node *token_node);
 // cmd list creation
 t_cmd_list				*create_cmd_list(t_token_list *token_list);
 
-// file list util (Add this near the bottom)
+// cmd_list_utils
+t_redir_type			token_type_to_redir_type(t_token_type token_type);
+int						extract_redirs(t_token_node *current,
+							t_cmd_node *cmd_node);
+
+// file list util
 t_file_list				*init_file_list(void);
 void					file_list_add_back(t_file_list *head,
 							t_file_node *file_node);
 t_file_node				*create_file_node(char *filename,
 							t_redir_type redir_type);
+void					free_file_list(t_file_list *file_list);
 
 #endif
