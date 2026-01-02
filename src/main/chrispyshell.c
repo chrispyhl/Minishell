@@ -6,14 +6,15 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/02 17:18:14 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/02 17:21:56 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // TODO: ctrl + C functionality via sigint handling
-// prior input is discard, ^C is printed
+// prior input is kept, but not executed, ^C is added
+// new line gets opened
 // void signal_handler(int code)
 // {
 // }
