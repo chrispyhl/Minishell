@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 17:02:01 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/02 17:18:14 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // TODO: ctrl + C functionality via sigint handling
-// partial input plus ctrl + C should keep input so far and open new prompt
+// prior input is discard, ^C is printed
 // void signal_handler(int code)
 // {
 // }
