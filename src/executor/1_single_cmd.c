@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_single_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 15:24:34 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/03 11:15:07 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,15 @@ int	execute_builtin(t_cmd_node *node, t_env_list *env)
 
 int	handle_single_cmd(t_cmd_node *node, t_env_list *env)
 {
+	if (!node->cmd || !node->cmd[0])
+	{
+		if (handle_redirections(node, env) == -1)
+			return (1);
+		return (0);
+	}
 	if (node->cmd_type == BUILTIN)
 		return (builtin_redir(node, env));
-	if (node->cmd_type == EXTERNAL)
+	else if (node->cmd_type == EXTERNAL)
 		return (execute_external(node, env));
 	return (0);
 }
