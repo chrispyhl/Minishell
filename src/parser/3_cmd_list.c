@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_cmd_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:19 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 16:59:51 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/02 18:36:28 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,18 @@ static char	**tokens_to_array(t_token_node *token_node)
 	node_nbr = 0;
 	while (current && current->token_type != T_PIPE)
 	{
-		node_nbr++;
-		current = current->next;
+		// note: >= T_REDIR_IN would soffice,
+		// but including end is better practice for maintenance
+		if (current->token_type >= T_REDIR_IN
+			&& current->token_type <= T_HEREDOC)
+			// skip redir command
+			current = current->next;
+		else
+			// increment!
+			node_nbr++;
+		// safety check for scenarios like "ls >"
+		if (current)
+			current = current->next;
 	}
 	cmd_array = malloc((node_nbr + 1) * sizeof(char *));
 	// +1 for the pt to NULL
@@ -35,14 +45,22 @@ static char	**tokens_to_array(t_token_node *token_node)
 	current = token_node;
 	while (current && current->token_type != T_PIPE)
 	{
-		cmd_array[i] = ft_strdup(current->token);
-		if (!cmd_array[i])
+		if (current->token_type >= T_REDIR_IN
+			&& current->token_type <= T_HEREDOC)
+			// skip redir command
+			current = current->next;
+		else
 		{
-			free_array(cmd_array);
-			return (NULL);
+			cmd_array[i] = ft_strdup(current->token);
+			if (!cmd_array[i])
+			{
+				free_array(cmd_array);
+				return (NULL);
+			}
+			i++;
 		}
-		i++;
-		current = current->next;
+		if (current)
+			current = current->next;
 	}
 	cmd_array[i] = NULL;
 	return (cmd_array);
@@ -68,7 +86,6 @@ t_cmd_type	set_cmd_type(char *cmd)
 	return (EXTERNAL);
 }
 
-// TODO: does not handle redirs/heredoc and files etc. yet
 // TODO: gc implementation!
 t_cmd_list	*create_cmd_list(t_token_list *token_list)
 {
@@ -79,21 +96,17 @@ t_cmd_list	*create_cmd_list(t_token_list *token_list)
 
 	current = token_list->head;
 	cmd_list = malloc(sizeof(t_cmd_list));
+	if (!cmd_list)
+		return (NULL);
 	cmd_list->head = NULL;
 	cmd_list->tail = NULL;
 	cmd_list->size = 0;
 	while (current)
 	{
-		cmd_array = tokens_to_array(current);
-		if (!cmd_array)
-		{
-			free_cmd_list(cmd_list);
-			return (NULL);
-		}
 		cmd_node = malloc(sizeof(t_cmd_node));
+		// TODO: implement gc!
 		if (!cmd_node)
 		{
-			free_array(cmd_array);
 			free_cmd_list(cmd_list);
 			return (NULL);
 		}
@@ -101,7 +114,21 @@ t_cmd_list	*create_cmd_list(t_token_list *token_list)
 		// TODO: implement gc!
 		if (!cmd_node->files)
 		{
-			free_array(cmd_array);
+			free(cmd_node);
+			free_cmd_list(cmd_list);
+			return (NULL);
+		}
+		if (extract_redirs(current, cmd_node) == -1)
+		{
+			free_file_list(cmd_node->files);
+			free(cmd_node);
+			free_cmd_list(cmd_list);
+			return (NULL);
+		}
+		cmd_array = tokens_to_array(current);
+		if (!cmd_array)
+		{
+			free_file_list(cmd_node->files);
 			free(cmd_node);
 			free_cmd_list(cmd_list);
 			return (NULL);

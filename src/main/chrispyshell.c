@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 17:02:01 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/03 12:50:46 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // TODO: ctrl + C functionality via sigint handling
-// partial input plus ctrl + C should keep input so far and open new prompt
+// prior input is kept, but not executed, ^C is added
+// new line gets opened
 // void signal_handler(int code)
 // {
 // }
@@ -71,6 +72,12 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			cmd_list = parser(input, env_list);
 			// TODO: ERROR HANDLING HERE
+			if (cmd_list->head->cmd[0])
+				ft_printf("DEBUG: cmd: %s\n", cmd_list->head->cmd[0]);
+			else
+				ft_printf("DEBUG: cmd: [EMPTY]\n");
+			ft_printf("DEBUG: list size: %d\n", cmd_list->size);
+			ft_printf("DEBUG: cmd_type: %d\n", cmd_list->head->cmd_type);
 			execute_command_list(cmd_list, env_list);
 			// ERROR HANDLING HERE
 			free_cmd_list(cmd_list); // if not used by executor
