@@ -6,7 +6,7 @@
 /*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 12:55:55 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/03 12:40:51 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/03 13:48:30 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,5 @@ int					ft_printf(const char *format, ...);
 
 char				*get_next_line(int fd);
 // includes GNL bonus
-long long			ft_atoll(const char *str, int *error);
-int					ft_strcmp(const char *s1, const char *s2);
 
 #endif

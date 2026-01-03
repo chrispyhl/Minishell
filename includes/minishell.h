@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/02 18:53:59 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/03 13:49:03 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,8 @@ void					free_file_list(t_file_list *file_list);
 
 // general utility
 void					free_array(char **array);
+long long				ft_atoll(const char *str, int *error);
+int						ft_strcmp(const char *s1, const char *s2);
+
 
 #endif
