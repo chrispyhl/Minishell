@@ -6,7 +6,7 @@
 /*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/02 17:04:35 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/03 11:08:38 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,7 @@ int			get_exit_status(int status);
 long long	ft_atoll(const char *str, int *error);
 int			ft_strcmp(const char *s1, const char *s2);
 
+
+void		fix_broken_parser_node(t_cmd_node *node);
 
 #endif
