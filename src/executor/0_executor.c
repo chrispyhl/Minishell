@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   0_executor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 14:54:53 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/03 12:12:13 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,18 @@
 
 int	execute_command_list(t_cmd_list *list, t_env_list *env)
 {
-	if (!list || !list->head)
+	t_cmd_node	*current; // TEMP!
+
+	if (!list || !list->head || list->size == 0)
 		return (EXIT_SUCCESS); // empty list
+	// TEMP!
+	current = list->head;
+	while (current)
+	{
+		fix_broken_parser_node(current);
+		current = current->next;
+	}
+	// TEMP!
 	if (list->size < 1)
 		return (1); // no list
 	if (list->size == 1)
