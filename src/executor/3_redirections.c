@@ -6,7 +6,7 @@
 /*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/02 15:49:29 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/03 13:38:11 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,26 @@ static int	open_file(char *filename, int type)
 	int			fd;
 	struct stat	info;
 
-	if (type == NODE_OUTPUT || type == NODE_APPEND)
+	if ((type == NODE_OUTPUT || type == NODE_APPEND) 
+			&& stat(filename, &info) == 0 && S_ISDIR(info.st_mode))
 	{
-		if (stat(filename, &info) == 0 && S_ISDIR(info.st_mode))
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(filename, 2);
-			ft_putendl_fd(": Is a directory", 2);
-			return (-1);
-		}
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(filename, 2);
+		ft_putendl_fd(": Is a directory", 2);
+		return (-1);
 	}
+	fd = -1;
 	if (type == NODE_INPUT)
 		fd = open(filename, O_RDONLY);
 	else if (type == NODE_OUTPUT)
 		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (type == NODE_APPEND)
 		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		perror(filename);
+	}
 	return (fd);
 }
 

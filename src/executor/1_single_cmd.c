@@ -6,7 +6,7 @@
 /*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/03 11:15:07 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/03 13:37:02 by chris            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,22 @@
 
 static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 {
-	int	saved_stdin;
-	int	saved_stdout;
+	int	saved_io[2];
 	int	ret;
 
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
+	saved_io[0] = dup(STDIN_FILENO);
+	saved_io[1] = dup(STDOUT_FILENO);
 	if (handle_redirections(node, env) == -1)
 	{
-		close(saved_stdin);
-		close(saved_stdout);
+		close(saved_io[0]);
+		close(saved_io[1]);
 		return (1);
 	}
 	ret = execute_builtin(node, env);
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+	dup2(saved_io[0], STDIN_FILENO);
+	dup2(saved_io[1], STDOUT_FILENO);
+	close(saved_io[0]);
+	close(saved_io[1]);
 	return (ret);
 }
 
@@ -60,11 +59,21 @@ int	execute_builtin(t_cmd_node *node, t_env_list *env)
 
 int	handle_single_cmd(t_cmd_node *node, t_env_list *env)
 {
+	int	saved_io[2];
+	
 	if (!node->cmd || !node->cmd[0])
 	{
+		saved_io[0] = dup(STDIN_FILENO);
+		saved_io[1] = dup(STDOUT_FILENO);
 		if (handle_redirections(node, env) == -1)
-			return (1);
-		return (0);
+		{
+			dup2(saved_io[0], STDIN_FILENO);
+			dup2(saved_io[1], STDOUT_FILENO);
+			return (close(saved_io[0]), close(saved_io[1]), 0);
+		}
+		dup2(saved_io[0], STDIN_FILENO);
+		dup2(saved_io[1], STDOUT_FILENO);
+		return (close(saved_io[0]), close(saved_io[1]), 0);
 	}
 	if (node->cmd_type == BUILTIN)
 		return (builtin_redir(node, env));
