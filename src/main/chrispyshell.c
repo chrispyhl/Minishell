@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/05 16:09:19 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/05 16:19:02 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static char	*get_filepath(char *path)
 {
 	char	cwd[PATH_MAX];
 	char	*result;
-	char *temp;
+	char	*temp;
 
 	// if it starts with a slash, it is abolute already
 	if (path[0] == '/')
@@ -108,10 +108,10 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(input);
 			cmd_list = parser(input, env_list);
-			// TODO: ERROR HANDLING HERE
-			execute_command_list(cmd_list, env_list);
-			// ERROR HANDLING HERE
-			free_cmd_list(cmd_list); // if not used by executor
+			if (cmd_list)
+				execute_command_list(cmd_list, env_list);
+			// TODO: MASSIVE ERROR HANDLING HERE
+			free_cmd_list(cmd_list); // if not used by executor?
 			free(input);
 		}
 	}
