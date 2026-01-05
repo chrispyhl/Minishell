@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/05 16:19:02 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/05 16:29:23 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		// prompt string needs to be refined (include path? newline?)
-		input = readline("chrispyshell: ");
+		input = readline("chrispyshell$ ");
 		// handles ctrl + D
 		if (input == NULL)
 		{
