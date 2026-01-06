@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/03 12:50:46 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/06 13:20:33 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,6 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			cmd_list = parser(input, env_list);
 			// TODO: ERROR HANDLING HERE
-			if (cmd_list->head->cmd[0])
-				ft_printf("DEBUG: cmd: %s\n", cmd_list->head->cmd[0]);
-			else
-				ft_printf("DEBUG: cmd: [EMPTY]\n");
-			ft_printf("DEBUG: list size: %d\n", cmd_list->size);
-			ft_printf("DEBUG: cmd_type: %d\n", cmd_list->head->cmd_type);
 			execute_command_list(cmd_list, env_list);
 			// ERROR HANDLING HERE
 			free_cmd_list(cmd_list); // if not used by executor

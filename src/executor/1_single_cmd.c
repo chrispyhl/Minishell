@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   1_single_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/03 13:37:02 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/06 13:16:36 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
+
+static void	update_underscore(t_env_list *env, char **cmd)
+{
+	int			i;
+
+	if (!env || !cmd || !cmd[0])
+		return ;
+	i = 0;
+	while(cmd[i])
+		i++;
+	set_env_value(env, "_", cmd[i - 1]);
+}
 
 static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 {
@@ -75,6 +87,7 @@ int	handle_single_cmd(t_cmd_node *node, t_env_list *env)
 		dup2(saved_io[1], STDOUT_FILENO);
 		return (close(saved_io[0]), close(saved_io[1]), 0);
 	}
+	update_underscore(env, node->cmd);
 	if (node->cmd_type == BUILTIN)
 		return (builtin_redir(node, env));
 	else if (node->cmd_type == EXTERNAL)
