@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_0_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:29:10 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 16:08:26 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/06 10:25:43 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	process_export_arg(t_env_list *env, char *arg)
 	}
 	if (!is_valid_env_key(key))
 	{
-		ft_putstr_fd("minishell: export: invalid identifier\n", 2);
+		ft_putstr_fd("chrispyshell: export: invalid identifier\n", 2);
 		return (1);
 	}
 	if (!update_env_if_exists(env, key, value))
@@ -78,7 +78,7 @@ int	is_numeric(char *str)
 
 int	err_msg(char *cmd, char *msg, int status)
 {
-	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd("chrispyshell: ", 2);
 	if (cmd)
 	{
 		ft_putstr_fd(cmd, 2);

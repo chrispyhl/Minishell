@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_builtins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/02 16:59:09 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/06 10:25:47 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ int	handle_cd(t_cmd_node *node, t_env_list *env)
 		path = get_env_value(env, "HOME");
 		if (!path)
 		{
-			ft_putstr_fd("minishell: cd: Env->HOME not set\n", 2);
+			ft_putstr_fd("chrispyshell: cd: Env->HOME not set\n", 2);
 			return (1); // error msg
 		}
 	}
 	else
 		path = node->cmd[1];
 	if (chdir(path) != 0)
-		return (perror("minishell: cd"), 1);
+		return (perror("chrispyshell: cd"), 1);
 	update_env_pwd(env, old_pwd);
 	return (0);
 }

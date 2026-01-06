@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_handle_externals.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:19:44 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/02 17:34:00 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/06 10:25:52 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	child_process(char *path, t_cmd_node *node, t_env_list *env)
 	envp = env_list_to_array(env);
 	if (!envp || execve(path, node->cmd, envp) == -1)
 	{
-		perror("minishell: execve");
+		perror("chrispyshell: execve");
 		gc_free();
 		exit(126);
 	}
@@ -58,7 +58,7 @@ int	handle_external_cmd(t_cmd_node *node, t_env_list *env)
 	if (pid == -1)
 	{
 		gc_free();
-		return (perror("minishell: fork"), 1);
+		return (perror("chrispyshell: fork"), 1);
 	}
 	if (pid == 0)
 		child_process(path, node, env);
