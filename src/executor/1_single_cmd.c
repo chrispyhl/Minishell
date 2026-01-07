@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_single_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/06 13:16:36 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/07 15:10:02 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	execute_builtin(t_cmd_node *node, t_env_list *env)
 int	handle_single_cmd(t_cmd_node *node, t_env_list *env)
 {
 	int	saved_io[2];
-	
+
 	if (!node->cmd || !node->cmd[0])
 	{
 		saved_io[0] = dup(STDIN_FILENO);
