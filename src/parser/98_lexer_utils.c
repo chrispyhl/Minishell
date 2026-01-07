@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   98_lexer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:34 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 13:19:36 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/07 22:40:38 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int	find_quote_end(char *seg, int *j)
 		(*j)++;
 	else
 	{
-		ft_putstr_fd("Error:\n", 2);
-		ft_putstr_fd("Quote not closed.\n", 2);
+		ft_putstr_fd("chrispyshell: quote not closed\n", 2);
 		return (-1);
 	}
 	return (0);
