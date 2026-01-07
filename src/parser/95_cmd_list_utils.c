@@ -45,14 +45,14 @@ int	extract_redirs(t_token_node *current, t_cmd_node *cmd_node)
 				}
 				else
 				{
-					ft_printf("syntax error near unexpected token '%s'\n",
+					ft_printf("chrispyshell: syntax error near unexpected token '%s'\n",
 						current->next->token);
 					return (-1);
 				}
 			}
 			else
 			{
-				ft_printf("syntax error near unexpected token 'newline'\n");
+				ft_printf("chrispyshell: syntax error near unexpected token 'newline'\n");
 				return (-1);
 			}
 		}
