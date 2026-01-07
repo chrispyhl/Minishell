@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 10:51:31 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/07 14:34:59 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ t_token_node			*create_token_node(char *content, t_token_type type);
 void					token_list_add_back(t_token_list *list,
 							t_token_node *new_node);
 void					free_token_node(t_token_node *token_node);
+void	free_token_list(t_token_list *token_list);
 
 // cmd list creation
 t_cmd_list				*create_cmd_list(t_token_list *token_list);
