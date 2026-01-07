@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_0_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:29:10 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/06 10:25:43 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/07 15:15:08 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,7 @@ int	process_export_arg(t_env_list *env, char *arg)
 		value = NULL;
 	}
 	if (!is_valid_env_key(key))
-	{
-		ft_putstr_fd("chrispyshell: export: invalid identifier\n", 2);
-		return (1);
-	}
+		return (err_msg("export", "not a valid identifier", 1));
 	if (!update_env_if_exists(env, key, value))
 		env_add_back(env, key, value);
 	return (0);
