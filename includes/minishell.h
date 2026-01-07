@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/05 16:11:41 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/07 14:40:45 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int						execute_command_list(t_cmd_list *list, t_env_list *env);
 t_env_node				*create_env_node(char *info);
 void					env_list_add_back(t_env_list *list,
 							t_env_node *new_node);
-int						set_filepath_evnar(t_env_list *env_list,
+int						set_filepath_envar(t_env_list *env_list,
 							char *filepath);
 void					free_env_list(t_env_list *env_list);
 
