@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 17:49:36 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/07 22:04:55 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+#define TEAL "\001\033[1;36m\002"
+#define RESET "\001\033[0m\002"
 
 volatile sig_atomic_t	g_signal = 0;
 // volatile: tells compiler optimization:
@@ -115,7 +118,7 @@ int	main(int argc, char **argv, char **envp)
 			g_signal = 0;
 		}
 		// prompt string needs to be refined (include path? newline?)
-		input = readline("chrispyshell$ ");
+		input = readline(TEAL"chrispyshell$ "RESET);
 		// handles ctrl + D
 		if (!input)
 		{
