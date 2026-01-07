@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2_piping.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 16:26:11 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/06 10:25:28 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	setup_pipes(int *pipe_fds, int prev_read, t_cmd_node *node)
 	{
 		if (pipe(pipe_fds) == -1)
 		{
-			return (perror("minishell: pipe"), -1);
+			return (perror("chrispyshell: pipe"), -1);
 		}
 	}
 	return (0);
@@ -95,7 +95,7 @@ int	handle_piped_cmd(t_cmd_list *list, t_env_list *env)
 			break ;
 		pid = fork();
 		if (pid == -1)
-			return (perror("minishell: fork"), 1);
+			return (perror("chrispyshell: fork"), 1);
 		if (pid == 0)
 			pipe_child(pipe_fds, prev_read, current, env);
 		pipe_parent(pipe_fds, &prev_read, current);

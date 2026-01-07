@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/03 12:41:32 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/06 13:17:10 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void 		remove_env_node(t_env_list *env, char *key);
 int			is_valid_env_key(char *key);
 char		**env_list_to_array(t_env_list *env);
 void		print_sorted_env(t_env_list *env);
+void		set_env_value(t_env_list *env, char *key, char *value);
 
 // OTHER UTILITIES
 

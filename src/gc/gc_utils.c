@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 12:47:22 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 15:31:54 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/06 13:09:33 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	gc_add(void *ptr)
 	new_node = ft_calloc(1, sizeof(t_gc_node));
 	if (!new_node)
 		return ;
+	new_node->ptr = ptr;
 	if (gc->head == NULL)
 	{
 		new_node->next = NULL;

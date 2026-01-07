@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_redirections.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/03 13:38:11 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/06 10:25:39 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	open_file(char *filename, int type)
 	if ((type == NODE_OUTPUT || type == NODE_APPEND) 
 			&& stat(filename, &info) == 0 && S_ISDIR(info.st_mode))
 	{
-		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("chrispyshell: ", 2);
 		ft_putstr_fd(filename, 2);
 		ft_putendl_fd(": Is a directory", 2);
 		return (-1);
@@ -75,7 +75,7 @@ static int	open_file(char *filename, int type)
 		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{
-		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("chrispyshell: ", 2);
 		perror(filename);
 	}
 	return (fd);
@@ -89,7 +89,7 @@ static void	handle_heredoc(char *delimiter, t_env_list *env)
 	size_t	d_len;
 
 	if (pipe(pipe_fds) == -1)
-		return (perror("minishell: pipe heredoc"));
+		return (perror("chrispyshell: pipe heredoc"));
 	d_len = ft_strlen(delimiter);
 	while (1)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_2_1more_env_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 16:43:08 by chris             #+#    #+#             */
-/*   Updated: 2026/01/02 17:19:35 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/06 13:18:55 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,31 @@ void	print_sorted_env(t_env_list *env)
 		print_export_line(env_arr[i]);
 		i++;
 	}
+}
+
+void	set_env_value(t_env_list *env, char *key, char *value)
+{
+	t_env_node	*current;
+	t_env_node	*new;
+
+	if (!env || !key)
+		return ;
+	current = env->head;
+	while (current)
+	{
+		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
+		{
+			current->value = ft_strdup(value);
+			gc_add(current->value);
+			return ;
+		}
+		current = current->next;
+	}
+	new = ft_calloc(1, sizeof(t_env_node));
+	gc_add(new);
+	new->key = ft_strdup(key);
+	gc_add(new->key);
+	new->value = ft_strdup(value);
+	gc_add(new->value);
+	env_list_add_back(env, new);
 }
