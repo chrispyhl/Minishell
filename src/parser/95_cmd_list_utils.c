@@ -28,33 +28,15 @@ int	extract_redirs(t_token_node *current, t_cmd_node *cmd_node)
 		if (current->token_type >= T_REDIR_IN
 			&& current->token_type <= T_HEREDOC)
 		{
-			// safety check: does next node (= file_name) exist?
-			if (current->next)
-			{
-				if (current->next->token_type == T_WORD)
-				{
-					// file_name = current->next->token since this is the normal syntax
-					// for example: > result.txt
-					new_node = create_file_node(current->next->token,
-							token_type_to_redir_type(current->token_type));
-					if (!new_node)
-						return (-1);
-					file_list_add_back(cmd_node->files, new_node);
-					// advance node; next node (file_name) will be skipped at loop end
-					current = current->next;
-				}
-				else
-				{
-					ft_printf("chrispyshell: syntax error near unexpected token '%s'\n",
-						current->next->token);
-					return (-1);
-				}
-			}
-			else
-			{
-				ft_printf("chrispyshell: syntax error near unexpected token 'newline'\n");
+			// file_name = current->next->token since this is the normal syntax
+			// for example: > result.txt
+			new_node = create_file_node(current->next->token,
+					token_type_to_redir_type(current->token_type));
+			if (!new_node)
 				return (-1);
-			}
+			file_list_add_back(cmd_node->files, new_node);
+			// advance node; next node (file_name) will be skipped at loop end
+			current = current->next;
 		}
 		current = current->next;
 	}

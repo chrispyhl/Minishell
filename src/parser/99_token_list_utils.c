@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:39 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 13:19:42 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/07 14:38:08 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,26 @@ void	token_list_add_back(t_token_list *list, t_token_node *new_node)
 
 void	free_token_node(t_token_node *token_node)
 {
-	t_token_node	*temp;
-
 	if (!token_node)
 		return ;
-	while (token_node)
+	if (token_node->token)
+		free(token_node->token);
+	free(token_node);
+}
+
+void	free_token_list(t_token_list *token_list)
+{
+	t_token_node	*current;
+	t_token_node	*temp_next;
+
+	if (!token_list)
+		return ;
+	current = token_list->head;
+	while (current)
 	{
-		temp = token_node->next;
-		if (token_node->token)
-			free(token_node->token);
-		free(token_node);
-		token_node = temp;
+		temp_next = current->next;
+		free_token_node(current);
+		current = temp_next;
 	}
+	free(token_list);
 }

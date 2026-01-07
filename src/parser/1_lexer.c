@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_lexer.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:37:01 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 10:47:21 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/07 15:10:14 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,24 +122,30 @@ t_token_list	*lexer(char *input)
 		// this helper function populates token_node and increments i
 		{
 			if (handle_token_redir(input, token_list, &i) == -1)
-				// TODO: CLEANUP NECESSARY HERE OR IN MAIN FT! (GC?)
+			{
+				free_token_list(token_list);
 				return (NULL);
+			}
 		}
 		// catch pipes
 		else if (input[i] == '|')
 		{
 			// this helper function populates token_node and increments i
 			if (handle_token_pipe(token_list, &i) == -1)
-				// TODO: CLEANUP NECESSARY HERE OR IN MAIN FT! (GC?)
+			{
+				free_token_list(token_list);
 				return (NULL);
+			}
 		}
 		// catch everything else
 		else if (input[i] != '\0')
 		{
 			// this helper function populates token_node and increments i
 			if (handle_token_word(input, token_list, &i) == -1)
-				// TODO: CLEANUP NECESSARY HERE OR IN MAIN FT! (GC?)
+			{
+				free_token_list(token_list);
 				return (NULL);
+			}
 		}
 	}
 	return (token_list);

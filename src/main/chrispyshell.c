@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 15:18:46 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/07 15:28:08 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,25 +83,36 @@ int	main(int argc, char **argv, char **envp)
 	// get absolute filepath of our executable
 	filepath = get_filepath(argv[0]);
 	if (!filepath)
+	{
+		ft_putstr_fd("chrispyshell: malloc error\n", 2);
 		return (1);
+	}
 	env_list = init_env_list(envp);
 	if (!env_list)
 	{
 		free(filepath);
-		free_env_list(env_list);
+		ft_putstr_fd("chrispyshell: malloc error\n", 2);
 		return (1);
 	}
 	// put the absolute filepath into our env_list
-	set_filepath_evnar(env_list, filepath);
+	if (set_filepath_envar(env_list, filepath) == -1)
+	{
+		free(filepath);
+		free_env_list(env_list);
+		ft_putstr_fd("chrispyshell: malloc error\n", 2);
+		return (1);
+	}
+	free(filepath);
 	while (1)
 	{
 		// prompt string needs to be refined (include path? newline?)
 		input = readline("chrispyshell$ ");
 		// handles ctrl + D
-		if (input == NULL)
+		if (!input)
 		{
 			ft_putstr_fd("exit\n", 1);
-			exit(1);
+			free_env_list(env_list);
+			exit(0);
 		}
 		else if (input[0] != '\0')
 		{
@@ -113,6 +124,8 @@ int	main(int argc, char **argv, char **envp)
 			free_cmd_list(cmd_list); // if not used by executor?
 			free(input);
 		}
+		else
+			free(input); // free input upon after blank line ENTER
 	}
 	// TODO: free env_list! this also frees filepath!
 	return (0);
