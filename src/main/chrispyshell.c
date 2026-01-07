@@ -6,18 +6,16 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 16:29:46 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/07 17:49:36 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// TODO: ctrl + C functionality via sigint handling
-// prior input is kept, but not executed, ^C is added
-// new line gets opened
-// void signal_handler(int code)
-// {
-// }
+volatile sig_atomic_t	g_signal = 0;
+// volatile: tells compiler optimization:
+// "don't skip scanning this value again for better effiency! might change anytime!"
+// sig_atomic_t: integer type that guarantees uninterrupted reading regardless of hardware
 
 static t_env_list	*init_env_list(char **envp)
 {
@@ -104,8 +102,18 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	}
 	free(filepath);
+	// setup for handling
+	// SIGINT (signal interrupt, ctrl + c)
+	// and SIGQUIT (ctrl + \)
+	setup_signals();
 	while (1)
 	{
+		// this means that SIGINT (ctrl + C) was entered!
+		if (g_signal == 2)
+		{
+			env_list->exit_status = 130;
+			g_signal = 0;
+		}
 		// prompt string needs to be refined (include path? newline?)
 		input = readline("chrispyshell$ ");
 		// handles ctrl + D
@@ -120,9 +128,11 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			cmd_list = parser(input, env_list);
 			if (cmd_list)
+			{
 				execute_command_list(cmd_list, env_list);
+				free_cmd_list(cmd_list);
+			}
 			// TODO: MASSIVE ERROR HANDLING HERE
-			free_cmd_list(cmd_list); // if not used by executor?
 			free(input);
 		}
 		else
