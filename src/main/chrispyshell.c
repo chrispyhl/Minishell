@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/05 16:29:23 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/07 10:35:59 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ int	main(int argc, char **argv, char **envp)
 	filepath = get_filepath(argv[0]);
 	if (!filepath)
 		return (1);
-	// put that filepath
 	env_list = init_env_list(envp);
 	if (!env_list)
 	{
