@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/03 13:49:03 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/05 16:11:41 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 # include <readline/readline.h>
 # include <stdio.h>  // readline, perror
 # include <stdlib.h> // malloc, free, exit
+
+// failsafe in case limits.h does not include PATH_MAX (depends on OS?)
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 // FILE STRUCTS
 // -------------------
@@ -110,6 +115,8 @@ int						execute_command_list(t_cmd_list *list, t_env_list *env);
 t_env_node				*create_env_node(char *info);
 void					env_list_add_back(t_env_list *list,
 							t_env_node *new_node);
+int						set_filepath_evnar(t_env_list *env_list,
+							char *filepath);
 void					free_env_list(t_env_list *env_list);
 
 // cmd utility
@@ -120,6 +127,5 @@ void					free_file_list(t_file_list *file_list);
 void					free_array(char **array);
 long long				ft_atoll(const char *str, int *error);
 int						ft_strcmp(const char *s1, const char *s2);
-
 
 #endif

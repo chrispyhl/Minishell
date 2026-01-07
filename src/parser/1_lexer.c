@@ -6,14 +6,11 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:37:01 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/24 15:31:27 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/07 10:47:21 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
-
-// TODO: does not handle open quote (echo "Hello ); should it?
-// for now, this ft prints and returns error when quote is unclosed
 
 static int	handle_token_word(char *input, t_token_list *token_list, int *i)
 {

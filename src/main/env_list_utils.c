@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_list_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:46:30 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/11 17:50:42 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/05 15:58:40 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,29 @@ void	env_list_add_back(t_env_list *list, t_env_node *new_node)
 		list->tail->next = NULL;
 	}
 	list->size += 1;
+}
+
+// ft for changing the value of _ in env
+int	set_filepath_evnar(t_env_list *env_list, char *filepath)
+{
+	t_env_node	*current;
+
+	current = env_list->head;
+	while (current->key)
+	{
+		// look for the key from parameter
+		if (ft_strcmp(current->key, "_") == 0)
+		{
+			// if key already has value, free it
+			if (current->value)
+				free(current->value);
+			// TODO: gc implementation!
+			current->value = filepath;
+			break ;
+		}
+		current = current->next;
+	}
+	return (0);
 }
 
 // TODO: replace with gc functionality
