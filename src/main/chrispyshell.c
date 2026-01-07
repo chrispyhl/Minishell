@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 15:28:08 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/07 16:29:46 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static t_env_list	*init_env_list(char **envp)
 	env_list->head = NULL;
 	env_list->tail = NULL;
 	env_list->size = 0;
+	env_list->exit_status = 0;
 	i = 0;
 	while (envp[i])
 	{

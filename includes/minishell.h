@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 14:40:45 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/07 16:46:57 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ typedef struct s_env_list
 	t_env_node			*head;
 	t_env_node			*tail;
 	ssize_t				size;
-
+	int					exit_status;
 }						t_env_list;
 // ~~~~~~~~~~~~~~~~~~~
 

@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:29 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 13:19:32 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/07 16:45:17 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,28 @@ int	expand_token(t_token_node *current, t_env_list *env_list, int *i)
 	int		key_len;
 
 	key_len = get_key_len(&current->token[*i]);
-	value = find_env_value(env_list, &current->token[*i] + 1, key_len);
-	if (!value)
-		value = "";
-	if (insert_value(current, &current->token[*i], value, key_len) == -1)
-		return (-1);
-	*i += ft_strlen(value);
+	if (current->token[(*i) + 1] == '?')
+	{
+		value = ft_itoa(env_list->exit_status);
+		if (!value)
+			return (-1);
+		if (insert_value(current, &current->token[*i], value, key_len) == -1)
+		{
+			free(value);
+			return (-1);
+		}
+		*i += ft_strlen(value);
+		free(value);
+	}
+	else
+	{
+		value = find_env_value(env_list, &current->token[*i] + 1, key_len);
+		if (!value)
+			value = "";
+		if (insert_value(current, &current->token[*i], value, key_len) == -1)
+			return (-1);
+		*i += ft_strlen(value);
+	}
 	return (0);
 }
 
