@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_2env_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:17:16 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 16:08:38 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/08 12:36:03 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ void	env_add_back(t_env_list *env, char *key, char *value)
 	if (!new_node)
 		return ;
 	new_node->key = gc_strdup(key);
-	new_node->value = gc_strdup(value);
+	if (value)
+		new_node->value = gc_strdup(value);
+	else
+		new_node->value = NULL;
 	new_node->next = NULL;
 	if (!env->head)
 	{

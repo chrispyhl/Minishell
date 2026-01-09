@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_single_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/07 15:10:02 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/09 15:51:20 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,6 @@ static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 	return (ret);
 }
 
-int	execute_external(t_cmd_node *node, t_env_list *env)
-{
-	return (handle_external_cmd(node, env));
-}
-
 int	execute_builtin(t_cmd_node *node, t_env_list *env)
 {
 	if (ft_strncmp(*node->cmd, "cd", 3) == 0)
@@ -71,26 +66,26 @@ int	execute_builtin(t_cmd_node *node, t_env_list *env)
 
 int	handle_single_cmd(t_cmd_node *node, t_env_list *env)
 {
-	int	saved_io[2];
-
-	if (!node->cmd || !node->cmd[0])
+	pid_t	pid;
+	
+	while (node->cmd && node->cmd[0] && node->cmd[0][0] == '\0' && node->cmd[1])
+		node->cmd++;
+	if (!node->cmd || !node->cmd[0] || node->cmd[0][0] == '\0')
 	{
-		saved_io[0] = dup(STDIN_FILENO);
-		saved_io[1] = dup(STDOUT_FILENO);
 		if (handle_redirections(node, env) == -1)
-		{
-			dup2(saved_io[0], STDIN_FILENO);
-			dup2(saved_io[1], STDOUT_FILENO);
-			return (close(saved_io[0]), close(saved_io[1]), 0);
-		}
-		dup2(saved_io[0], STDIN_FILENO);
-		dup2(saved_io[1], STDOUT_FILENO);
-		return (close(saved_io[0]), close(saved_io[1]), 0);
+			env->exit_status = 1;
+		else
+			env->exit_status = 0;
+		return (env->exit_status);
 	}
 	update_underscore(env, node->cmd);
 	if (node->cmd_type == BUILTIN)
-		return (builtin_redir(node, env));
-	else if (node->cmd_type == EXTERNAL)
-		return (execute_external(node, env));
-	return (0);
+		env->exit_status = builtin_redir(node, env);
+	else
+	{
+		pid = handle_external_cmd(node, env);
+		wait_for_all(env, pid);
+	}
+	sync_exit_status(env);
+	return (env->exit_status);
 }

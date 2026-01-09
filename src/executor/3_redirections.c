@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/06 10:25:39 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/09 15:19:16 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,10 @@ int	handle_redirections(t_cmd_node *node, t_env_list *env)
 		{
 			fd = open_file(current->filename, current->redir_type);
 			if (fd == -1)
+			{
+				env->exit_status = 1;
 				return (-1);
+			}
 			if (current->redir_type == NODE_INPUT)
 				dup2(fd, STDIN_FILENO);
 			else
