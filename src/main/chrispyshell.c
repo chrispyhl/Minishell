@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 22:04:55 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/09 15:15:26 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,15 +111,17 @@ int	main(int argc, char **argv, char **envp)
 	setup_signals();
 	while (1)
 	{
-		// this means that SIGINT (ctrl + C) was entered!
-		if (g_signal == 2)
-		{
-			env_list->exit_status = 130;
-			g_signal = 0;
-		}
+		//// this means that SIGINT (ctrl + C) was entered!
+		//if (g_signal == 2)
+		//{
+		//	env_list->exit_status = 130;
+		//	g_signal = 0;
+		//}
+		sync_exit_status(env_list);
 		// prompt string needs to be refined (include path? newline?)
 		input = readline(TEAL"chrispyshell$ "RESET);
 		// handles ctrl + D
+		sync_exit_status(env_list);
 		if (!input)
 		{
 			ft_putstr_fd("exit\n", 1);

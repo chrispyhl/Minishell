@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   general_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:49 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/03 13:55:57 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/09 13:55:35 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,6 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-static int	ft_isspace(int c)
-{
-	return (c == 32 || (c >= 9 && c <= 13));
-}
-
 long long	ft_atoll(const char *str, int *error)
 {
 	int					c;
@@ -53,20 +48,31 @@ long long	ft_atoll(const char *str, int *error)
 	c = 0;
 	pos_neg = 1;
 	result = 0;
-	while (ft_isspace(str[c]))
+	while (str[c] && (str[c] == 32 || (str[c] >= 9 && str[c] <= 13)))
 		c++;
-	if (str[c] == '+' || str[c] == '-')
-	{
-		if (str[c] == '-')
+	if ((str[c] == '+' || str[c] == '-') && str[c++] == '-')
 			pos_neg = -1;
-	}
+	if (!(str[c] >= '0' && str[c] <= '9'))
+		return (*error = 1, 0);
 	while (str[c] >= '0' && str[c] <= '9')
 	{
 		if (result > __LONG_LONG_MAX__ / 10 || (result == __LONG_LONG_MAX__ / 10
-				&& (unsigned long long)(str[c] - '0') > (unsigned long long)
-				(__LONG_LONG_MAX__ % 10 + (pos_neg == -1))))
+				&& (unsigned long long)(str[c] - '0') > 7 + (pos_neg == -1)))
 					return (*error = 1, 0);
 		result = result * 10 + (str[c++] - '0');
 	}
+	while (str[c] && (str[c] == 32 || (str[c] >= 9 && str[c] <= 13)))
+		c++;
+	if (str[c])
+		*error = 1;
 	return (result * pos_neg);
+}
+
+void	sync_exit_status(t_env_list *env)
+{
+	if (g_signal != 0)
+	{
+		env->exit_status = 128 + g_signal;
+		g_signal = 0;
+	}
 }
