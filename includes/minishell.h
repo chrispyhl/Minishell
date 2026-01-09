@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 17:34:27 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/09 14:23:36 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ typedef struct s_env_list
 t_cmd_list						*parser(char *input, t_env_list *env_list);
 
 // EXECUTOR
-int								execute_command_list(t_cmd_list *list,
+void								execute_command_list(t_cmd_list *list,
 									t_env_list *env);
 
 // ENVIRONMENTAL VARIABLES LIST
@@ -134,6 +134,7 @@ void							free_file_list(t_file_list *file_list);
 void							free_array(char **array);
 long long						ft_atoll(const char *str, int *error);
 int								ft_strcmp(const char *s1, const char *s2);
+void							sync_exit_status(t_env_list *env);
 
 // signal handling
 void	setup_signals(void);
