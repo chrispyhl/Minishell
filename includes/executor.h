@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/09 15:52:59 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/09 15:58:40 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int			process_export_arg(t_env_list *env, char *arg);
 int			is_numeric(char *str);
 int			err_msg(char *cmd, char *msg, int status);
 int			get_exit_status(int status);
-void		sync_exit_status(t_env_list *env);
 void		handle_wait_status(int status, t_env_list *env);
 
 // Vorrübergehend
