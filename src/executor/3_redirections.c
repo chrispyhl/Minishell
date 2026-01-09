@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/09 15:19:16 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/09 16:20:36 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	open_file(char *filename, int type)
 	struct stat	info;
 
 	if ((type == NODE_OUTPUT || type == NODE_APPEND) 
-			&& stat(filename, &info) == 0 && S_ISDIR(info.st_mode))
+		&& stat(filename, &info) == 0 && S_ISDIR(info.st_mode))
 	{
 		ft_putstr_fd("chrispyshell: ", 2);
 		ft_putstr_fd(filename, 2);

@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/09 15:51:20 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/09 16:20:26 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	update_underscore(t_env_list *env, char **cmd)
 	if (!env || !cmd || !cmd[0])
 		return ;
 	i = 0;
-	while(cmd[i])
+	while (cmd[i])
 		i++;
 	set_env_value(env, "_", cmd[i - 1]);
 }
