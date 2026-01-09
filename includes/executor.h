@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/06 13:17:10 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/09 15:52:59 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,13 @@
 # include <fcntl.h>
 # include <limits.h>
 
-// // TESTER HELPERS
-
-// t_cmd_node	*create_test_node(enum e_cmd_type type, const char **args);
-// t_env_node	*create_test_env_node(char *key, char *value);
-// t_env_list	*create_dummy_env_list(void);
-// t_cmd_list	*setup_single_command_test(t_cmd_node *node);
-// t_file_node	*create_test_file_node(char *filename, t_redir_type type);
-
 // EXECUTOR CORE
 
-int			execute_command_list(t_cmd_list *list, t_env_list *env);
+void		execute_command_list(t_cmd_list *list, t_env_list *env);
+void		wait_for_all(t_env_list *env, pid_t last_pid);
 
 int			handle_single_cmd(t_cmd_node *node, t_env_list *env);
 int			execute_builtin(t_cmd_node *node, t_env_list *env);
-int			execute_external(t_cmd_node *node, t_env_list *env);
 
 // BUILTINS
 
@@ -76,6 +68,8 @@ int			process_export_arg(t_env_list *env, char *arg);
 int			is_numeric(char *str);
 int			err_msg(char *cmd, char *msg, int status);
 int			get_exit_status(int status);
+void		sync_exit_status(t_env_list *env);
+void		handle_wait_status(int status, t_env_list *env);
 
 // Vorrübergehend
 
