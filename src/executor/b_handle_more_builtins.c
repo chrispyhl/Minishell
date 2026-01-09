@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_more_builtins.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chris <chris@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:14:29 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/02 17:29:26 by chris            ###   ########.fr       */
+/*   Updated: 2026/01/09 15:17:27 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,16 @@ int	handle_exit(t_cmd_node *node)
 		exit(0);
 	}
 	status = ft_atoll(node->cmd[1], &error);
-	if (!is_numeric(node->cmd[1]) || error)
+	if (error || !is_numeric(node->cmd[1]))
 	{
-		err_msg("exit", "numeric argument required", 255);
+		err_msg("exit", "numeric argument required", 2);
 		gc_free();
-		exit (255);
+		exit (2);
 	}
-	else if (node->cmd[2])
+	if (node->cmd[2])
 		return (err_msg("exit", "too many arguments", 1));
 	gc_free();
-	exit(status % 256);
+	exit((unsigned char)status);
 }
 
 int	handle_unset(t_cmd_node *node, t_env_list *env)
