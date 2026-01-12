@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 14:03:32 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 16:09:59 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,20 @@ static void	update_env_pwd(t_env_list *env, char *old_pwd)
 		process_export_arg(env, gc_strjoin("PWD=", new_pwd));
 }
 
-void	print_export_line(char *line)
+static int	is_valid_n(char *arg)
 {
 	int	i;
 
-	i = 0;
-	ft_putstr_fd("declare -x ", 1);
-	while (line[i] && line[i] != '=')
-		ft_putchar_fd(line[i++], 1);
-	if (line[i] == '=')
+	if (!arg || arg[0] != '-' || arg[1] != 'n')
+		return (0);
+	i = 1;
+	while (arg[i])
 	{
-		ft_putstr_fd("=\"", 1);
-		ft_putstr_fd(&line[i + 1], 1);
-		ft_putstr_fd("\"", 1);
+		if (arg[i] != 'n')
+			return (0);
+		i++;
 	}
-	ft_putchar_fd('\n', 1);
+	return (1);
 }
 
 int	handle_cd(t_cmd_node *node, t_env_list *env)
@@ -68,7 +67,7 @@ int	handle_echo(t_cmd_node *node)
 
 	n = 1;
 	i = 1;
-	while (node->cmd[i] && !ft_strncmp(node->cmd[i], "-n", 3))
+	while (node->cmd[i] && is_valid_n(node->cmd[i]))
 	{
 		n = 0;
 		i++;
