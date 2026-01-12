@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/09 15:15:26 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 13:39:46 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	cmd_list = NULL;
+	// initialize gc!
+	// gc_init();
 	// get absolute filepath of our executable
 	filepath = get_filepath(argv[0]);
 	if (!filepath)
@@ -112,14 +114,14 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		//// this means that SIGINT (ctrl + C) was entered!
-		//if (g_signal == 2)
+		// if (g_signal == 2)
 		//{
 		//	env_list->exit_status = 130;
 		//	g_signal = 0;
 		//}
-		sync_exit_status(env_list);
-		// prompt string needs to be refined (include path? newline?)
-		input = readline(TEAL"chrispyshell$ "RESET);
+		// note: this sync BEFORE readline is only necessary if UI is supposed to change (color changes for example)
+		// sync_exit_status(env_list);
+		input = readline(TEAL "chrispyshell$ " RESET);
 		// handles ctrl + D
 		sync_exit_status(env_list);
 		if (!input)
@@ -142,7 +144,10 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else
 			free(input); // free input upon after blank line ENTER
+		// gc_free();
 	}
+	// cleanup useless here?
+	// clean_up();
 	// TODO: free env_list! this also frees filepath!
 	return (0);
 }
