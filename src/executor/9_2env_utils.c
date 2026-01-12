@@ -6,11 +6,34 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:17:16 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 15:50:31 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 16:01:49 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
+
+static void	free_env_node(t_env_node *node)
+{
+	if (!node)
+		return ;
+	if (node->key)
+		free (node->key);
+	if (node->value)
+		free (node->value);
+	free (node);
+}
+
+static void	unlink_and_free(t_env_list *env, t_env_node *curr, t_env_node *prev)
+{
+	if (!prev)
+		env->head = curr->next;
+	else
+		prev->next = curr->next;
+	if (curr == env->tail)
+		env->tail = prev;
+	env->size--;
+	free_env_node(curr);
+}
 
 char	*get_env_value(t_env_list *env, char *key)
 {
@@ -56,17 +79,6 @@ void	env_add_back(t_env_list *env, char *key, char *value)
 	env->size++;
 }
 
-static void	free_env_node(t_env_node *node)
-{
-	if (!node)
-		return ;
-	if (node->key)
-		free (node->key);
-	if (node->value)
-		free (node->value);
-	free (node);
-}
-
 void	remove_env_node(t_env_list *env, char *key)
 {
 	t_env_node	*curr;
@@ -82,34 +94,10 @@ void	remove_env_node(t_env_list *env, char *key)
 	{
 		if (ft_strncmp(curr->key, key, len + 1) == 0)
 		{
-			if (!prev)
-				env->head = curr->next;
-			else
-				prev->next = curr->next;
-			if (curr = env->tail)
-				env->tail = prev;
-			env->size--;
-			free_env_node(curr);
+			unlink_and_free(env, curr, prev);
 			return ;
 		}
 		prev = curr;
 		curr = curr->next;
 	}
-}
-
-int	is_valid_env_key(char *key)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha(key[i]) && key[i] != '_')
-		return (0);
-	i++;
-	while (key[i])
-	{
-		if (!ft_isalnum(key[i]) && key[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
 }

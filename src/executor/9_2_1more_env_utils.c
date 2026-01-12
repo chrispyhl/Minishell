@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_2_1more_env_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 16:43:08 by chris             #+#    #+#             */
-/*   Updated: 2026/01/06 13:18:55 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 16:01:59 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,21 @@ void	set_env_value(t_env_list *env, char *key, char *value)
 	new->value = ft_strdup(value);
 	gc_add(new->value);
 	env_list_add_back(env, new);
+}
+
+int	is_valid_env_key(char *key)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(key[i]) && key[i] != '_')
+		return (0);
+	i++;
+	while (key[i])
+	{
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
 }
