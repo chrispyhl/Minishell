@@ -3,24 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   9_0_1_more_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 12:19:57 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/08 13:07:31 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 15:39:00 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
-void handle_wait_status(int status, t_env_list *env)
+int	is_numeric(char *str)
 {
-	if (WIFEXITED(status))
-		env->exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
+	int	i;
+
+	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	if (!str[i])
+		return (0);
+	while (str[i])
 	{
-		env->exit_status = 128 + WTERMSIG(status);
-		if (WTERMSIG(status) == SIGQUIT)
-			ft_putstr_fd("Quit: (core dumped)\n", 2);
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
 	}
-	sync_exit_status(env);
+	return (1);
 }

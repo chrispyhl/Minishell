@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:29:10 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 14:54:22 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 15:41:54 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,27 @@ static int	update_env_if_exists(t_env_list *env, char *key, char *value)
 	curr = env->head;
 	while (curr)
 	{
-		if (ft_strncmp(curr->key, key, ft_strlen(key) + 1) == 0)
+		if (ft_strcmp(curr->key, key) == 0)
 		{
-			if (value != NULL)
-				curr->value = value;
+			if (value)
+			{
+				if (curr->value)
+					free (curr->value);
+				curr->value = ft_strdup(value);
+			}
 			return (1);
 		}
 		curr = curr->next;
 	}
 	return (0);
+}
+
+static void	free_temp_export(char *key, char *value)
+{
+	if (key)
+		free (key);
+	if (value)
+		free (value);
 }
 
 int	process_export_arg(t_env_list *env, char *arg)
@@ -39,38 +51,23 @@ int	process_export_arg(t_env_list *env, char *arg)
 	equals = ft_strchr(arg, '=');
 	if (equals)
 	{
-		key = ft_malloc(equals - arg + 1, 1);
-		ft_strlcpy(key, arg, equals - arg + 1);
-		value = gc_strdup(equals + 1);
+		key = ft_substr(arg, 0, equals - arg);
+		value = ft_strdup(equals + 1);
 	}
 	else
 	{
-		key = gc_strdup(arg);
+		key = ft_strdup(arg);
 		value = NULL;
 	}
 	if (!is_valid_env_key(key))
+	{
+		free_temp_export(key, value);
 		return (err_msg("not a valid identifier", 1));
+	}
 	if (!update_env_if_exists(env, key, value))
 		env_add_back(env, key, value);
+	free_temp_export(key, value);
 	return (0);
-}
-
-int	is_numeric(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	if (!str[i])
-		return (0);
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
 }
 
 int	err_msg(char *msg, int status)

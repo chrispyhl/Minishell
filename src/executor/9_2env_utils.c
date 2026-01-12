@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_2env_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:17:16 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/08 12:36:03 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 15:50:31 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ void	env_add_back(t_env_list *env, char *key, char *value)
 {
 	t_env_node	*new_node;
 
-	new_node = ft_malloc(1, sizeof(t_env_node));
+	new_node = malloc(sizeof(t_env_node));
 	if (!new_node)
 		return ;
-	new_node->key = gc_strdup(key);
+	new_node->key = ft_strdup(key);
 	if (value)
-		new_node->value = gc_strdup(value);
+		new_node->value = ft_strdup(value);
 	else
 		new_node->value = NULL;
 	new_node->next = NULL;
@@ -56,15 +56,15 @@ void	env_add_back(t_env_list *env, char *key, char *value)
 	env->size++;
 }
 
-static void	unlink_env_node(t_env_list *env, t_env_node *curr, t_env_node *prev)
+static void	free_env_node(t_env_node *node)
 {
-	if (!prev)
-		env->head = curr->next;
-	else
-		prev->next = curr->next;
-	if (curr == env->tail)
-		env->tail = prev;
-	env->size--;
+	if (!node)
+		return ;
+	if (node->key)
+		free (node->key);
+	if (node->value)
+		free (node->value);
+	free (node);
 }
 
 void	remove_env_node(t_env_list *env, char *key)
@@ -82,7 +82,14 @@ void	remove_env_node(t_env_list *env, char *key)
 	{
 		if (ft_strncmp(curr->key, key, len + 1) == 0)
 		{
-			unlink_env_node(env, curr, prev);
+			if (!prev)
+				env->head = curr->next;
+			else
+				prev->next = curr->next;
+			if (curr = env->tail)
+				env->tail = prev;
+			env->size--;
+			free_env_node(curr);
 			return ;
 		}
 		prev = curr;
