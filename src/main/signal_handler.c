@@ -42,3 +42,13 @@ void	setup_signals(void)
 	sigaction(SIGQUIT, &sigact, NULL);
 	// this would otherwise crash the shell, so it has to be ignored
 }
+
+// TODO: final discussion about hardcoding 130
+void	sync_exit_status(t_env_list *env)
+{
+	if (g_signal != 0)
+	{
+		env->exit_status = 128 + g_signal;
+		g_signal = 0;
+	}
+}
