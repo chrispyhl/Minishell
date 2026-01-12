@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:37:01 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 15:10:14 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/12 13:54:17 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,13 @@ static int	handle_token_word(char *input, t_token_list *token_list, int *i)
 	}
 	// create a new node containing seg up until the undesired character
 	// since ft_substr copies with the condition (i < len), it stops before j
-	node_content = ft_substr(seg, 0, j);
+	node_content = gc_substr(seg, 0, j);
 	if (!node_content)
 		return (-1);
 	// this creates a new token_list node with the substr and it's token category (WORD)
 	new_node = create_token_node(node_content, T_WORD);
 	if (!new_node)
-	{
-		free(node_content);
 		return (-1);
-	}
 	// i gets incremeted by j so the lexer ft continues after the word
 	*i += j;
 	// the node gets added to the master token_list
@@ -62,15 +59,12 @@ static int	handle_token_pipe(t_token_list *token_list, int *i)
 	char			*node_content;
 	t_token_node	*new_node;
 
-	node_content = ft_strdup("|");
+	node_content = gc_strdup("|");
 	if (!node_content)
 		return (-1);
 	new_node = create_token_node(node_content, T_PIPE);
 	if (!new_node)
-	{
-		free(node_content);
 		return (-1);
-	}
 	(*i)++;
 	token_list_add_back(token_list, new_node);
 	return (0);
@@ -89,10 +83,7 @@ static int	handle_token_redir(char *input, t_token_list *token_list, int *i)
 		return (-1);
 	new_node = create_token_node(node_content, redir_type);
 	if (!new_node)
-	{
-		free(node_content);
 		return (-1);
-	}
 	(*i) += ft_strlen(node_content);
 	token_list_add_back(token_list, new_node);
 	return (0);
@@ -122,30 +113,21 @@ t_token_list	*lexer(char *input)
 		// this helper function populates token_node and increments i
 		{
 			if (handle_token_redir(input, token_list, &i) == -1)
-			{
-				free_token_list(token_list);
 				return (NULL);
-			}
 		}
 		// catch pipes
 		else if (input[i] == '|')
 		{
 			// this helper function populates token_node and increments i
 			if (handle_token_pipe(token_list, &i) == -1)
-			{
-				free_token_list(token_list);
 				return (NULL);
-			}
 		}
 		// catch everything else
 		else if (input[i] != '\0')
 		{
 			// this helper function populates token_node and increments i
 			if (handle_token_word(input, token_list, &i) == -1)
-			{
-				free_token_list(token_list);
 				return (NULL);
-			}
 		}
 	}
 	return (token_list);

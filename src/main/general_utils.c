@@ -6,28 +6,11 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:49 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 12:59:17 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/12 14:55:47 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	free_array(char **array)
-{
-	int	i;
-
-	i = 0;
-	if (!array)
-		return ;
-	while (array[i])
-	{
-		// TODO: implement gc
-		free(array[i]);
-		i++;
-	}
-	// TODO: implement gc
-	free(array);
-}
 
 int	ft_strcmp(const char *s1, const char *s2)
 {

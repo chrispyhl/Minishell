@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2_expander.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/24 15:32:12 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/12 14:49:08 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	remove_quotes(t_token_node *node)
 
 	// TODO: replace with gc!
 	// after removing the quotes, new string won't be larger than old one
-	result = malloc((ft_strlen(node->token)) * sizeof(char));
+	result = ft_malloc(sizeof(char), ft_strlen(node->token) + 1);
 	if (!result)
 		return (-1);
 	i = 0;
@@ -82,7 +82,6 @@ static int	remove_quotes(t_token_node *node)
 			result[j++] = node->token[i++];
 	}
 	result[j] = '\0';
-	free(node->token);
 	node->token = result;
 	return (0);
 }

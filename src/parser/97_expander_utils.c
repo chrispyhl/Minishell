@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:29 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 16:45:17 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/12 14:03:17 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,19 @@ int	insert_value(t_token_node *current, char *key_pt, char *value, int key_len)
 	char	*pre_val;
 	char	*result;
 
-	affix = ft_substr(current->token, 0, key_pt - current->token);
+	affix = gc_substr(current->token, 0, key_pt - current->token);
 	if (!affix)
 		return (-1);
-	pre_val = ft_strjoin(affix, value);
-	free(affix);
+	pre_val = gc_strjoin(affix, value);
 	if (!pre_val)
 		return (-1);
-	affix = ft_substr(key_pt, key_len + 1, ft_strlen(key_pt));
+	affix = gc_substr(key_pt, key_len + 1, ft_strlen(key_pt));
 	if (!affix)
-	{
-		free(pre_val);
 		return (-1);
-	}
-	result = ft_strjoin(pre_val, affix);
-	free(pre_val);
-	free(affix);
+	result = gc_strjoin(pre_val, affix);
+
 	if (!result)
 		return (-1);
-	free(current->token);
 	current->token = result;
 	return (0);
 }
@@ -81,16 +75,12 @@ int	expand_token(t_token_node *current, t_env_list *env_list, int *i)
 	key_len = get_key_len(&current->token[*i]);
 	if (current->token[(*i) + 1] == '?')
 	{
-		value = ft_itoa(env_list->exit_status);
+		value = gc_itoa(env_list->exit_status);
 		if (!value)
 			return (-1);
 		if (insert_value(current, &current->token[*i], value, key_len) == -1)
-		{
-			free(value);
 			return (-1);
-		}
 		*i += ft_strlen(value);
-		free(value);
 	}
 	else
 	{

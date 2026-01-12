@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 12:47:22 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/06 13:09:33 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 14:19:56 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,11 @@ void	gc_free(void)
 	while (current != NULL)
 	{
 		tmp = current->next;
-		free (current->ptr);
-		free (current);
+		free(current->ptr);
+		free(current);
 		current = tmp;
 	}
+	gc->head = NULL;
+	gc->tail = NULL;
+	gc->size = 0;
 }
-

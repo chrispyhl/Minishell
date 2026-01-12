@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 13:41:16 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/12 14:56:39 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	cmd_list = NULL;
 	// initialize gc!
-	// gc_init();
+	gc_init();
 	// get absolute filepath of our executable
 	filepath = get_filepath(argv[0]);
 	if (!filepath)
@@ -128,6 +128,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			ft_putstr_fd("exit\n", 1);
 			free_env_list(env_list);
+			clean_up();
 			exit(0);
 		}
 		else if (input[0] != '\0')
@@ -135,19 +136,19 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			cmd_list = parser(input, env_list);
 			if (cmd_list)
-			{
 				execute_command_list(cmd_list, env_list);
-				free_cmd_list(cmd_list);
-			}
 			// TODO: MASSIVE ERROR HANDLING HERE
 			free(input);
 		}
 		else
 			free(input); // free input upon after blank line ENTER
-		// gc_free();
+		gc_free();
 	}
-	// cleanup useless here?
-	// clean_up();
+	if (input)
+		free(input);
+	if (env_list)
+		free_env_list(env_list);
+	clean_up();
 	// TODO: free env_list! this also frees filepath!
 	return (0);
 }
