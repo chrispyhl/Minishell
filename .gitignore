@@ -56,4 +56,5 @@ obj/parser/1_lexer.o
 obj/main/chrispyshell.o
 obj/parser/99_list_utils.o
 chrispyshell
+minishell
 src/parser/a.out
