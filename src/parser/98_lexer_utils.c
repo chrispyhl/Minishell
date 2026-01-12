@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   98_lexer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:34 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 22:40:38 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/12 13:48:14 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,22 @@ int	create_redir_node_content(char *seg, char **node_content,
 {
 	if (seg[0] == '<' && seg[1] == '<')
 	{
-		*node_content = ft_strdup("<<");
+		*node_content = gc_strdup("<<");
 		*redir_type = T_HEREDOC;
 	}
 	else if (seg[0] == '>' && seg[1] == '>')
 	{
-		*node_content = ft_strdup(">>");
+		*node_content = gc_strdup(">>");
 		*redir_type = T_REDIR_APP;
 	}
 	else if (seg[0] == '<')
 	{
-		*node_content = ft_strdup("<");
+		*node_content = gc_strdup("<");
 		*redir_type = T_REDIR_IN;
 	}
 	else if (seg[0] == '>')
 	{
-		*node_content = ft_strdup(">");
+		*node_content = gc_strdup(">");
 		*redir_type = T_REDIR_OUT;
 	}
 	if ((!*node_content))

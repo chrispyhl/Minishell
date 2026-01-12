@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:24 by craabe            #+#    #+#             */
-/*   Updated: 2025/12/30 13:19:27 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/12 13:47:50 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_file_list	*init_file_list(void)
 	t_file_list	*file_list;
 
 	// TODO: gc implementation!
-	file_list = malloc(sizeof(t_file_list));
+	file_list = ft_malloc(sizeof(t_file_list), 1);
 	if (!file_list)
 		return (NULL);
 	file_list->head = NULL;
@@ -30,16 +30,13 @@ t_file_node	*create_file_node(char *filename, t_redir_type redir_type)
 {
 	t_file_node	*node;
 
-	node = malloc(sizeof(t_file_node));
+	node = ft_malloc(sizeof(t_file_node), 1);
 	if (!node)
 		return (NULL);
 	// copy instead of assignment so that filename can be freed while this stays
-	node->filename = ft_strdup(filename);
+	node->filename = gc_strdup(filename);
 	if (!node->filename)
-	{
-		free(node);
 		return (NULL);
-	}
 	node->redir_type = redir_type;
 	node->next = NULL;
 	return (node);

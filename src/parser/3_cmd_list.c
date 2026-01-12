@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_cmd_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:19 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/02 18:36:28 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/12 14:02:56 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	**tokens_to_array(t_token_node *token_node)
 		if (current)
 			current = current->next;
 	}
-	cmd_array = malloc((node_nbr + 1) * sizeof(char *));
+	cmd_array = ft_malloc(sizeof(char *), node_nbr + 1);
 	// +1 for the pt to NULL
 	i = 0;
 	if (!cmd_array)
@@ -51,12 +51,9 @@ static char	**tokens_to_array(t_token_node *token_node)
 			current = current->next;
 		else
 		{
-			cmd_array[i] = ft_strdup(current->token);
+			cmd_array[i] = gc_strdup(current->token);
 			if (!cmd_array[i])
-			{
-				free_array(cmd_array);
 				return (NULL);
-			}
 			i++;
 		}
 		if (current)
@@ -95,7 +92,7 @@ t_cmd_list	*create_cmd_list(t_token_list *token_list)
 	t_token_node	*current;
 
 	current = token_list->head;
-	cmd_list = malloc(sizeof(t_cmd_list));
+	cmd_list = ft_malloc(sizeof(t_cmd_list), 1);
 	if (!cmd_list)
 		return (NULL);
 	cmd_list->head = NULL;
@@ -103,36 +100,19 @@ t_cmd_list	*create_cmd_list(t_token_list *token_list)
 	cmd_list->size = 0;
 	while (current)
 	{
-		cmd_node = malloc(sizeof(t_cmd_node));
+		cmd_node = ft_malloc(sizeof(t_cmd_node), 1);
 		// TODO: implement gc!
 		if (!cmd_node)
-		{
-			free_cmd_list(cmd_list);
 			return (NULL);
-		}
 		cmd_node->files = init_file_list();
 		// TODO: implement gc!
 		if (!cmd_node->files)
-		{
-			free(cmd_node);
-			free_cmd_list(cmd_list);
 			return (NULL);
-		}
 		if (extract_redirs(current, cmd_node) == -1)
-		{
-			free_file_list(cmd_node->files);
-			free(cmd_node);
-			free_cmd_list(cmd_list);
 			return (NULL);
-		}
 		cmd_array = tokens_to_array(current);
 		if (!cmd_array)
-		{
-			free_file_list(cmd_node->files);
-			free(cmd_node);
-			free_cmd_list(cmd_list);
 			return (NULL);
-		}
 		cmd_node->cmd = cmd_array;
 		cmd_node->cmd_type = set_cmd_type(cmd_array[0]);
 		cmd_node->next = NULL;

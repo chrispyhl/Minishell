@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/09 14:23:36 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 14:55:42 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,17 +126,12 @@ int								set_filepath_envar(t_env_list *env_list,
 									char *filepath);
 void							free_env_list(t_env_list *env_list);
 
-// cmd utility
-void							free_cmd_list(t_cmd_list *cmd_list);
-void							free_file_list(t_file_list *file_list);
-
 // general utility
-void							free_array(char **array);
 long long						ft_atoll(const char *str, int *error);
 int								ft_strcmp(const char *s1, const char *s2);
-void							sync_exit_status(t_env_list *env);
 
 // signal handling
 void	setup_signals(void);
+void							sync_exit_status(t_env_list *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:46:30 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/07 15:05:35 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/12 15:52:18 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ int	set_filepath_envar(t_env_list *env_list, char *filepath)
 	return (0);
 }
 
-// TODO: replace with gc functionality
 void	free_env_list(t_env_list *env_list)
 {
 	t_env_node	*current;

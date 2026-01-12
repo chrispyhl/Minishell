@@ -3,31 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   general_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:49 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/09 13:55:35 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 14:55:47 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	free_array(char **array)
-{
-	int	i;
-
-	i = 0;
-	if (!array)
-		return ;
-	while (array[i])
-	{
-		// TODO: implement gc
-		free(array[i]);
-		i++;
-	}
-	// TODO: implement gc
-	free(array);
-}
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
@@ -68,11 +51,3 @@ long long	ft_atoll(const char *str, int *error)
 	return (result * pos_neg);
 }
 
-void	sync_exit_status(t_env_list *env)
-{
-	if (g_signal != 0)
-	{
-		env->exit_status = 128 + g_signal;
-		g_signal = 0;
-	}
-}
