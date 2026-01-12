@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_single_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/09 16:20:26 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 15:03:48 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 	saved_io[1] = dup(STDOUT_FILENO);
 	if (handle_redirections(node, env) == -1)
 	{
+		dup2(saved_io[0], STDIN_FILENO);
+		dup2(saved_io[1], STDOUT_FILENO);
 		close(saved_io[0]);
 		close(saved_io[1]);
 		return (1);
@@ -67,7 +69,7 @@ int	execute_builtin(t_cmd_node *node, t_env_list *env)
 int	handle_single_cmd(t_cmd_node *node, t_env_list *env)
 {
 	pid_t	pid;
-	
+
 	while (node->cmd && node->cmd[0] && node->cmd[0][0] == '\0' && node->cmd[1])
 		node->cmd++;
 	if (!node->cmd || !node->cmd[0] || node->cmd[0][0] == '\0')
