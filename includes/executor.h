@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 15:54:32 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 16:21:10 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int			handle_redirections(t_cmd_node *node, t_env_list *env);
 
 char		*get_env_value(t_env_list *env, char *key);
 void		env_add_back(t_env_list *env, char *key, char *value);
-void 		remove_env_node(t_env_list *env, char *key);
+void		remove_env_node(t_env_list *env, char *key);
 int			is_valid_env_key(char *key);
 char		**env_list_to_array(t_env_list *env);
 void		print_sorted_env(t_env_list *env);

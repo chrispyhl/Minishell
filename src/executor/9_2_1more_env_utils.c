@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 16:43:08 by chris             #+#    #+#             */
-/*   Updated: 2026/01/12 16:01:59 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 16:25:26 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,18 @@ void	set_env_value(t_env_list *env, char *key, char *value)
 	{
 		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
 		{
+			free(current->value);
 			current->value = ft_strdup(value);
-			gc_add(current->value);
 			return ;
 		}
 		current = current->next;
 	}
-	new = ft_calloc(1, sizeof(t_env_node));
-	gc_add(new);
+	new = malloc(sizeof(t_env_node));
+	if (!new)
+		return ;
 	new->key = ft_strdup(key);
-	gc_add(new->key);
 	new->value = ft_strdup(value);
-	gc_add(new->value);
+	new->next = NULL;
 	env_list_add_back(env, new);
 }
 
