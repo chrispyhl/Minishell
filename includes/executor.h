@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 14:02:33 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 15:54:32 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int			handle_echo(t_cmd_node *node);
 int			handle_pwd(void);
 int			handle_env(t_env_list *env);
 int			handle_cd(t_cmd_node *node, t_env_list *env);
-int			handle_exit(t_cmd_node *node);
+int			handle_exit(t_cmd_node *node, t_env_list *env);
 int			handle_export(t_cmd_node *node, t_env_list *env);
 int			handle_unset(t_cmd_node *node, t_env_list *env);
 
@@ -68,7 +68,6 @@ int			process_export_arg(t_env_list *env, char *arg);
 int			is_numeric(char *str);
 int			err_msg(char *msg, int status);
 int			get_exit_status(int status);
-void		handle_wait_status(int status, t_env_list *env);
 
 // Vorrübergehend
 
