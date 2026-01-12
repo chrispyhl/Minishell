@@ -6,11 +6,11 @@
 #    By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 16:38:39 by craabe            #+#    #+#              #
-#    Updated: 2025/12/30 16:09:21 by cpohl            ###   ########.fr        #
+#    Updated: 2026/01/12 16:38:42 by cpohl            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = chrispyshell
+NAME = minishell
 
 CC = cc
 CFLAGS = -Wextra -Wall -Werror -I includes
