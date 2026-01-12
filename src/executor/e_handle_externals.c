@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_handle_externals.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:19:44 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/09 15:46:42 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 14:37:43 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ static int	handle_path_error(char *cmd)
 	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, F_OK) != 0)
-			return (err_msg(cmd, "No such file or directory", 127));
+			return (err_msg("No such file or directory", 127));
 		if (stat(cmd, &info) == 0 && S_ISDIR(info.st_mode))
-			return (err_msg(cmd, "is a directory", 126));
-		return (err_msg(cmd, "Permission denied", 126));
+			return (err_msg("Is a directory", 126));
+		return (err_msg("Permission denied", 126));
 	}
-	return (err_msg(cmd, "command not found", 127));
+	return (err_msg("command not found", 127));
 }
 
 static void	child_process(t_cmd_node *node, t_env_list *env)

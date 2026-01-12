@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:29:10 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/07 15:15:08 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 14:54:22 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	process_export_arg(t_env_list *env, char *arg)
 		value = NULL;
 	}
 	if (!is_valid_env_key(key))
-		return (err_msg("export", "not a valid identifier", 1));
+		return (err_msg("not a valid identifier", 1));
 	if (!update_env_if_exists(env, key, value))
 		env_add_back(env, key, value);
 	return (0);
@@ -73,14 +73,9 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-int	err_msg(char *cmd, char *msg, int status)
+int	err_msg(char *msg, int status)
 {
 	ft_putstr_fd("chrispyshell: ", 2);
-	if (cmd)
-	{
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": ", 2);
-	}
 	ft_putendl_fd(msg, 2);
 	return (status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_builtins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/08 12:31:56 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/12 14:03:32 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ int	handle_cd(t_cmd_node *node, t_env_list *env)
 	char	old_pwd[1024];
 
 	if (node->cmd[1] && node->cmd[2])
-		return (err_msg("cd", "too many arguments", 1));
+		return (err_msg("too many arguments", 1));
 	if (!getcwd(old_pwd, sizeof(old_pwd)))
 		return (1);
 	if (!node->cmd[1])
 	{
 		path = get_env_value(env, "HOME");
 		if (!path || !*path)
-			return (err_msg("cd", "HOME not set", 1));
+			return (err_msg("HOME not set", 1));
 	}
 	else
 		path = node->cmd[1];
