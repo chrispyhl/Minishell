@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/13 15:10:37 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/13 16:18:44 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ static int	open_file(char *filename, int type)
 	return (fd);
 }
 
-static int	appy_node_redir(t_file_node *current, t_env_list *env)
+static int	apply_node_redir(t_file_node *current, t_env_list *env)
 {
 	int	fd;
 
 	if (current->redir_type == NODE_HEREDOC)
 	{
-		if (current->heredoc_fd == -1)
+		if (current->heredoc_fd != -1)
 		{
 			dup2(current->heredoc_fd, STDIN_FILENO);
 			close(current->heredoc_fd);
@@ -82,16 +82,7 @@ int	handle_redirections(t_cmd_node *node, t_env_list *env)
 	current = node->files->head;
 	while (current)
 	{
-		if (current->redir_type == NODE_HEREDOC)
-		{
-			if (current->heredoc_fd == -1)
-			{
-				dup2(current->heredoc_fd, STDIN_FILENO);
-				close(current->heredoc_fd);
-				current->heredoc_fd = -1;
-			}
-		}
-		else if (appy_node_redir(current, env) == -1)
+		if (apply_node_redir(current, env) == -1)
 			return (-1);
 		current = current->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/13 15:05:42 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/13 16:20:08 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,9 +136,12 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			cmd_list = parser(input, env_list);
 			if (cmd_list)
+			{
 				execute_command_list(cmd_list, env_list);
-			rl_on_new_line();
-			rl_replace_line("", 0);
+				g_signal = 0;
+				rl_on_new_line();
+				rl_replace_line("", 0);
+			}
 			// TODO: MASSIVE ERROR HANDLING HERE
 			free(input);
 		}
