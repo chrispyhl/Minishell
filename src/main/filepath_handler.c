@@ -52,3 +52,28 @@ int	set_filepath_envar(t_env_list *env_list, char *filepath)
 	env_list_add_back(env_list, new_node);
 	return (0);
 }
+
+// the contents of argv[0] depend on how the program was called
+// ./chrispyshell --> relative path in argv
+// /home/example/chrispyshell --> absolute path
+// to unify, this ft will return the full path in any case
+char	*get_filepath(char *path)
+{
+	char	cwd[PATH_MAX];
+	char	*result;
+	char	*temp;
+
+	// if it starts with a slash, it is abolute already
+	if (path[0] == '/')
+		// returning ft_strdup so this also returns malloced string
+		return (ft_strdup(path));
+	// if it starts with ., the path is relative
+	if (getcwd(cwd, PATH_MAX) == NULL)
+		return (NULL);
+	temp = ft_strjoin(cwd, "/");
+	if (!temp)
+		return (NULL);
+	result = ft_strjoin(temp, path);
+	free(temp);
+	return (result);
+}

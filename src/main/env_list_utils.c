@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 16:46:30 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/13 14:06:22 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/13 16:02:24 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_env_node	*new_env_node(char *key, char *value)
 	return (node);
 }
 
-t_env_node	*create_env_node(char *info)
+static t_env_node	*create_env_node(char *info)
 {
 	char	*key;
 	char	*value;
@@ -91,4 +91,32 @@ void	free_env_list(t_env_list *env_list)
 		current = next_node;
 	}
 	free(env_list);
+}
+
+t_env_list	*init_env_list(char **envp)
+{
+	t_env_list	*env_list;
+	t_env_node	*env_node;
+	int			i;
+
+	env_list = malloc(sizeof(t_env_list));
+	if (!env_list)
+		return (NULL);
+	env_list->head = NULL;
+	env_list->tail = NULL;
+	env_list->size = 0;
+	env_list->exit_status = 0;
+	i = 0;
+	while (envp[i])
+	{
+		env_node = create_env_node(envp[i]);
+		if (!env_node)
+		{
+			free_env_list(env_list);
+			return (NULL);
+		}
+		env_list_add_back(env_list, env_node);
+		i++;
+	}
+	return (env_list);
 }
