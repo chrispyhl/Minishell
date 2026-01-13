@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/13 13:47:00 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/13 14:57:45 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,10 @@ int						insert_value(t_token_node *current, char *key_pt,
 int						expand_token(t_token_node *current,
 							t_env_list *env_list, int *i);
 int						check_var_start(char c);
+// expander util 2
+int						remove_quotes(t_token_node *node);
+int						check_state(t_token_node *current,
+							t_env_list *env_list);
 
 // token list util
 t_token_list			*init_token_list(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   97_expander_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:29 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 14:03:17 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/13 14:59:48 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	insert_value(t_token_node *current, char *key_pt, char *value, int key_len)
 	if (!affix)
 		return (-1);
 	result = gc_strjoin(pre_val, affix);
-
 	if (!result)
 		return (-1);
 	current->token = result;
@@ -94,7 +93,6 @@ int	expand_token(t_token_node *current, t_env_list *env_list, int *i)
 	return (0);
 }
 
-// small helper ft to avoid clutter in if statement in expander ft
 int	check_var_start(char c)
 {
 	if (ft_isalnum(c) == 1 || c == '_' || c == '?')

@@ -1,6 +1,11 @@
 
 #include "../../includes/parser.h"
 
+static int	check_if_word_char(char c)
+{
+	return (c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t');
+}
+
 int	handle_token_word(char *input, t_token_list *token_list, int *i)
 {
 	char			*node_content;
@@ -11,19 +16,15 @@ int	handle_token_word(char *input, t_token_list *token_list, int *i)
 	seg = input + *i; // seg = segment of the string, starting from index i
 	j = 0;
 	// skip until something that does not belong to the word is encountered
-	while (seg[j] && seg[j] != '|' && seg[j] != '<' && seg[j] != '>'
-		&& seg[j] != ' ' && seg[j] != '\t')
+	while (seg[j] && check_if_word_char(seg[j]) == 1)
 	{
 		// if the loop found a double/single quote, we enter quote mode
 		// --> all characters are escaped up until the next quote
 		// includes edge case handling for (example) echo "A"B
 		// --> creates two nodes: echo, "A"B
 		// --> bash would output AB --> "A"B will be refined in expander
-		if (seg[j] == '\"' || seg[j] == '\'')
-		{
-			if (find_quote_end(seg, &j) == -1)
-				return (-1);
-		}
+		if ((seg[j] == '\"' || seg[j] == '\'') && find_quote_end(seg, &j) == -1)
+			return (-1);
 		else
 			j++;
 	}
@@ -42,8 +43,6 @@ int	handle_token_word(char *input, t_token_list *token_list, int *i)
 	token_list_add_back(token_list, new_node);
 	return (0);
 }
-
-// 11 comment lines
 
 int	handle_token_pipe(t_token_list *token_list, int *i)
 {

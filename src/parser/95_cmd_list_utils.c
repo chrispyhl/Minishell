@@ -57,7 +57,6 @@ int	populate_array(t_token_node *token_node, char **cmd_array)
 	{
 		if (current->token_type >= T_REDIR_IN
 			&& current->token_type <= T_HEREDOC)
-		// skip redir command
 		{
 			if (current->next)
 				current = current->next;
@@ -111,7 +110,7 @@ char	**tokens_to_array(t_token_node *token_node)
 t_cmd_type	set_cmd_type(char *cmd)
 {
 	static const char	*builtins[] = {"echo", "cd", "pwd", "export", "unset",
-			"env", "exit", NULL};
+		"env", "exit", NULL};
 	int					i;
 	size_t				cmd_len;
 
