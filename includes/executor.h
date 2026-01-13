@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 16:21:10 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/13 13:33:14 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char		*get_cmd_path(char *cmd, t_env_list *env);
 
 int			handle_piped_cmd(t_cmd_list *list, t_env_list *env);
 int			handle_redirections(t_cmd_node *node, t_env_list *env);
+int			fork_heredoc(char *delimiter, t_env_list *env);
 
 // ENV UTILITIES
 

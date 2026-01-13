@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   0_executor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 15:07:55 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/13 15:17:17 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,49 @@ void	wait_for_all(t_env_list *env, pid_t last_pid)
 		env->exit_status = 128 + WTERMSIG(last_status);
 }
 
+static int	process_cmd_heredocs(t_cmd_node *cmd, t_env_list *env)
+{
+	t_file_node	*file;
+
+	file = NULL;
+	if (cmd->files)
+		file = cmd->files->head;
+	while (file)
+	{
+		if (file->redir_type == NODE_HEREDOC)
+		{
+			file->heredoc_fd = fork_heredoc(file->filename, env);
+			if (file->heredoc_fd == -1)
+				return (-1);
+		}
+		file = file->next;
+	}
+	return (0);
+}
+
+int	pre_process_heredocs(t_cmd_list *list, t_env_list *env)
+{
+	t_cmd_node	*current;
+
+	current = list->head;
+	while (current)
+	{
+			if (process_cmd_heredocs(current, env) == -1)
+					return (-1);
+			current = current->next;
+	}
+	return (0);
+}
+
 void	execute_command_list(t_cmd_list *list, t_env_list *env)
 {
 	t_cmd_node	*current;
 	pid_t		last_pid;
 
+	if (!list || !list->head)
+		return ;
+	if (pre_process_heredocs(list, env) == -1)
+		return ;
 	current = list->head;
 	if (!current)
 		return ;
