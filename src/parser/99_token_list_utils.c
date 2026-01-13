@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   99_token_list_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:39 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 13:42:48 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/13 11:44:08 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_token_list	*init_token_list(void)
 {
 	t_token_list	*token_list;
 
-	token_list = ft_malloc(sizeof(t_token_list), 1);
+	token_list = ft_malloc(1, sizeof(t_token_list));
 	if (!token_list)
 		return (NULL);
 	token_list->head = NULL;
@@ -33,7 +33,7 @@ t_token_node	*create_token_node(char *content, t_token_type type)
 	malloc: calculates the total bytes needed for your 4 fields:
 	pointer *token, enum type, pointer *next, pointer *prev.
 	*/
-	node = (t_token_node *)ft_malloc(sizeof(t_token_node), 1);
+	node = (t_token_node *)ft_malloc(1, sizeof(t_token_node));
 	if (!node)
 		return (NULL);
 	node->token = content;
@@ -42,6 +42,7 @@ t_token_node	*create_token_node(char *content, t_token_type type)
 	node->prev = NULL;
 	return (node);
 }
+
 void	token_list_add_back(t_token_list *list, t_token_node *new_node)
 {
 	if (list == NULL || new_node == NULL)

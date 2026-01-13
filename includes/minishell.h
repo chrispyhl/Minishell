@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 14:55:42 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/13 14:10:03 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,12 @@ typedef struct s_env_list
 t_cmd_list						*parser(char *input, t_env_list *env_list);
 
 // EXECUTOR
-void								execute_command_list(t_cmd_list *list,
+void							execute_command_list(t_cmd_list *list,
 									t_env_list *env);
 
 // ENVIRONMENTAL VARIABLES LIST
 t_env_node						*create_env_node(char *info);
+t_env_node						*new_env_node(char *key, char *value);
 void							env_list_add_back(t_env_list *list,
 									t_env_node *new_node);
 int								set_filepath_envar(t_env_list *env_list,
@@ -131,7 +132,7 @@ long long						ft_atoll(const char *str, int *error);
 int								ft_strcmp(const char *s1, const char *s2);
 
 // signal handling
-void	setup_signals(void);
+void							setup_signals(void);
 void							sync_exit_status(t_env_list *env);
 
 #endif

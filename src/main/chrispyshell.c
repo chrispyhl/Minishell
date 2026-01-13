@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 14:56:39 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/13 13:34:06 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	cmd_list = NULL;
-	// initialize gc!
 	gc_init();
 	// get absolute filepath of our executable
 	filepath = get_filepath(argv[0]);
@@ -107,18 +106,9 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	}
 	free(filepath);
-	// setup for handling
-	// SIGINT (signal interrupt, ctrl + c)
-	// and SIGQUIT (ctrl + \)
 	setup_signals();
 	while (1)
 	{
-		//// this means that SIGINT (ctrl + C) was entered!
-		// if (g_signal == 2)
-		//{
-		//	env_list->exit_status = 130;
-		//	g_signal = 0;
-		//}
 		// note: this sync BEFORE readline is only necessary if UI is supposed to change (color changes for example)
 		// sync_exit_status(env_list);
 		input = readline(TEAL "chrispyshell$ " RESET);
@@ -137,7 +127,6 @@ int	main(int argc, char **argv, char **envp)
 			cmd_list = parser(input, env_list);
 			if (cmd_list)
 				execute_command_list(cmd_list, env_list);
-			// TODO: MASSIVE ERROR HANDLING HERE
 			free(input);
 		}
 		else
@@ -149,6 +138,5 @@ int	main(int argc, char **argv, char **envp)
 	if (env_list)
 		free_env_list(env_list);
 	clean_up();
-	// TODO: free env_list! this also frees filepath!
 	return (0);
 }

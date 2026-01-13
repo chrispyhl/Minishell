@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2_expander.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 14:49:08 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/13 13:33:05 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,8 @@ static int	remove_quotes(t_token_node *node)
 	t_expander_state	state;
 	char				*result;
 
-	// TODO: replace with gc!
 	// after removing the quotes, new string won't be larger than old one
-	result = ft_malloc(sizeof(char), ft_strlen(node->token) + 1);
+	result = ft_malloc(ft_strlen(node->token) + 1, sizeof(char));
 	if (!result)
 		return (-1);
 	i = 0;
@@ -125,3 +124,5 @@ int	expander(t_token_list *token_list, t_env_list *env_list)
 	}
 	return (0);
 }
+
+// 5 comment lines

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   96_file_list_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:24 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 13:47:50 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/13 11:43:53 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ t_file_list	*init_file_list(void)
 {
 	t_file_list	*file_list;
 
-	// TODO: gc implementation!
-	file_list = ft_malloc(sizeof(t_file_list), 1);
+	file_list = ft_malloc(1, sizeof(t_file_list));
 	if (!file_list)
 		return (NULL);
 	file_list->head = NULL;
@@ -30,7 +29,7 @@ t_file_node	*create_file_node(char *filename, t_redir_type redir_type)
 {
 	t_file_node	*node;
 
-	node = ft_malloc(sizeof(t_file_node), 1);
+	node = ft_malloc(1, sizeof(t_file_node));
 	if (!node)
 		return (NULL);
 	// copy instead of assignment so that filename can be freed while this stays
