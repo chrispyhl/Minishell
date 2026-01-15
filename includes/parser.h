@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 13:43:01 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/13 14:57:45 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,13 @@ typedef enum e_expander_state
 // lexer
 t_token_list			*lexer(char *input);
 
+// handler
+int						handle_token_word(char *input, t_token_list *token_list,
+							int *i);
+int						handle_token_pipe(t_token_list *token_list, int *i);
+int						handle_token_redir(char *input,
+							t_token_list *token_list, int *i);
+
 // expander
 int						expander(t_token_list *token_list,
 							t_env_list *env_list);
@@ -68,6 +75,10 @@ int						insert_value(t_token_node *current, char *key_pt,
 int						expand_token(t_token_node *current,
 							t_env_list *env_list, int *i);
 int						check_var_start(char c);
+// expander util 2
+int						remove_quotes(t_token_node *node);
+int						check_state(t_token_node *current,
+							t_env_list *env_list);
 
 // token list util
 t_token_list			*init_token_list(void);
@@ -85,6 +96,10 @@ int						check_token_syntax(t_token_list *token_list);
 t_redir_type			token_type_to_redir_type(t_token_type token_type);
 int						extract_redirs(t_token_node *current,
 							t_cmd_node *cmd_node);
+int						populate_array(t_token_node *token_node,
+							char **cmd_array);
+char					**tokens_to_array(t_token_node *token_node);
+t_cmd_type				set_cmd_type(char *cmd);
 
 // file list util
 t_file_list				*init_file_list(void);

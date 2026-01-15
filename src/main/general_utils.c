@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   general_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:49 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 14:55:47 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/13 17:16:45 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ long long	ft_atoll(const char *str, int *error)
 	while (str[c] && (str[c] == 32 || (str[c] >= 9 && str[c] <= 13)))
 		c++;
 	if ((str[c] == '+' || str[c] == '-') && str[c++] == '-')
-			pos_neg = -1;
+		pos_neg = -1;
 	if (!(str[c] >= '0' && str[c] <= '9'))
 		return (*error = 1, 0);
 	while (str[c] >= '0' && str[c] <= '9')
 	{
 		if (result > __LONG_LONG_MAX__ / 10 || (result == __LONG_LONG_MAX__ / 10
 				&& (unsigned long long)(str[c] - '0') > 7 + (pos_neg == -1)))
-					return (*error = 1, 0);
+			return (*error = 1, 0);
 		result = result * 10 + (str[c++] - '0');
 	}
 	while (str[c] && (str[c] == 32 || (str[c] >= 9 && str[c] <= 13)))
@@ -50,4 +50,3 @@ long long	ft_atoll(const char *str, int *error)
 		*error = 1;
 	return (result * pos_neg);
 }
-
