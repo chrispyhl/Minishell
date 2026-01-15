@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:24 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/13 11:43:53 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/15 15:10:28 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,19 @@ t_file_list	*init_file_list(void)
 
 t_file_node	*create_file_node(char *filename, t_redir_type redir_type)
 {
-	t_file_node	*node;
+	t_file_node	*file_node;
 
-	node = ft_malloc(1, sizeof(t_file_node));
-	if (!node)
+	file_node = ft_malloc(1, sizeof(t_file_node));
+	if (!file_node)
 		return (NULL);
 	// copy instead of assignment so that filename can be freed while this stays
-	node->filename = gc_strdup(filename);
-	if (!node->filename)
+	file_node->filename = gc_strdup(filename);
+	if (!file_node->filename)
 		return (NULL);
-	node->redir_type = redir_type;
-	node->next = NULL;
-	return (node);
+	file_node->redir_type = redir_type;
+	file_node->heredoc_fd = -1;
+	file_node->next = NULL;
+	return (file_node);
 }
 
 void	file_list_add_back(t_file_list *file_list, t_file_node *file_node)
