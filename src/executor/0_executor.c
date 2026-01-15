@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/13 15:17:17 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/13 17:14:02 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ static int	process_cmd_heredocs(t_cmd_node *cmd, t_env_list *env)
 	{
 		if (file->redir_type == NODE_HEREDOC)
 		{
+			if (file->heredoc_fd != -1)
+				close(file->heredoc_fd);
 			file->heredoc_fd = fork_heredoc(file->filename, env);
 			if (file->heredoc_fd == -1)
 				return (-1);
@@ -69,6 +71,28 @@ int	pre_process_heredocs(t_cmd_list *list, t_env_list *env)
 	return (0);
 }
 
+static void	close_all_heredocs(t_cmd_list *list)
+{
+	t_cmd_node	*cmd;
+	t_file_node	*file;
+
+	cmd = list->head;
+	while (cmd)
+	{
+		file = (cmd->files) ? cmd->files->head : NULL;
+		while (file)
+		{
+			if (file->heredoc_fd != -1)
+			{
+				close(file->heredoc_fd);
+				file->heredoc_fd = -1;
+			}
+			file = file->next;
+		}
+		cmd = cmd->next;
+	}
+}
+
 void	execute_command_list(t_cmd_list *list, t_env_list *env)
 {
 	t_cmd_node	*current;
@@ -88,4 +112,5 @@ void	execute_command_list(t_cmd_list *list, t_env_list *env)
 	}
 	last_pid = handle_piped_cmd(list, env);
 	wait_for_all(env, last_pid);
+	close_all_heredocs(list);
 }
