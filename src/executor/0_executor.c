@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/13 17:14:02 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/15 15:10:57 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,12 @@ static void	close_all_heredocs(t_cmd_list *list)
 	cmd = list->head;
 	while (cmd)
 	{
-		file = (cmd->files) ? cmd->files->head : NULL;
+		file = NULL;
+		if (cmd)
+		{
+			if (cmd->files)
+				file = cmd ->files->head;
+		}
 		while (file)
 		{
 			if (file->heredoc_fd != -1)
