@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_more_builtins.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:14:29 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 16:06:37 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/15 15:56:19 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ int	handle_env(t_env_list *env)
 	return (0);
 }
 
-int	handle_exit(t_cmd_node *node, t_env_list *env)
+int	handle_exit(t_cmd_node *node, t_env_list *env, int saved_io[2])
 {
 	long long	status;
 	int			error;
 
 	error = 0;
+	if (saved_io && saved_io[0] != -1)
+		close(saved_io[0]);
+	if (saved_io && saved_io[1] != -1)
+		close(saved_io[1]);
 	if (!node->cmd[1])
 	{
 		free_env_list(env);

@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/13 13:33:14 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/15 15:57:30 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		execute_command_list(t_cmd_list *list, t_env_list *env);
 void		wait_for_all(t_env_list *env, pid_t last_pid);
 
 int			handle_single_cmd(t_cmd_node *node, t_env_list *env);
-int			execute_builtin(t_cmd_node *node, t_env_list *env);
+int			execute_builtin(t_cmd_node *node, t_env_list *env, int saved_io[2]);
 
 // BUILTINS
 
@@ -35,7 +35,7 @@ int			handle_echo(t_cmd_node *node);
 int			handle_pwd(void);
 int			handle_env(t_env_list *env);
 int			handle_cd(t_cmd_node *node, t_env_list *env);
-int			handle_exit(t_cmd_node *node, t_env_list *env);
+int			handle_exit(t_cmd_node *node, t_env_list *env, int saved_io[2]);
 int			handle_export(t_cmd_node *node, t_env_list *env);
 int			handle_unset(t_cmd_node *node, t_env_list *env);
 
