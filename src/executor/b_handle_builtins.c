@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_builtins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 16:09:59 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/17 15:16:08 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,15 @@ int	handle_cd(t_cmd_node *node, t_env_list *env)
 		return (err_msg("too many arguments", 1));
 	if (!getcwd(old_pwd, sizeof(old_pwd)))
 		return (1);
-	if (!node->cmd[1])
+	path = node->cmd[1];
+	if (!path || path[0] == '~')
 	{
 		path = get_env_value(env, "HOME");
 		if (!path || !*path)
 			return (err_msg("HOME not set", 1));
+		if (node->cmd[1] && node->cmd[1][0] == '~')
+			path = gc_strjoin(path, &node->cmd[1][1]);
 	}
-	else
-		path = node->cmd[1];
 	if (chdir(path) != 0)
 		return (perror("chrispyshell: cd"), 1);
 	update_env_pwd(env, old_pwd);
