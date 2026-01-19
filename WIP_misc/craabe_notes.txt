@@ -31,3 +31,5 @@ cat ''$USER has a one byte leak wtf; at least it behaves correctly (unclosed bra
 g_global declared only once in main and in minishell.h?
 
 confirm that chrispyshell_loop changes are correct!
+
+README proofreaden
