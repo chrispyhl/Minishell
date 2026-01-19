@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/13 16:19:33 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/19 13:23:12 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,5 +127,5 @@ int	fork_heredoc(char *delimiter, t_env_list *env)
 		heredoc_loop(delimiter, env, pipe_fds[1]);
 	}
 	close(pipe_fds[1]); // Close write end in parent
-	return (heredoc_wait(pid, pipe_fds, env)); // Should not reach here
+	return (heredoc_wait(pid, pipe_fds, env));
 }
