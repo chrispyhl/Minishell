@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 12:03:39 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/19 12:41:44 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_list *env)
 {
+	int	ret;
+
 	if (prev_read != -1) // Wenn es nicht der erste Befehl ist...
 	{
 		dup2(prev_read, STDIN_FILENO); // ...nimm den Input vom vorherigen Befehl
@@ -30,7 +32,9 @@ static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_lis
 		gc_free();
 		exit(1);
 	}
-	exit(handle_single_cmd(node, env));
+	ret = handle_single_cmd(node, env);
+	gc_free();
+	exit(ret);
 }
 
 static int	pipe_parent(int *pipe_fds, int *prev_read, t_cmd_node *node)
