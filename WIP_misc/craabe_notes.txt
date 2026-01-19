@@ -22,3 +22,10 @@ STUFF THAT'S NOT YET POSSIBLE ACCORDING TO GEMINI:
 - implementing input/output redirection logic (since files are not assigned yet)
 - differentiating between buildins and executables
 
+
+TO DO:
+for heredoc, $USER as delimiter has to be read literally! delimiter should be $USER, not craabe
+
+cat ''$USER has a one byte leak wtf; at least it behaves correctly (unclosed bracket!)
+
+g_global declared only once in main and in minishell.h?
