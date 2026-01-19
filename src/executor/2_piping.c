@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2_piping.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/19 12:41:44 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/19 14:52:57 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_lis
 	if (handle_redirections(node, env) == -1) // Redictions überschreiben die Pipes (haben Vorrang) z.b. bei "<" oder ">"
 	{
 		gc_free();
+		free_env_list(env);
 		exit(1);
 	}
 	ret = handle_single_cmd(node, env);
+	free_env_list(env);
 	gc_free();
 	exit(ret);
 }

@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:19:44 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 14:37:43 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/19 16:06:36 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,22 @@ static void	child_process(t_cmd_node *node, t_env_list *env)
 	if (handle_redirections(node, env) == -1)
 	{
 		gc_free();
+		free_env_list(env);
 		exit(1);
 	}
 	path = get_cmd_path(node->cmd[0], env);
 	if (!path)
+	{
+		free_env_list(env);
+		gc_free();
 		exit(handle_path_error(node->cmd[0]));
+	}
 	envp = env_list_to_array(env);
 	if (!envp || execve(path, node->cmd, envp) == -1)
 	{
 		perror("chrispyshell: execve");
 		gc_free();
+		free_env_list(env);
 		exit(126);
 	}
 }

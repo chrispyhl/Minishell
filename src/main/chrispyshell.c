@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/15 15:13:12 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/19 13:57:18 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	main_setup(char *argv[], char **envp, t_env_list **env_list)
 	return (0);
 }
 
-static void	chrispyshell_loop(t_env_list *env_list)
+static int	chrispyshell_loop(t_env_list *env_list)
 {
 	char		*input;
 	t_cmd_list	*cmd_list;
@@ -60,9 +60,7 @@ static void	chrispyshell_loop(t_env_list *env_list)
 	if (!input)
 	{
 		ft_putstr_fd("exit\n", 1);
-		free_env_list(env_list);
-		clean_up();
-		exit(0);
+		return (-1);
 	}
 	else if (input[0] != '\0')
 	{
@@ -75,12 +73,15 @@ static void	chrispyshell_loop(t_env_list *env_list)
 	else
 		free(input); // free input upon after blank line ENTER
 	gc_free();
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_env_list	*env_list;
+	int			ret;
 
+	ret = 0;
 	(void)argc;
 	env_list = NULL;
 	if (main_setup(argv, envp, &env_list) == -1)
@@ -88,10 +89,10 @@ int	main(int argc, char **argv, char **envp)
 		ft_putstr_fd("chrispyshell: malloc error\n", 2);
 		return (1);
 	}
-	while (1)
-		chrispyshell_loop(env_list);
+	while (ret != -1)
+		ret = chrispyshell_loop(env_list);
 	if (env_list)
 		free_env_list(env_list);
 	clean_up();
-	return (0);
+	exit (0);
 }
