@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_0_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:29:10 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 15:41:54 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 17:06:59 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,17 @@ int	process_export_arg(t_env_list *env, char *arg)
 	char	*key;
 	char	*value;
 	char	*equals;
+	int		append;
 
+	append = 0;
 	equals = ft_strchr(arg, '=');
-	if (equals)
+	if (equals && equals > arg && *(equals - 1) == '+')
+	{
+		append = 1;
+		key = ft_substr(arg, 0, equals - arg - 1);
+		value = ft_strdup(equals + 1);
+	}
+	else if (equals)
 	{
 		key = ft_substr(arg, 0, equals - arg);
 		value = ft_strdup(equals + 1);
@@ -64,8 +72,16 @@ int	process_export_arg(t_env_list *env, char *arg)
 		free_temp_export(key, value);
 		return (err_msg("not a valid identifier", 1));
 	}
-	if (!update_env_if_exists(env, key, value))
-		env_add_back(env, key, value);
+	if (append)
+	{
+		if (append_env_value(env, key, value) == 0)
+			set_env_value(env, key, value);
+	}
+	else
+	{
+		if (update_env_if_exists(env, key, value) == 0)
+			env_add_back(env, key, value);
+	}
 	free_temp_export(key, value);
 	return (0);
 }

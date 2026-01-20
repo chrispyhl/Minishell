@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/20 16:08:20 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 17:07:29 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,19 @@ static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_lis
 
 static int	pipe_parent(int *pipe_fds, int *prev_read, t_cmd_node *node)
 {
-	if (*prev_read != -1)
+	if (*prev_read >= 0)
 		close(*prev_read); // schließe den vorherigen Lese-Ende der Pipe
 	if (node->next)
 	{
-		close(pipe_fds[1]); // schließe das Schreib-Ende der aktuellen Pipe im Parent
+		if (pipe_fds[1] >= 0) // wenn es eine nächste Pipe gibt
+			close(pipe_fds[1]); // schließe das Schreib-Ende der aktuellen Pipe im Parent
 		*prev_read = pipe_fds[0]; // speichere das Lese-Ende für den nächsten Befehl
 	}
 	else
-		close(pipe_fds[0]); // schließe das Lese-Ende der aktuellen Pipe im Parent
+	{
+		if (pipe_fds[0] >= 0)
+			close(pipe_fds[0]); // schließe das Lese-Ende der aktuellen Pipe im Parent
+	}
 	return (0);
 }
 
@@ -67,6 +71,8 @@ int	handle_piped_cmd(t_cmd_list *list, t_env_list *env)
 	int			prev_read;
 	pid_t		pid;
 
+	pipe_fds[0] = -1;
+	pipe_fds[1] = -1;
 	current = list->head;
 	prev_read = -1;
 	while (current)

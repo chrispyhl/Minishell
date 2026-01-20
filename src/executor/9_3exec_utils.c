@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_3exec_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:17:15 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 16:08:42 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 16:18:56 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ char	*get_cmd_path(char *cmd, t_env_list *env)
 		if (stat(cmd, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 			return (NULL);
 		if (access(cmd, F_OK | X_OK) == 0)
-			return (gc_strdup(cmd));
+			return (ft_strdup(cmd));
 		return (NULL);
 	}
 	path_var = get_env_value(env, "PATH");
 	if (!path_var)
 		return (NULL);
-	dirs = gc_split(path_var, ':');
+	dirs = ft_split(path_var, ':');
 	return (find_path_in_dirs(dirs, cmd));
 }

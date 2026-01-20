@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/20 15:37:49 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 16:36:44 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int			is_valid_env_key(char *key);
 char		**env_list_to_array(t_env_list *env);
 void		print_sorted_env(t_env_list *env);
 void		set_env_value(t_env_list *env, char *key, char *value);
+int			append_env_value(t_env_list *env, char *key, char *value);
 
 // OTHER UTILITIES
 
