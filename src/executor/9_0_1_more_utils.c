@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_0_1_more_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 12:19:57 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 16:06:45 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 15:38:09 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,10 @@ void	print_export_line(char *line)
 		ft_putstr_fd("\"", 1);
 	}
 	ft_putchar_fd('\n', 1);
+}
+
+void	full_cleanup(t_env_list *env)
+{
+	free_env_list(env);
+	gc_free();
 }

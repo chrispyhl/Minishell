@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2_piping.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/19 14:52:57 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 16:08:20 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_lis
 {
 	int	ret;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (prev_read != -1) // Wenn es nicht der erste Befehl ist...
 	{
 		dup2(prev_read, STDIN_FILENO); // ...nimm den Input vom vorherigen Befehl
@@ -33,10 +35,15 @@ static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_lis
 		free_env_list(env);
 		exit(1);
 	}
-	ret = handle_single_cmd(node, env);
-	free_env_list(env);
-	gc_free();
-	exit(ret);
+	if (node->cmd_type == BUILTIN)
+	{
+		ret = execute_builtin(node, env, NULL);
+		free_env_list(env);
+		gc_free();
+		exit(ret);
+	}
+	else
+		execute_binary(node, env);
 }
 
 static int	pipe_parent(int *pipe_fds, int *prev_read, t_cmd_node *node)
@@ -48,6 +55,8 @@ static int	pipe_parent(int *pipe_fds, int *prev_read, t_cmd_node *node)
 		close(pipe_fds[1]); // schließe das Schreib-Ende der aktuellen Pipe im Parent
 		*prev_read = pipe_fds[0]; // speichere das Lese-Ende für den nächsten Befehl
 	}
+	else
+		close(pipe_fds[0]); // schließe das Lese-Ende der aktuellen Pipe im Parent
 	return (0);
 }
 
@@ -68,7 +77,11 @@ int	handle_piped_cmd(t_cmd_list *list, t_env_list *env)
 		if (pid == -1)
 			return (perror("chrispyshell: fork"), 1);
 		if (pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			pipe_child(pipe_fds, prev_read, current, env);
+		}
 		pipe_parent(pipe_fds, &prev_read, current);
 		current = current->next;
 	}

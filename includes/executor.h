@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/15 15:57:30 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 15:37:49 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int			handle_unset(t_cmd_node *node, t_env_list *env);
 // EXTERNALS
 
 int			handle_external_cmd(t_cmd_node *node, t_env_list *env);
+void		execute_binary(t_cmd_node *node, t_env_list *env);
 
 // EXTERNAL UTILITIES
 char		*get_cmd_path(char *cmd, t_env_list *env);
@@ -69,6 +70,7 @@ int			process_export_arg(t_env_list *env, char *arg);
 int			is_numeric(char *str);
 int			err_msg(char *msg, int status);
 int			get_exit_status(int status);
+void		full_cleanup(t_env_list *env);
 
 // Vorrübergehend
 
