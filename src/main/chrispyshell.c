@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/19 13:57:18 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 15:36:11 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static int	main_setup(char *argv[], char **envp, t_env_list **env_list)
 		free(filepath);
 		return (-1);
 	}
+	update_shlvl(*env_list);
 	if (set_filepath_envar(*env_list, filepath) == -1)
 	{
 		free(filepath);

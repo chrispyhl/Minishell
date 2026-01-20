@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/15 15:12:51 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 15:44:40 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ int								set_filepath_envar(t_env_list *env_list,
 // general utility
 long long						ft_atoll(const char *str, int *error);
 int								ft_strcmp(const char *s1, const char *s2);
+void							update_shlvl(t_env_list *env);
 
 // signal handling
 void							setup_signals(void);
