@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 16:39:13 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 17:58:57 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int			handle_redirections(t_cmd_node *node, t_env_list *env);
 
 // Heredoc
 
-int			fork_heredoc(char *delimiter, t_env_list *env);
+int			fork_heredoc(char *delimiter, t_env_list *env, int heredoc_quote);
 
 char		*append_var(char *line, int *i, t_env_list *env, char *new_line);
 int			get_var_len(char *str);
