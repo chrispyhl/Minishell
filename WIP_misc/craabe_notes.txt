@@ -1,27 +1,3 @@
-CMD_LIST FROM PROTOTYPICAL PARSER
-SHOULD BE USABLE FOR EXECUTOR HERE!
-SUPPORTED:
-+ tokenization:
-		raw input string is split into tokens ("words",
-		pipes,redirs)
-+ expander
-		environmental variables should be handled correctly
-+ grouping
-		sectors between pipes are grouped in command nodes; those get added to command list;
-		each command node has a NULL-terminated **char array
-NOT YET SUPPORTED:
-- redirs, heredoc and files not yet supported
-- BUILDIN-detection not yet supported
-- syntax validation not yet implemented; might cause undefined behavior
-STUFF THAT'S POSSIBLE FOR THE EXECUTOR ACCORDING TO GEMINI:
-+ looping throug the t_cmd_list
-+ setting up pipes between nodes
-+ forking processes
-+ executing commands using the **cmd array
-STUFF THAT'S NOT YET POSSIBLE ACCORDING TO GEMINI:
-- implementing input/output redirection logic (since files are not assigned yet)
-- differentiating between buildins and executables
-
 
 TO DO:
 for heredoc, $USER as delimiter has to be read literally depending on usage of quotation in delimiter
@@ -34,7 +10,7 @@ expansion of tilde
 cat ''$USER has a one byte leak wtf; at least it behaves correctly (unclosed bracket!)
 --> DONE, was an error in gc_ftstrjoin (used ft_strdup instead of gc_strdup)
 
-g_global declared only once in main and in minishell.h?
+g_signal declared only once in main and in minishell.h?
 
 confirm that chrispyshell_loop changes are correct!
 
