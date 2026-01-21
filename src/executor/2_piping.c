@@ -6,18 +6,14 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/20 17:07:29 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 17:27:29 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
-static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_list *env)
+static void	setup_child_io(int *pipe_fds, int prev_read, t_cmd_node *node)
 {
-	int	ret;
-
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 	if (prev_read != -1) // Wenn es nicht der erste Befehl ist...
 	{
 		dup2(prev_read, STDIN_FILENO); // ...nimm den Input vom vorherigen Befehl
@@ -29,21 +25,27 @@ static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_lis
 		dup2(pipe_fds[1], STDOUT_FILENO); // ...schreibe den Output in die Pipe
 		close(pipe_fds[1]);
 	}
+}
+
+static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_list *env)
+{
+	int	ret;
+
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	setup_child_io(pipe_fds, prev_read, node);
 	if (handle_redirections(node, env) == -1) // Redictions überschreiben die Pipes (haben Vorrang) z.b. bei "<" oder ">"
 	{
-		gc_free();
-		free_env_list(env);
+		full_cleanup(env);
 		exit(1);
 	}
 	if (node->cmd_type == BUILTIN)
 	{
 		ret = execute_builtin(node, env, NULL);
-		free_env_list(env);
-		gc_free();
+		full_cleanup(env);
 		exit(ret);
 	}
-	else
-		execute_binary(node, env);
+	execute_binary(node, env);
 }
 
 static int	pipe_parent(int *pipe_fds, int *prev_read, t_cmd_node *node)
@@ -77,7 +79,7 @@ int	handle_piped_cmd(t_cmd_list *list, t_env_list *env)
 	prev_read = -1;
 	while (current)
 	{
-		if (current->next && pipe(pipe_fds) == -1)
+		if (current->next && pipe(pipe_fds) == -1) // pipe nach jedem Befehl außer dem letzten erstellen
 			return (perror("chrispyshell: pipe"), 1);
 		pid = fork();
 		if (pid == -1)

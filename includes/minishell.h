@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/20 15:44:40 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 17:53:44 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_cmd_list
 	t_cmd_node					*head;
 	t_cmd_node					*tail;
 	ssize_t						size;
+	int							heredoc_quote;
 }								t_cmd_list;
 // -------------------
 

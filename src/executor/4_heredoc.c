@@ -6,53 +6,36 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/19 13:23:12 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 17:52:33 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
-static int	get_var_len(char *str)
-{
-	int	len;
-
-	len = 0;
-	if (ft_isdigit(str[len]))
-		return (1);
-	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
-		len++;
-	return (len);
-}
-
-static char	*append_var(char *line, int *i, t_env_list *env, char *new_line)
-{
-	char	*var_name;
-	char	*var_value;
-	int		var_len;
-
-	var_len = get_var_len(&line[*i + 1]);
-	var_name = gc_substr(line, *i + 1, var_len);
-	var_value = get_env_value(env, var_name);
-	if (var_value)
-		new_line = gc_strjoin(new_line, var_value);
-	*i += var_len + 1;
-	return (new_line);
-}
-
-static char	*expand_heredoc_line(char *line, t_env_list *env)
+static char	*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote)
 {
 	char	*new_line;
+	char	*old;
+	char	*temp;
 	int		i;
 
 	i = 0;
-	new_line = gc_strdup("");
+	new_line = ft_strdup("");
+	if (!heredoc_quote)
+		return (ft_strdup(line));
 	while (line && line[i])
 	{
 		if (line[i] == '$' && line[i + 1] 
 			&& (ft_isalnum(line[i + 1]) || line[i + 1] == '_')) // Variable detected
 				new_line = append_var(line, &i, env, new_line);
 		else
-				new_line = gc_strjoin(new_line, gc_substr(line, i++, 1)); // Copy regular character
+		{
+			temp = ft_substr(line, i++, 1);
+			old = new_line;
+			new_line = ft_strjoin(new_line, temp); // Copy regular character
+			free(old);
+			free(temp);
+		}
 	}
 	return (new_line);
 }
@@ -66,7 +49,7 @@ static void	heredoc_cleanup_and_exit(t_env_list *env, int pipe_fd, int status)
 	exit(status);
 }
 
-static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd)
+static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd, int heredoc_quote)
 {
 	char	*line;
 	char	*expanded;
@@ -85,7 +68,7 @@ static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd)
 			free(line); // free the line before breaking
 			break ;
 		}
-		expanded = expand_heredoc_line(line, env); // expand variables in the line
+		expanded = expand_heredoc_line(line, env, heredoc_quote); // expand variables in the line
 		ft_putendl_fd(expanded, pipe_fd); // write expanded line to pipe
 		free(line);
 	}
@@ -112,19 +95,19 @@ static int heredoc_wait(pid_t pid, int *pipe_fds, t_env_list *env)
 	return (-1);
 }
 
-int	fork_heredoc(char *delimiter, t_env_list *env)
+int	fork_heredoc(char *delimiter, t_env_list *env, int heredoc_quote)
 {
 	int		pipe_fds[2];
 	pid_t	pid;
 
-	if (pipe(pipe_fds) == -1)
+	if (pipe(pipe_fds) == -1) // create pipe
 		return (-1);
 	signal(SIGINT, SIG_IGN); // ignore SIGINT in parent during heredoc
 	pid = fork();
 	if (pid == 0) // Child process
 	{
 		close(pipe_fds[0]); // Close read end in child
-		heredoc_loop(delimiter, env, pipe_fds[1]);
+		heredoc_loop(delimiter, env, pipe_fds[1], heredoc_quote);
 	}
 	close(pipe_fds[1]); // Close write end in parent
 	return (heredoc_wait(pid, pipe_fds, env));

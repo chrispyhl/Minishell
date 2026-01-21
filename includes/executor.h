@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/20 16:36:44 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 16:39:13 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,29 @@ int			handle_exit(t_cmd_node *node, t_env_list *env, int saved_io[2]);
 int			handle_export(t_cmd_node *node, t_env_list *env);
 int			handle_unset(t_cmd_node *node, t_env_list *env);
 
+void		print_export_line(char *line);
+int			process_export_arg(t_env_list *env, char *arg);
+
 // EXTERNALS
 
 int			handle_external_cmd(t_cmd_node *node, t_env_list *env);
 void		execute_binary(t_cmd_node *node, t_env_list *env);
 
 // EXTERNAL UTILITIES
+
 char		*get_cmd_path(char *cmd, t_env_list *env);
 
 // Piping
 
 int			handle_piped_cmd(t_cmd_list *list, t_env_list *env);
 int			handle_redirections(t_cmd_node *node, t_env_list *env);
+
+// Heredoc
+
 int			fork_heredoc(char *delimiter, t_env_list *env);
+
+char		*append_var(char *line, int *i, t_env_list *env, char *new_line);
+int			get_var_len(char *str);
 
 // ENV UTILITIES
 
@@ -63,15 +73,15 @@ char		**env_list_to_array(t_env_list *env);
 void		print_sorted_env(t_env_list *env);
 void		set_env_value(t_env_list *env, char *key, char *value);
 int			append_env_value(t_env_list *env, char *key, char *value);
+int			update_env_if_exists(t_env_list *env, char *key, char *value);
 
 // OTHER UTILITIES
 
-void		print_export_line(char *line);
-int			process_export_arg(t_env_list *env, char *arg);
 int			is_numeric(char *str);
 int			err_msg(char *msg, int status);
 int			get_exit_status(int status);
 void		full_cleanup(t_env_list *env);
+void		update_underscore(t_env_list *env, char **cmd);
 
 // Vorrübergehend
 

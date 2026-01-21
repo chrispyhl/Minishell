@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/20 16:05:22 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 17:54:58 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,15 @@ static int	process_cmd_heredocs(t_cmd_node *cmd, t_env_list *env)
 	file = NULL;
 	if (cmd->files)
 		file = cmd->files->head;
-	while (file)
+	while (file) // schleife durch alle Dateien des Befehls
 	{
-		if (file->redir_type == NODE_HEREDOC)
+		if (file->redir_type == NODE_HEREDOC) // heredoc gefunden
 		{
-			if (file->heredoc_fd != -1)
-				close(file->heredoc_fd);
-			file->heredoc_fd = fork_heredoc(file->filename, env);
+			if (file->heredoc_fd != -1) // falls vorher schon ein fd existiert
+				close(file->heredoc_fd); // schließe vorherigen fd
+			file->heredoc_fd = fork_heredoc(file->filename, env, cmd->heredoc_quote); // erstelle neuen heredoc
 			if (file->heredoc_fd == -1)
-				return (-1);
+				return (-1); // Error beim Erstellen des Heredocs
 		}
 		file = file->next;
 	}
@@ -109,11 +109,11 @@ void	execute_command_list(t_cmd_list *list, t_env_list *env)
 	t_cmd_node	*current;
 	pid_t		last_pid;
 
-	if (!list || !list->head)
+	if (!list || !list->head) // Prüfe, ob die Liste leer ist
 		return ;
-	if (pre_process_heredocs(list, env) == -1)
+	if (pre_process_heredocs(list, env) == -1) // verarbeite alle Heredocs vor dem Ausführen der Befehle
 	{
-		close_all_heredocs(list);
+		close_all_heredocs(list); // wenn error, schließe alle Heredocs
 		return ;
 	}
 	signal(SIGINT, SIG_IGN); // ignore SIGINT in parent during processing

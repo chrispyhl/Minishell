@@ -6,31 +6,19 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/15 15:54:07 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 15:56:15 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
-
-static void	update_underscore(t_env_list *env, char **cmd)
-{
-	int			i;
-
-	if (!env || !cmd || !cmd[0])
-		return ;
-	i = 0;
-	while (cmd[i])
-		i++;
-	set_env_value(env, "_", cmd[i - 1]);
-}
 
 static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 {
 	int	saved_io[2];
 	int	ret;
 
-	saved_io[0] = dup(STDIN_FILENO);
-	saved_io[1] = dup(STDOUT_FILENO);
+	saved_io[0] = dup(STDIN_FILENO); // Speichere die original STDIN
+	saved_io[1] = dup(STDOUT_FILENO); // Speichere die original STDOUT
 	if (handle_redirections(node, env) == -1)
 	{
 		dup2(saved_io[0], STDIN_FILENO);

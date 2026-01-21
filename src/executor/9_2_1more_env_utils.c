@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 16:43:08 by chris             #+#    #+#             */
-/*   Updated: 2026/01/20 16:36:27 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 16:42:29 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	append_env_value(t_env_list *env, char *key, char *value)
 	current = env->head;
 	while (current)
 	{
-		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
+		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0) // Schlüssel gefunden
 		{
 			if (!value)
 				return (1);
@@ -110,6 +110,28 @@ int	append_env_value(t_env_list *env, char *key, char *value)
 			return (1);
 		}
 		current = current->next;
+	}
+	return (0);
+}
+
+int	update_env_if_exists(t_env_list *env, char *key, char *value)
+{
+	t_env_node	*curr;
+
+	curr = env->head;
+	while (curr)
+	{
+		if (ft_strcmp(curr->key, key) == 0)
+		{
+			if (value)
+			{
+				if (curr->value)
+					free (curr->value);
+				curr->value = ft_strdup(value);
+			}
+			return (1);
+		}
+		curr = curr->next;
 	}
 	return (0);
 }
