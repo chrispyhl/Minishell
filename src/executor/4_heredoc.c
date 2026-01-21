@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 17:52:33 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 18:07:05 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote)
 
 	i = 0;
 	new_line = ft_strdup("");
-	if (!heredoc_quote)
+	if (heredoc_quote)
 		return (ft_strdup(line));
 	while (line && line[i])
 	{
@@ -71,6 +71,7 @@ static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd, int here
 		expanded = expand_heredoc_line(line, env, heredoc_quote); // expand variables in the line
 		ft_putendl_fd(expanded, pipe_fd); // write expanded line to pipe
 		free(line);
+		free(expanded);
 	}
 	rl_clear_history();
 	heredoc_cleanup_and_exit(env, pipe_fd, 0);
