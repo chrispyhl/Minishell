@@ -29,9 +29,10 @@ expander recognizes heredoc quotes; 0 or 1 is passed on to cmd_node
 --> DONE, needs verification with executor
 
 expansion of tilde
---> DONE
+--> DONE. needs "chrispyshell: [$HOME]: Is a directory" printed by executor
 
 cat ''$USER has a one byte leak wtf; at least it behaves correctly (unclosed bracket!)
+--> DONE, was an error in gc_ftstrjoin (used ft_strdup instead of gc_strdup)
 
 g_global declared only once in main and in minishell.h?
 
