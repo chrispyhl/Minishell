@@ -6,12 +6,20 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/21 12:57:52 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/21 14:48:19 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+// colors
+# ifndef TEAL
+#  define TEAL "\001\033[1;36m\002"
+# endif
+# ifndef RESET
+#  define RESET "\001\033[0m\002"
+# endif
 
 # define _XOPEN_SOURCE 700 // to keep vs code from flaggin struct sigaction
 // TEST WITHOUT THIS BEFORE SUBMITTING! erorr might just be cosmetic

@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   chrispyshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/19 13:57:18 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 14:47:40 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-#define TEAL "\001\033[1;36m\002"
-#define RESET "\001\033[0m\002"
 
 volatile sig_atomic_t	g_signal = 0;
 // volatile: tells compiler optimization:
