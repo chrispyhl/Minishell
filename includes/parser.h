@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/13 14:57:45 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/21 12:41:19 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_token_node
 	enum e_token_type	token_type;
 	struct s_token_node	*next;
 	struct s_token_node	*prev;
+	int					heredoc_quote;
 }						t_token_node;
 
 typedef struct s_token_list
@@ -77,7 +78,7 @@ int						expand_token(t_token_node *current,
 int						check_var_start(char c);
 // expander util 2
 int						remove_quotes(t_token_node *node);
-int						check_state(t_token_node *current,
+int						handle_expansion(t_token_node *current,
 							t_env_list *env_list);
 
 // token list util

@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:39 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/19 12:20:43 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/21 11:58:15 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_token_node	*create_token_node(char *content, t_token_type type)
 	node->token_type = type;
 	node->next = NULL;
 	node->prev = NULL;
+	node->heredoc_quote = 0;
 	return (node);
 }
 

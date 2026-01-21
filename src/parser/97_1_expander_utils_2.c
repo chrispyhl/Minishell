@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:20:36 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/19 12:20:38 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/21 12:40:22 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	remove_quotes(t_token_node *node)
 	t_expander_state	state;
 	char				*result;
 
-	// after removing the quotes, new string won't be larger than old one
+	if (!(ft_strchr(node->token, '\'')) && !ft_strchr(node->token, '\"'))
+		return (0);
 	result = ft_malloc(ft_strlen(node->token) + 1, sizeof(char));
 	if (!result)
 		return (-1);
@@ -93,7 +94,7 @@ int	remove_quotes(t_token_node *node)
 	return (0);
 }
 
-int	check_state(t_token_node *current, t_env_list *env_list)
+int	handle_expansion(t_token_node *current, t_env_list *env_list)
 {
 	int					i;
 	t_expander_state	state;
