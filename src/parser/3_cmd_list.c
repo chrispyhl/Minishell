@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_cmd_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:19 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/13 12:08:28 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/21 12:57:37 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static t_cmd_node	*populate_cmd_node(t_token_node *current)
 	cmd_node->cmd = cmd_array;
 	cmd_node->cmd_type = set_cmd_type(cmd_array[0]);
 	cmd_node->next = NULL;
+	cmd_node->heredoc_quote = current->heredoc_quote;
 	return (cmd_node);
 }
 

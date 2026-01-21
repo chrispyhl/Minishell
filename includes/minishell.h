@@ -6,12 +6,20 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/21 17:53:44 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 17:57:48 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+// colors
+# ifndef TEAL
+#  define TEAL "\001\033[1;36m\002"
+# endif
+# ifndef RESET
+#  define RESET "\001\033[0m\002"
+# endif
 
 # define _XOPEN_SOURCE 700 // to keep vs code from flaggin struct sigaction
 // TEST WITHOUT THIS BEFORE SUBMITTING! erorr might just be cosmetic
@@ -46,7 +54,7 @@ typedef struct s_file_node
 {
 	char						*filename;
 	enum e_redir_type			redir_type;
-	int							heredoc_fd; // only used for heredocs
+	int heredoc_fd; // only used for heredocs
 	struct s_file_node			*next;
 }								t_file_node;
 /*
@@ -78,6 +86,7 @@ typedef struct s_cmd_node
 	char						**cmd;
 	t_file_list					*files;
 	struct s_cmd_node			*next;
+	int							heredoc_quote;
 }								t_cmd_node;
 /*
 cmd_type = specifies type of command
