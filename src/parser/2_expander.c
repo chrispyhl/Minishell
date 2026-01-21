@@ -6,14 +6,33 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/21 12:51:05 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/21 13:11:07 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 
-static int	handle_heredoc_expansion(t_token_node *current, t_env_list *env_list,
-		int *heredoc_found)
+static int	handle_tilde(t_token_node *current, t_env_list *env_list)
+{
+	char	*home_path;
+	char	*new_token;
+
+	if (current->token[0] == '~' && (current->token[1] == '/'
+			|| current->token[1] == '\0'))
+	{
+		home_path = find_env_value(env_list, "HOME", 4);
+		if (!home_path)
+			return (0);
+		new_token = gc_strjoin(home_path, &current->token[1]);
+		if (!new_token)
+			return (-1);
+		current->token = new_token;
+	}
+	return (0);
+}
+
+static int	handle_heredoc_expansion(t_token_node *current,
+		t_env_list *env_list, int *heredoc_found)
 {
 	int	quotes_found;
 
@@ -37,8 +56,13 @@ static int	expand_word(t_token_node *current, t_env_list *env_list,
 		if (handle_heredoc_expansion(current, env_list, heredoc_found) == -1)
 			return (-1);
 	}
-	else if (handle_expansion(current, env_list) == -1)
-		return (-1);
+	else
+	{
+		if (handle_tilde(current, env_list) == -1)
+			return (-1);
+		if (handle_expansion(current, env_list) == -1)
+			return (-1);
+	}
 	if (remove_quotes(current) == -1)
 		return (-1);
 	return (0);

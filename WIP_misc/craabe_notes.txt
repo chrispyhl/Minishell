@@ -28,6 +28,9 @@ for heredoc, $USER as delimiter has to be read literally depending on usage of q
 expander recognizes heredoc quotes; 0 or 1 is passed on to cmd_node
 --> DONE, needs verification with executor
 
+expansion of tilde
+--> DONE
+
 cat ''$USER has a one byte leak wtf; at least it behaves correctly (unclosed bracket!)
 
 g_global declared only once in main and in minishell.h?
