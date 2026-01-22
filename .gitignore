@@ -91,3 +91,5 @@ obj/parser/97_expander_utils.o
 obj/parser/98_lexer_utils.o
 obj/parser/99_token_list_utils.o
 obj/executor/4_heredoc.o
+obj/executor/9_4_heredoc_utils.o
+obj/executor/9_b_utils.o
