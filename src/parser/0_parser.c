@@ -6,7 +6,7 @@
 /*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:34 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/13 15:56:52 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/22 19:07:41 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_cmd_list	*parser(char *input, t_env_list *env_list)
 
 	cmd_list = NULL;
 	token_list = lexer(input);
-	if (!token_list)
+	if (!token_list || !token_list->head)
 		return (NULL);
 	if (check_token_syntax(token_list) != 1)
 		// != 1 means either an error (-1) or invalid syntax (0)
