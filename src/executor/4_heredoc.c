@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4_heredoc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 18:07:05 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 11:52:55 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ static char	*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote)
 		return (ft_strdup(line));
 	while (line && line[i])
 	{
-		if (line[i] == '$' && line[i + 1] 
-			&& (ft_isalnum(line[i + 1]) || line[i + 1] == '_')) // Variable detected
-				new_line = append_var(line, &i, env, new_line);
+		if (line[i] == '$' && line[i + 1] && (ft_isalnum(line[i + 1]) || line[i
+				+ 1] == '_')) // Variable detected
+			new_line = append_var(line, &i, env, new_line);
 		else
 		{
 			temp = ft_substr(line, i++, 1);
@@ -49,27 +49,32 @@ static void	heredoc_cleanup_and_exit(t_env_list *env, int pipe_fd, int status)
 	exit(status);
 }
 
-static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd, int heredoc_quote)
+static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd,
+		int heredoc_quote)
 {
 	char	*line;
 	char	*expanded;
 	size_t	d_len;
 
 	d_len = ft_strlen(delimiter);
-	signal(SIGINT, SIG_DFL); // set signal handler for SIGINT to default
+	signal(SIGINT, SIG_DFL);  // set signal handler for SIGINT to default
 	signal(SIGQUIT, SIG_IGN); // ignore SIGQUIT
 	while (1)
 	{
 		line = readline("> "); // prompt for heredoc input
-		if (!line) // EOF encountered
+		if (!line)             // EOF encountered
 			break ;
-		if ((ft_strlen(line) == d_len && ft_strncmp(line, delimiter, d_len) == 0)) // delimiter matched
+		if ((ft_strlen(line) == d_len && ft_strncmp(line, delimiter,
+					d_len) == 0)) // delimiter matched
 		{
 			free(line); // free the line before breaking
 			break ;
 		}
-		expanded = expand_heredoc_line(line, env, heredoc_quote); // expand variables in the line
-		ft_putendl_fd(expanded, pipe_fd); // write expanded line to pipe
+		ft_printf("!!! DEBUG flag: %d !!! \n", heredoc_quote);
+		expanded = expand_heredoc_line(line, env, heredoc_quote);
+				// expand variables in the line
+		ft_putendl_fd(expanded, pipe_fd);
+			// write expanded line to pipe
 		free(line);
 		free(expanded);
 	}
@@ -77,7 +82,7 @@ static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd, int here
 	heredoc_cleanup_and_exit(env, pipe_fd, 0);
 }
 
-static int heredoc_wait(pid_t pid, int *pipe_fds, t_env_list *env)
+static int	heredoc_wait(pid_t pid, int *pipe_fds, t_env_list *env)
 {
 	int	status;
 
@@ -87,7 +92,7 @@ static int heredoc_wait(pid_t pid, int *pipe_fds, t_env_list *env)
 	rl_replace_line("", 0);
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 		return (pipe_fds[0]); // return read end of the pipe
-	close (pipe_fds[0]);
+	close(pipe_fds[0]);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
 		write(1, "\n", 1);

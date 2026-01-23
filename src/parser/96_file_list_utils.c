@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   96_file_list_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:24 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/15 15:10:28 by gries            ###   ########.fr       */
+/*   Updated: 2026/01/23 11:55:36 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ t_file_list	*init_file_list(void)
 	return (file_list);
 }
 
-t_file_node	*create_file_node(char *filename, t_redir_type redir_type)
+t_file_node	*create_file_node(t_token_node *current, t_redir_type redir_type)
 {
 	t_file_node	*file_node;
+	char		*filename;
 
+	filename = current->next->token;
 	file_node = ft_malloc(1, sizeof(t_file_node));
 	if (!file_node)
 		return (NULL);
@@ -38,6 +40,8 @@ t_file_node	*create_file_node(char *filename, t_redir_type redir_type)
 		return (NULL);
 	file_node->redir_type = redir_type;
 	file_node->heredoc_fd = -1;
+	file_node->heredoc_quote = current->heredoc_quote;
+	ft_printf("!!! DEBUG: flag in file node: %d !!!\n", file_node->heredoc_quote);
 	file_node->next = NULL;
 	return (file_node);
 }

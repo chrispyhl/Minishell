@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/21 13:11:07 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 12:03:22 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ static int	handle_tilde(t_token_node *current, t_env_list *env_list)
 }
 
 static int	handle_heredoc_expansion(t_token_node *current,
-		t_env_list *env_list, int *heredoc_found)
+		t_env_list *env_list)
 {
 	int	quotes_found;
 
 	quotes_found = 0;
 	if (ft_strchr(current->token, '\'') || ft_strchr(current->token, '\"'))
 		quotes_found = 1;
+	ft_printf("!!! DEBUG flag in token_node: %d !!!\n ", quotes_found);
 	current->heredoc_quote = quotes_found;
 	// only expand delimiter if no quotes where found
 	if (quotes_found == 0)
 		if (handle_expansion(current, env_list) == -1)
 			return (-1);
-	*heredoc_found = 0;
 	return (0);
 }
 
@@ -53,8 +53,9 @@ static int	expand_word(t_token_node *current, t_env_list *env_list,
 {
 	if (*heredoc_found == 1)
 	{
-		if (handle_heredoc_expansion(current, env_list, heredoc_found) == -1)
+		if (handle_heredoc_expansion(current, env_list) == -1)
 			return (-1);
+		*heredoc_found = 0;
 	}
 	else
 	{
