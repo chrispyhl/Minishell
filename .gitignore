@@ -62,15 +62,12 @@ obj/executor/0_executor.o
 obj/executor/1_single_cmd.o
 obj/executor/2_piping.o
 obj/executor/3_redirections.o
-obj/executor/4_heredoc.o
 obj/executor/9_0_1_more_utils.o
 obj/executor/9_0_utils.o
 obj/executor/9_1_env_conversion.o
 obj/executor/9_2_1more_env_utils.o
 obj/executor/9_2env_utils.o
 obj/executor/9_3exec_utils.o
-obj/executor/9_4_heredoc_utils.o
-obj/executor/9_b_utils.o
 obj/executor/b_handle_builtins.o
 obj/executor/b_handle_more_builtins.o
 obj/executor/e_handle_externals.o
@@ -93,3 +90,6 @@ obj/parser/97_1_expander_utils_2.o
 obj/parser/97_expander_utils.o
 obj/parser/98_lexer_utils.o
 obj/parser/99_token_list_utils.o
+obj/executor/4_heredoc.o
+obj/executor/9_4_heredoc_utils.o
+obj/executor/9_b_utils.o

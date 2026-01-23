@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   9_3exec_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:17:15 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 16:08:42 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 18:09:48 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
+
+static void	free_string_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
 
 static char	*find_path_in_dirs(char **dirs, char *cmd)
 {
@@ -34,6 +49,7 @@ char	*get_cmd_path(char *cmd, t_env_list *env)
 {
 	char		*path_var;
 	char		**dirs;
+	char		*result;
 	struct stat	path_stat;
 
 	if (!cmd)
@@ -43,12 +59,14 @@ char	*get_cmd_path(char *cmd, t_env_list *env)
 		if (stat(cmd, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 			return (NULL);
 		if (access(cmd, F_OK | X_OK) == 0)
-			return (gc_strdup(cmd));
+			return (ft_strdup(cmd));
 		return (NULL);
 	}
 	path_var = get_env_value(env, "PATH");
 	if (!path_var)
 		return (NULL);
-	dirs = gc_split(path_var, ':');
-	return (find_path_in_dirs(dirs, cmd));
+	dirs = ft_split(path_var, ':');
+	result = find_path_in_dirs(dirs, cmd);
+	free_string_array(dirs);
+	return (result);
 }

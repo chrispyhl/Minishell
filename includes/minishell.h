@@ -6,12 +6,20 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 14:55:42 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 11:40:23 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+// colors
+# ifndef TEAL
+#  define TEAL "\001\033[1;36m\002"
+# endif
+# ifndef RESET
+#  define RESET "\001\033[0m\002"
+# endif
 
 # define _XOPEN_SOURCE 700 // to keep vs code from flaggin struct sigaction
 // TEST WITHOUT THIS BEFORE SUBMITTING! erorr might just be cosmetic
@@ -46,6 +54,8 @@ typedef struct s_file_node
 {
 	char						*filename;
 	enum e_redir_type			redir_type;
+	int							heredoc_fd;
+	int							heredoc_quote;
 	struct s_file_node			*next;
 }								t_file_node;
 /*
@@ -89,6 +99,7 @@ typedef struct s_cmd_list
 	t_cmd_node					*head;
 	t_cmd_node					*tail;
 	ssize_t						size;
+	int							heredoc_quote;
 }								t_cmd_list;
 // -------------------
 
@@ -115,23 +126,28 @@ typedef struct s_env_list
 t_cmd_list						*parser(char *input, t_env_list *env_list);
 
 // EXECUTOR
-void								execute_command_list(t_cmd_list *list,
+void							execute_command_list(t_cmd_list *list,
 									t_env_list *env);
 
 // ENVIRONMENTAL VARIABLES LIST
-t_env_node						*create_env_node(char *info);
+t_env_node						*new_env_node(char *key, char *value);
 void							env_list_add_back(t_env_list *list,
 									t_env_node *new_node);
+void							free_env_list(t_env_list *env_list);
+t_env_list						*init_env_list(char **envp);
+
+// filepath handler
+char							*get_filepath(char *path);
 int								set_filepath_envar(t_env_list *env_list,
 									char *filepath);
-void							free_env_list(t_env_list *env_list);
 
 // general utility
 long long						ft_atoll(const char *str, int *error);
 int								ft_strcmp(const char *s1, const char *s2);
+void							update_shlvl(t_env_list *env);
 
 // signal handling
-void	setup_signals(void);
+void							setup_signals(void);
 void							sync_exit_status(t_env_list *env);
 
 #endif

@@ -3,50 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   e_handle_externals.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:19:44 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 14:37:43 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/20 15:24:27 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
-static int	handle_path_error(char *cmd)
+static int	handle_path_error(char *cmd, t_env_list *env)
 {
 	struct stat	info;
+	int			ret;
 
+	ret = 0;
 	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, F_OK) != 0)
-			return (err_msg("No such file or directory", 127));
-		if (stat(cmd, &info) == 0 && S_ISDIR(info.st_mode))
-			return (err_msg("Is a directory", 126));
-		return (err_msg("Permission denied", 126));
+			ret = err_msg("No such file or directory", 127);
+		else if (stat(cmd, &info) == 0 && S_ISDIR(info.st_mode))
+			ret = err_msg("Is a directory", 126);
+		else
+			ret = err_msg("Permission denied", 126);
 	}
-	return (err_msg("command not found", 127));
+	else
+		ret = err_msg("command not found", 127);
+	full_cleanup(env);
+	return (ret);
 }
 
 static void	child_process(t_cmd_node *node, t_env_list *env)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	if (handle_redirections(node, env) == -1)
+	{
+		full_cleanup(env);
+		exit(1);
+	}
+	execute_binary(node, env);
+}
+
+void	execute_binary(t_cmd_node *node, t_env_list *env)
+{
 	char	*path;
 	char	**envp;
 
-	if (handle_redirections(node, env) == -1)
+	if (!node->cmd || !node->cmd[0])
 	{
-		gc_free();
+		full_cleanup(env);
+		exit(0);
+	}
+	path = get_cmd_path(node->cmd[0], env); // Hole den Pfad der ausführbaren Datei
+	if (!path)
+		exit(handle_path_error(node->cmd[0], env)); // Wenn der Pfad nicht gefunden wird, Fehler behandeln
+	envp = env_list_to_array(env); // Konvertiere die Umgebungsvariablenliste in ein Array für execve
+	if (!envp)
+	{
+		full_cleanup(env);
 		exit(1);
 	}
-	path = get_cmd_path(node->cmd[0], env);
-	if (!path)
-		exit(handle_path_error(node->cmd[0]));
-	envp = env_list_to_array(env);
-	if (!envp || execve(path, node->cmd, envp) == -1)
-	{
-		perror("chrispyshell: execve");
-		gc_free();
-		exit(126);
-	}
+	execve(path, node->cmd, envp); // Führe den Befe
+	perror("chrispyshell: execve");
+	full_cleanup(env);
+	exit(126);
 }
 
 int	handle_external_cmd(t_cmd_node *node, t_env_list *env)

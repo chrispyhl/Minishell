@@ -6,121 +6,90 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 14:49:08 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 12:43:42 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 
-static t_expander_state	get_state(char letter, t_expander_state mode_curr)
+static int	handle_tilde(t_token_node *current, t_env_list *env_list)
 {
-	if (mode_curr == STATE_DEFAULT)
+	char	*home_path;
+	char	*new_token;
+
+	if (current->token[0] == '~' && (current->token[1] == '/'
+			|| current->token[1] == '\0'))
 	{
-		if (letter == '\'')
-			return (STATE_SINGLE);
-		if (letter == '\"')
-			return (STATE_DOUBLE);
+		home_path = find_env_value(env_list, "HOME", 4);
+		if (!home_path)
+			return (0);
+		new_token = gc_strjoin(home_path, &current->token[1]);
+		if (!new_token)
+			return (-1);
+		current->token = new_token;
 	}
-	if (mode_curr == STATE_SINGLE)
-	{
-		if (letter == '\'')
-			return (STATE_DEFAULT);
-	}
-	if (mode_curr == STATE_DOUBLE)
-	{
-		if (letter == '\"')
-			return (STATE_DEFAULT);
-	}
-	// if nothing fits, original value is returned
-	return (mode_curr);
+	return (0);
 }
 
-static int	remove_quotes(t_token_node *node)
+static int	handle_heredoc_expansion(t_token_node *current,
+		t_env_list *env_list)
 {
-	int					i;
-	int					j;
-	t_expander_state	state;
-	char				*result;
+	if (ft_strchr(current->token, '\'') || ft_strchr(current->token, '\"'))
+		current->heredoc_quote = 1;
+	// only expand delimiter if no quotes where found
+	if (current->heredoc_quote == 0)
+		if (handle_expansion(current, env_list) == -1)
+			return (-1);
+	return (0);
+}
 
-	// TODO: replace with gc!
-	// after removing the quotes, new string won't be larger than old one
-	result = ft_malloc(sizeof(char), ft_strlen(node->token) + 1);
-	if (!result)
-		return (-1);
-	i = 0;
-	j = 0;
-	state = STATE_DEFAULT;
-	while (node->token[i])
+static int	expand_word(t_token_node *current, t_env_list *env_list,
+		int *heredoc_found)
+{
+	if (*heredoc_found == 1)
 	{
-		if (node->token[i] == '\'')
-		{
-			if (state == STATE_DEFAULT)
-				state = STATE_SINGLE;
-			else if (state == STATE_SINGLE)
-				state = STATE_DEFAULT;
-			else
-			{
-				result[j] = node->token[i];
-				j++;
-			}
-			i++;
-		}
-		else if (node->token[i] == '\"')
-		{
-			if (state == STATE_DEFAULT)
-				state = STATE_DOUBLE;
-			else if (state == STATE_DOUBLE)
-				state = STATE_DEFAULT;
-			else
-			{
-				result[j] = node->token[i];
-				j++;
-			}
-			i++;
-		}
-		else
-			result[j++] = node->token[i++];
+		if (handle_heredoc_expansion(current, env_list) == -1)
+			return (-1);
+		*heredoc_found = 0;
 	}
-	result[j] = '\0';
-	node->token = result;
+	else
+	{
+		if (handle_tilde(current, env_list) == -1)
+			return (-1);
+		if (handle_expansion(current, env_list) == -1)
+			return (-1);
+	}
+	if (remove_quotes(current) == -1)
+		return (-1);
 	return (0);
 }
 
 int	expander(t_token_list *token_list, t_env_list *env_list)
 {
-	t_token_node		*current;
-	int					i;
-	t_expander_state	state;
+	t_token_node	*current;
+	int				heredoc_found;
+	// int				quotes_found;
 
 	current = token_list->head;
+	// if (current->heredoc_quote == -1)
+	// 	current->heredoc_quote = 0;
+	heredoc_found = 0;
+	// quotes_found = 0;
 	while (current)
 	{
-		if (current->token_type == T_WORD)
+		// current->heredoc_quote = quotes_found;
+		if (current->token_type == T_HEREDOC)
+			heredoc_found = 1;
+		else if (current->token_type != T_WORD)
 		{
-			i = 0;
-			state = STATE_DEFAULT;
-			while (current->token[i])
-			{
-				state = get_state(current->token[i], state);
-				// we encounter a $-sign
-				// --> are we in single-quote-mode?
-				// no? is it a viable envar? (depending on following char)
-				// 1) yes = expand; 2) no = just increment, keep as is
-				if (current->token[i] == '$' && state != STATE_SINGLE
-					&& check_var_start(current->token[i + 1]) == 1)
-				{
-					if (expand_token(current, env_list, &i) == -1)
-						return (-1);
-				}
-				else
-					i++;
-			}
-			// if there is a double or single quote inside
-			if (ft_strchr(current->token, '\'') != NULL
-					|| ft_strchr(current->token, '\"') != NULL)
-				if (remove_quotes(current) == -1)
-					return (-1);
+			heredoc_found = 0;
+			if (current->token_type == T_PIPE)
+				current->heredoc_quote = 0;
 		}
+		else if (current->token_type == T_WORD)
+			if (expand_word(current, env_list, &heredoc_found) == -1)
+				return (-1);
+		// quotes_found = current->heredoc_quote;
 		current = current->next;
 	}
 	return (0);

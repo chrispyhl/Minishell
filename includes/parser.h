@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 13:43:01 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 11:42:22 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_token_node
 	enum e_token_type	token_type;
 	struct s_token_node	*next;
 	struct s_token_node	*prev;
+	int					heredoc_quote;
 }						t_token_node;
 
 typedef struct s_token_list
@@ -50,6 +51,13 @@ typedef enum e_expander_state
 // lexer
 t_token_list			*lexer(char *input);
 
+// handler
+int						handle_token_word(char *input, t_token_list *token_list,
+							int *i);
+int						handle_token_pipe(t_token_list *token_list, int *i);
+int						handle_token_redir(char *input,
+							t_token_list *token_list, int *i);
+
 // expander
 int						expander(t_token_list *token_list,
 							t_env_list *env_list);
@@ -68,6 +76,10 @@ int						insert_value(t_token_node *current, char *key_pt,
 int						expand_token(t_token_node *current,
 							t_env_list *env_list, int *i);
 int						check_var_start(char c);
+// expander util 2
+int						remove_quotes(t_token_node *node);
+int						handle_expansion(t_token_node *current,
+							t_env_list *env_list);
 
 // token list util
 t_token_list			*init_token_list(void);
@@ -85,12 +97,16 @@ int						check_token_syntax(t_token_list *token_list);
 t_redir_type			token_type_to_redir_type(t_token_type token_type);
 int						extract_redirs(t_token_node *current,
 							t_cmd_node *cmd_node);
+int						populate_array(t_token_node *token_node,
+							char **cmd_array);
+char					**tokens_to_array(t_token_node *token_node);
+t_cmd_type				set_cmd_type(char *cmd);
 
 // file list util
 t_file_list				*init_file_list(void);
 void					file_list_add_back(t_file_list *head,
 							t_file_node *file_node);
-t_file_node				*create_file_node(char *filename,
+t_file_node				*create_file_node(t_token_node *current,
 							t_redir_type redir_type);
 void					free_file_list(t_file_list *file_list);
 

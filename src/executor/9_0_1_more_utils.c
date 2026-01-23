@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_0_1_more_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 12:19:57 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 16:06:45 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 16:37:18 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,20 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-void	print_export_line(char *line)
+void	full_cleanup(t_env_list *env)
 {
-	int	i;
+	free_env_list(env);
+	gc_free();
+}
 
+void	update_underscore(t_env_list *env, char **cmd)
+{
+	int			i;
+
+	if (!env || !cmd || !cmd[0])
+		return ;
 	i = 0;
-	ft_putstr_fd("declare -x ", 1);
-	while (line[i] && line[i] != '=')
-		ft_putchar_fd(line[i++], 1);
-	if (line[i] == '=')
-	{
-		ft_putstr_fd("=\"", 1);
-		ft_putstr_fd(&line[i + 1], 1);
-		ft_putstr_fd("\"", 1);
-	}
-	ft_putchar_fd('\n', 1);
+	while (cmd[i])
+		i++;
+	set_env_value(env, "_", cmd[i - 1]);
 }

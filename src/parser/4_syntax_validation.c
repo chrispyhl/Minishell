@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   4_syntax_validation.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/19 12:20:23 by craabe            #+#    #+#             */
+/*   Updated: 2026/01/19 12:20:26 by craabe           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../includes/parser.h"
 
@@ -6,8 +17,8 @@ static int	check_pipe(t_token_node *current)
 	if (!current->next)
 	{
 		// TODO: IMPORTANTE! clarify if MULTILINE HANDLING is mandatory!
-		ft_putstr_fd("chrispyshell: syntax error near unexpected token 'newline'\n",
-			2);
+		ft_putstr_fd("chrispyshell: syntax error near unexpected\
+			token 'newline'\n", 2);
 		return (0);
 	}
 	if (current->next->token_type == T_PIPE)
@@ -23,8 +34,8 @@ static int	check_redir(t_token_node *current)
 {
 	if (!current->next)
 	{
-		ft_putstr_fd("chrispyshell: syntax error near unexpected token 'newline'\n",
-			2);
+		ft_putstr_fd("chrispyshell: syntax error near unexpected\
+			token 'newline'\n", 2);
 		return (0);
 	}
 	if (current->next->token_type != T_WORD)
@@ -44,7 +55,8 @@ int	check_token_syntax(t_token_list *token_list)
 	current = token_list->head;
 	if (current->token_type == T_PIPE)
 	{
-		ft_putstr_fd("chrispyshell: syntax error near unexpected token '|'\n", 2);
+		ft_putstr_fd("chrispyshell: syntax error near unexpected token '|'\n",
+			2);
 		return (0);
 	}
 	while (current)

@@ -3,34 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   1_single_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:52:49 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/12 15:54:43 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 15:56:15 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
-
-static void	update_underscore(t_env_list *env, char **cmd)
-{
-	int			i;
-
-	if (!env || !cmd || !cmd[0])
-		return ;
-	i = 0;
-	while (cmd[i])
-		i++;
-	set_env_value(env, "_", cmd[i - 1]);
-}
 
 static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 {
 	int	saved_io[2];
 	int	ret;
 
-	saved_io[0] = dup(STDIN_FILENO);
-	saved_io[1] = dup(STDOUT_FILENO);
+	saved_io[0] = dup(STDIN_FILENO); // Speichere die original STDIN
+	saved_io[1] = dup(STDOUT_FILENO); // Speichere die original STDOUT
 	if (handle_redirections(node, env) == -1)
 	{
 		dup2(saved_io[0], STDIN_FILENO);
@@ -39,7 +27,7 @@ static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 		close(saved_io[1]);
 		return (1);
 	}
-	ret = execute_builtin(node, env);
+	ret = execute_builtin(node, env, saved_io);
 	dup2(saved_io[0], STDIN_FILENO);
 	dup2(saved_io[1], STDOUT_FILENO);
 	close(saved_io[0]);
@@ -47,7 +35,7 @@ static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 	return (ret);
 }
 
-int	execute_builtin(t_cmd_node *node, t_env_list *env)
+int	execute_builtin(t_cmd_node *node, t_env_list *env, int saved_io[2])
 {
 	if (ft_strncmp(*node->cmd, "cd", 3) == 0)
 		return (handle_cd(node, env));
@@ -62,7 +50,7 @@ int	execute_builtin(t_cmd_node *node, t_env_list *env)
 	if (ft_strncmp(*node->cmd, "env", 4) == 0)
 		return (handle_env(env));
 	if (ft_strncmp(*node->cmd, "exit", 5) == 0)
-		return (handle_exit(node, env));
+		return (handle_exit(node, env, saved_io));
 	return (1);
 }
 

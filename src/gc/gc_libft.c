@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_libft.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 12:54:10 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/09 14:28:56 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/21 14:21:24 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*gc_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	s_len = ft_strlen(s);
 	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
+		return (gc_strdup(""));
 	if (len > s_len - start)
 		len = s_len - start;
 	str = ft_malloc(len + 1, 1);
