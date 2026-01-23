@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4_heredoc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 18:07:05 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 11:43:32 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ static char	*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote)
 		return (ft_strdup(line));
 	while (line && line[i])
 	{
-		if (line[i] == '$' && line[i + 1] 
+		if (line[i] == '$' && line[i + 1]
 			&& (ft_isalnum(line[i + 1]) || line[i + 1] == '_')) // Variable detected
-				new_line = append_var(line, &i, env, new_line);
+			new_line = append_var(line, &i, env, new_line);
 		else
 		{
 			temp = ft_substr(line, i++, 1);
@@ -77,7 +77,7 @@ static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd, int here
 	heredoc_cleanup_and_exit(env, pipe_fd, 0);
 }
 
-static int heredoc_wait(pid_t pid, int *pipe_fds, t_env_list *env)
+static int	heredoc_wait(pid_t pid, int *pipe_fds, t_env_list *env)
 {
 	int	status;
 

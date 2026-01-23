@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_more_builtins.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:14:29 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 16:53:19 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 11:42:16 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
-static void exit_with_status(t_env_list *env, int status)
+static void	exit_with_status(t_env_list *env, int status)
 {
 	full_cleanup(env);
 	exit(status);

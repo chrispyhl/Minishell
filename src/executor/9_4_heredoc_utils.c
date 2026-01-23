@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_4_heredoc_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 15:38:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 15:38:23 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 11:42:34 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*append_var(char *line, int *i, t_env_list *env, char *new_line)
 	var_value = get_env_value(env, var_name);
 	if (var_value)
 	{
-		old = new_line;	
+		old = new_line;
 		new_line = ft_strjoin(new_line, var_value);
 		free(old);
 	}
