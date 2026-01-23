@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:24 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/23 11:55:36 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 12:37:10 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ t_file_node	*create_file_node(t_token_node *current, t_redir_type redir_type)
 		return (NULL);
 	file_node->redir_type = redir_type;
 	file_node->heredoc_fd = -1;
-	file_node->heredoc_quote = current->heredoc_quote;
-	ft_printf("!!! DEBUG: flag in file node: %d !!!\n", file_node->heredoc_quote);
+	file_node->heredoc_quote = current->next->heredoc_quote;
 	file_node->next = NULL;
 	return (file_node);
 }

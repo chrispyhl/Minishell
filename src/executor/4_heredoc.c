@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 11:52:55 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 12:48:34 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd,
 			free(line); // free the line before breaking
 			break ;
 		}
-		ft_printf("!!! DEBUG flag: %d !!! \n", heredoc_quote);
 		expanded = expand_heredoc_line(line, env, heredoc_quote);
 				// expand variables in the line
 		ft_putendl_fd(expanded, pipe_fd);
