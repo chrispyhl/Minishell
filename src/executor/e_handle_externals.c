@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_handle_externals.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:19:44 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/20 15:24:27 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 14:22:14 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,26 @@ void	execute_binary(t_cmd_node *node, t_env_list *env)
 {
 	char	*path;
 	char	**envp;
+	int		i;
 
-	if (!node->cmd || !node->cmd[0])
+	i = 0;
+	while (!node->cmd[i][0] && node->cmd[i + 1])
+		i++;
+	if (!node->cmd || !node->cmd[i] || !node->cmd[i][0])
 	{
 		full_cleanup(env);
 		exit(0);
 	}
-	path = get_cmd_path(node->cmd[0], env); // Hole den Pfad der ausführbaren Datei
+	path = get_cmd_path(node->cmd[i], env); // Hole den Pfad der ausführbaren Datei
 	if (!path)
-		exit(handle_path_error(node->cmd[0], env)); // Wenn der Pfad nicht gefunden wird, Fehler behandeln
+		exit(handle_path_error(node->cmd[i], env)); // Wenn der Pfad nicht gefunden wird, Fehler behandeln
 	envp = env_list_to_array(env); // Konvertiere die Umgebungsvariablenliste in ein Array für execve
 	if (!envp)
 	{
 		full_cleanup(env);
 		exit(1);
 	}
-	execve(path, node->cmd, envp); // Führe den Befe
+	execve(path, (node->cmd) + i, envp); // Führe den Befe
 	perror("chrispyshell: execve");
 	full_cleanup(env);
 	exit(126);
