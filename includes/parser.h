@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/21 12:41:19 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 11:42:22 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_cmd_type				set_cmd_type(char *cmd);
 t_file_list				*init_file_list(void);
 void					file_list_add_back(t_file_list *head,
 							t_file_node *file_node);
-t_file_node				*create_file_node(char *filename,
+t_file_node				*create_file_node(t_token_node *current,
 							t_redir_type redir_type);
 void					free_file_list(t_file_list *file_list);
 

@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:20:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/19 12:20:30 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 11:41:34 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	extract_redirs(t_token_node *current, t_cmd_node *cmd_node)
 				return (-1);
 			// file_name = current->next->token since this is the normal syntax
 			// for example: > result.txt
-			new_node = create_file_node(current->next->token,
+			new_node = create_file_node(current,
 					token_type_to_redir_type(current->token_type));
 			if (!new_node)
 				return (-1);

@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/21 13:11:07 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 12:43:42 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,14 @@ static int	handle_tilde(t_token_node *current, t_env_list *env_list)
 }
 
 static int	handle_heredoc_expansion(t_token_node *current,
-		t_env_list *env_list, int *heredoc_found)
+		t_env_list *env_list)
 {
-	int	quotes_found;
-
-	quotes_found = 0;
 	if (ft_strchr(current->token, '\'') || ft_strchr(current->token, '\"'))
-		quotes_found = 1;
-	current->heredoc_quote = quotes_found;
+		current->heredoc_quote = 1;
 	// only expand delimiter if no quotes where found
-	if (quotes_found == 0)
+	if (current->heredoc_quote == 0)
 		if (handle_expansion(current, env_list) == -1)
 			return (-1);
-	*heredoc_found = 0;
 	return (0);
 }
 
@@ -53,8 +48,9 @@ static int	expand_word(t_token_node *current, t_env_list *env_list,
 {
 	if (*heredoc_found == 1)
 	{
-		if (handle_heredoc_expansion(current, env_list, heredoc_found) == -1)
+		if (handle_heredoc_expansion(current, env_list) == -1)
 			return (-1);
+		*heredoc_found = 0;
 	}
 	else
 	{
@@ -72,18 +68,28 @@ int	expander(t_token_list *token_list, t_env_list *env_list)
 {
 	t_token_node	*current;
 	int				heredoc_found;
+	// int				quotes_found;
 
 	current = token_list->head;
+	// if (current->heredoc_quote == -1)
+	// 	current->heredoc_quote = 0;
 	heredoc_found = 0;
+	// quotes_found = 0;
 	while (current)
 	{
+		// current->heredoc_quote = quotes_found;
 		if (current->token_type == T_HEREDOC)
 			heredoc_found = 1;
 		else if (current->token_type != T_WORD)
+		{
 			heredoc_found = 0;
+			if (current->token_type == T_PIPE)
+				current->heredoc_quote = 0;
+		}
 		else if (current->token_type == T_WORD)
 			if (expand_word(current, env_list, &heredoc_found) == -1)
 				return (-1);
+		// quotes_found = current->heredoc_quote;
 		current = current->next;
 	}
 	return (0);

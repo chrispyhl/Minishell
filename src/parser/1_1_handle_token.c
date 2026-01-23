@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_1_handle_token.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gries <gries@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:20:05 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/19 12:20:14 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/22 18:44:06 by gries            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,28 @@ static int	check_if_word_char(char c)
 	return (c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t');
 }
 
-int	handle_token_word(char *input, t_token_list *token_list, int *i)
+static t_token_node	*create_word_token_node(char *seg, int j)
 {
 	char			*node_content;
-	int				j;
 	t_token_node	*new_node;
+
+	// create a new node containing seg up until the undesired character
+	// since ft_substr copies with the condition (i < len), it stops before j
+	node_content = gc_substr(seg, 0, j);
+	if (!node_content)
+		return (NULL);
+	// this creates a new token_list node with the substr and it's token category (WORD)
+	new_node = create_token_node(node_content, T_WORD);
+	if (!new_node)
+		return (NULL);
+	return (new_node);
+}
+
+int	handle_token_word(char *input, t_token_list *token_list, int *i)
+{
+	int				j;
 	char			*seg;
+	t_token_node	*new_node;
 
 	seg = input + *i; // seg = segment of the string, starting from index i
 	j = 0;
@@ -34,18 +50,15 @@ int	handle_token_word(char *input, t_token_list *token_list, int *i)
 		// includes edge case handling for (example) echo "A"B
 		// --> creates two nodes: echo, "A"B
 		// --> bash would output AB --> "A"B will be refined in expander
-		if ((seg[j] == '\"' || seg[j] == '\'') && find_quote_end(seg, &j) == -1)
-			return (-1);
+		if (seg[j] == '\"' || seg[j] == '\'')
+		{
+			if (find_quote_end(seg, &j) == -1)
+				return (-1);
+		}
 		else
 			j++;
 	}
-	// create a new node containing seg up until the undesired character
-	// since ft_substr copies with the condition (i < len), it stops before j
-	node_content = gc_substr(seg, 0, j);
-	if (!node_content)
-		return (-1);
-	// this creates a new token_list node with the substr and it's token category (WORD)
-	new_node = create_token_node(node_content, T_WORD);
+	new_node = create_word_token_node(seg, j);
 	if (!new_node)
 		return (-1);
 	// i gets incremeted by j so the lexer ft continues after the word

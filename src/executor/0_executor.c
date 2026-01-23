@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   0_executor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 17:54:58 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 11:52:19 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	process_cmd_heredocs(t_cmd_node *cmd, t_env_list *env)
 		{
 			if (file->heredoc_fd != -1) // falls vorher schon ein fd existiert
 				close(file->heredoc_fd); // schließe vorherigen fd
-			file->heredoc_fd = fork_heredoc(file->filename, env, cmd->heredoc_quote); // erstelle neuen heredoc
+			file->heredoc_fd = fork_heredoc(file->filename, env, file->heredoc_quote); // erstelle neuen heredoc
 			if (file->heredoc_fd == -1)
 				return (-1); // Error beim Erstellen des Heredocs
 		}

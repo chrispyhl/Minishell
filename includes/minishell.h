@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/21 17:57:48 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 11:40:23 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ typedef struct s_file_node
 {
 	char						*filename;
 	enum e_redir_type			redir_type;
-	int heredoc_fd; // only used for heredocs
+	int							heredoc_fd;
+	int							heredoc_quote;
 	struct s_file_node			*next;
 }								t_file_node;
 /*
@@ -86,7 +87,6 @@ typedef struct s_cmd_node
 	char						**cmd;
 	t_file_list					*files;
 	struct s_cmd_node			*next;
-	int							heredoc_quote;
 }								t_cmd_node;
 /*
 cmd_type = specifies type of command
