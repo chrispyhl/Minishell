@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 12:48:34 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/23 13:44:34 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ static char	*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote)
 	i = 0;
 	new_line = ft_strdup("");
 	if (heredoc_quote)
+	{
+		free(new_line);
 		return (ft_strdup(line));
+	}
 	while (line && line[i])
 	{
 		if (line[i] == '$' && line[i + 1] && (ft_isalnum(line[i + 1]) || line[i
@@ -65,15 +68,16 @@ static void	heredoc_loop(char *delimiter, t_env_list *env, int pipe_fd,
 		if (!line)             // EOF encountered
 			break ;
 		if ((ft_strlen(line) == d_len && ft_strncmp(line, delimiter,
-					d_len) == 0)) // delimiter matched
+													d_len) == 0))
+														// delimiter matched
 		{
 			free(line); // free the line before breaking
 			break ;
 		}
 		expanded = expand_heredoc_line(line, env, heredoc_quote);
-				// expand variables in the line
+		// expand variables in the line
 		ft_putendl_fd(expanded, pipe_fd);
-			// write expanded line to pipe
+		// write expanded line to pipe
 		free(line);
 		free(expanded);
 	}
