@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2_piping.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 17:27:29 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 15:25:40 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,10 @@ int	handle_piped_cmd(t_cmd_list *list, t_env_list *env)
 		if (pid == -1)
 			return (perror("chrispyshell: fork"), 1);
 		if (pid == 0)
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
 			pipe_child(pipe_fds, prev_read, current, env);
-		}
 		pipe_parent(pipe_fds, &prev_read, current);
 		current = current->next;
 	}
+	close_all_hd_in_parent(list);
 	return (pid);
 }

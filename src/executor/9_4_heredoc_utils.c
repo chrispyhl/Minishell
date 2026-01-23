@@ -6,11 +6,54 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 15:38:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 11:42:34 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 15:54:32 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
+
+static void	close_heredocs_in_cmd(t_cmd_node *cmd)
+{
+	t_file_node	*file;
+
+	if (!cmd || !cmd->files)
+		return ;
+	file = cmd->files->head;
+	while (file)
+	{
+		if (file->redir_type == NODE_HEREDOC && file->heredoc_fd != -1)
+		{
+			close(file->heredoc_fd);
+			file->heredoc_fd = -1;
+		}
+		file = file->next;
+	}
+}
+
+void	close_all_hd_in_parent(t_cmd_list *list)
+{
+	t_cmd_node	*cmd;
+
+	cmd = list->head;
+	while (cmd)
+	{
+		close_heredocs_in_cmd(cmd);
+		cmd = cmd->next;
+	}
+}
+
+char	*append_char(char *line, int *i, char *new_line)
+{
+	char	*temp;
+	char	*old;
+
+	temp = ft_substr(line, (*i)++, 1);
+	old = new_line;
+	new_line = ft_strjoin(new_line, temp);
+	free(old);
+	free(temp);
+	return (new_line);
+}
 
 char	*append_var(char *line, int *i, t_env_list *env, char *new_line)
 {

@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 13:51:31 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 15:55:49 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,21 @@
 static char	*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote)
 {
 	char	*new_line;
-	char	*old;
-	char	*temp;
 	int		i;
 
-	i = 0;
-	new_line = ft_strdup("");
 	if (heredoc_quote)
-	{
-		free(new_line);
 		return (ft_strdup(line));
-	}
+	new_line = ft_strdup("");
+	if (!new_line)
+		return (NULL);
+	i = 0;
 	while (line && line[i])
 	{
 		if (line[i] == '$' && line[i + 1]
-			&& (ft_isalnum(line[i + 1]) || line[i + 1] == '_')) // Variable detected
+			&& (ft_isalnum(line[i + 1]) || line[i + 1] == '_'))
 			new_line = append_var(line, &i, env, new_line);
 		else
-		{
-			temp = ft_substr(line, i++, 1);
-			old = new_line;
-			new_line = ft_strjoin(new_line, temp); // Copy regular character
-			free(old);
-			free(temp);
-		}
+			new_line = append_char(line, &i, new_line);
 	}
 	return (new_line);
 }
@@ -66,16 +57,13 @@ static void	heredoc_loop(char *del, t_env_list *env, int pipe_fd, int heredoc_qu
 		line = readline("> "); // prompt for heredoc input
 		if (!line)             // EOF encountered
 			break ;
-		if ((ft_strlen(line) == d_len && ft_strncmp(line, del, d_len) == 0))
-														// delimiter matched
+		if ((ft_strlen(line) == d_len && ft_strncmp(line, del, d_len) == 0)) // delimiter matched
 		{
 			free(line); // free the line before breaking
 			break ;
 		}
-		expanded = expand_heredoc_line(line, env, heredoc_quote);
-		// expand variables in the line
-		ft_putendl_fd(expanded, pipe_fd);
-		// write expanded line to pipe
+		expanded = expand_heredoc_line(line, env, heredoc_quote); // expand variables in the line
+		ft_putendl_fd(expanded, pipe_fd); // write expanded line to pipe
 		free(line);
 		free(expanded);
 	}

@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 11:41:45 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 15:26:48 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ static int	apply_node_redir(t_file_node *current, t_env_list *env)
 	{
 		if (current->heredoc_fd != -1)
 		{
-			dup2(current->heredoc_fd, STDIN_FILENO);
+			if (dup2(current->heredoc_fd, STDIN_FILENO) == -1)
+				return (perror("chrispyshell: dup2"), -1);
 			close(current->heredoc_fd);
 			current->heredoc_fd = -1;
 		}

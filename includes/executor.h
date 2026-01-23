@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 17:58:57 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/23 15:54:46 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int			handle_redirections(t_cmd_node *node, t_env_list *env);
 
 int			fork_heredoc(char *delimiter, t_env_list *env, int heredoc_quote);
 
+void		close_all_hd_in_parent(t_cmd_list *list);
+char		*append_char(char *line, int *i, char *new_line);
 char		*append_var(char *line, int *i, t_env_list *env, char *new_line);
 int			get_var_len(char *str);
 
