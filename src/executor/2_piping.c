@@ -3,27 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   2_piping.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 16:26:59 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 20:06:35 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
-static void	setup_child_io(int *pipe_fds, int prev_read, t_cmd_node *node)
+
+static void	setup_child_io(t_pipe_info *info)
 {
-	if (prev_read != -1) // Wenn es nicht der erste Befehl ist...
+	if (info->prev_read != -1)
 	{
-		dup2(prev_read, STDIN_FILENO); // ...nimm den Input vom vorherigen Befehl
-		close(prev_read);
+		dup2(info->prev_read, STDIN_FILENO);
+		close(info->prev_read);
 	}
-	if (node->next) // wenn noch ein Befehl folgt...
+	if (info->node->next)
 	{
-		close(pipe_fds[0]);
-		dup2(pipe_fds[1], STDOUT_FILENO); // ...schreibe den Output in die Pipe
-		close(pipe_fds[1]);
+		close(info->pipe_fds[0]);
+		dup2(info->pipe_fds[1], STDOUT_FILENO);
+		close(info->pipe_fds[1]);
 	}
 }
 
@@ -37,7 +38,7 @@ static void	close_other_heredoc_fds(t_cmd_list *list, t_cmd_node *current_node)
 	cmd = list->head;
 	while (cmd)
 	{
-		if (cmd != current_node && cmd->files)
+		if (cmd != current_node && cmd->files) // nur andere Befehle
 		{
 			file = cmd->files->head;
 			while (file)
@@ -51,37 +52,36 @@ static void	close_other_heredoc_fds(t_cmd_list *list, t_cmd_node *current_node)
 	}
 }
 
-static void	pipe_child(t_cmd_list *list, int *pipe_fds, int prev_read,
-		t_cmd_node *node, t_env_list *env)
+static void	pipe_child(t_cmd_list *list, t_pipe_info *info, t_env_list *env)
 {
 	int	ret;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	setup_child_io(pipe_fds, prev_read, node);
-	close_other_heredoc_fds(list, node);
-	if (handle_redirections(node, env) == -1)
+	setup_child_io(info);
+	close_other_heredoc_fds(list, info->node);
+	if (handle_redirections(info->node, env) == -1)
 	{
 		full_cleanup(env);
 		exit(1);
 	}
-	if (node->cmd_type == BUILTIN)
+	if (info->node->cmd_type == BUILTIN)
 	{
-		ret = execute_builtin(node, env, NULL);
+		ret = execute_builtin(info->node, env, NULL);
 		full_cleanup(env);
 		exit(ret);
 	}
-	if (node->cmd == NULL || node->cmd[0] == NULL)
+	if (info->node->cmd == NULL || info->node->cmd[0] == NULL) // empty command
 	{
 		full_cleanup(env);
 		exit(0);
 	}
-	execute_binary(node, env);
+	execute_binary(info->node, env); // execute external command
 }
 
 static int	pipe_parent(int *pipe_fds, int *prev_read, t_cmd_node *node)
 {
-	if (*prev_read >= 0)
+	if (*prev_read >= 0) // wenn es ein vorheriges Lese-Ende der Pipe gibt
 		close(*prev_read); // schließe den vorherigen Lese-Ende der Pipe
 	if (node->next)
 	{
@@ -100,24 +100,26 @@ static int	pipe_parent(int *pipe_fds, int *prev_read, t_cmd_node *node)
 int	handle_piped_cmd(t_cmd_list *list, t_env_list *env)
 {
 	t_cmd_node	*current;
-	int			pipe_fds[2]; // 0: read end, 1: write end
-	int			prev_read;
+	t_pipe_info	info;
+	int			pipe_fds[2];
 	pid_t		pid;
 
 	pipe_fds[0] = -1;
 	pipe_fds[1] = -1;
 	current = list->head;
-	prev_read = -1;
+	info.prev_read = -1;
+	info.pipe_fds = pipe_fds;
 	while (current)
 	{
-		if (current->next && pipe(pipe_fds) == -1) // pipe nach jedem Befehl außer dem letzten erstellen
+		if (current->next && pipe(pipe_fds) == -1) // Wenn noch ein Befehl folgt, erstelle eine Pipe
 			return (perror("chrispyshell: pipe"), 1);
-		pid = fork();
+		pid = fork(); // Erstelle einen neuen Prozess
 		if (pid == -1)
 			return (perror("chrispyshell: fork"), 1);
+		info.node = current; // Setze den aktuellen Knoten im Pipe-Info
 		if (pid == 0)
-			pipe_child(list, pipe_fds, prev_read, current, env);
-		pipe_parent(pipe_fds, &prev_read, current);
+			pipe_child(list, &info, env);
+		pipe_parent(pipe_fds, &info.prev_read, current);
 		current = current->next;
 	}
 	return (pid);

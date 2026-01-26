@@ -3,52 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   0_executor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 15:42:54 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 19:03:23 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
-void	wait_for_all(t_env_list *env, pid_t last_pid)
-{
-	int	status;
-	int	last_status;
-	int	res;
-
-	last_status = 0;
-	if (last_pid == -1)
-		return ;
-	while (1)
-	{
-		res = waitpid(-1, &status, 0); // wenn waitpid -1 ist sind alle Kinderprozesse beendet
-		if (res <= 0) // wenn alle childs beendet sind,
-			break ; // beende die Schleife
-		if (res == last_pid) // wenn es der letzte Prozess ist,
-			last_status = status; // speichere seinen Status
-		if (WIFSIGNALED(status))
-		{
-			if (WTERMSIG(status) == SIGINT)
-				write(1, "\n", 1);
-			else if (WTERMSIG(status) == SIGQUIT)
-				write(1, "Quit (core dumped)\n", 19);
-		}
-	}
-	if (WIFSIGNALED(last_status))
-		env->exit_status = WTERMSIG(last_status) + 128;
-	else
-		env->exit_status = WEXITSTATUS(last_status);
-}
-
 static void	close_last_hd(int *last_hd_fd)
 {
-	if (*last_hd_fd != -1)
+	if (*last_hd_fd != -1) // Wenn ein letzter Heredoc-FD existiert
 	{
-		close(*last_hd_fd);
-		*last_hd_fd = -1;
+		close(*last_hd_fd); // Schließe ihn
+		*last_hd_fd = -1; // Setze den Wert zurück
 	}
+}
+
+static int	process_heredoc_file(t_file_node *file, t_env_list *env, int *last)
+{
+	close_last_hd(last); // Schließe den vorherigen Heredoc-FD, falls vorhanden
+	if (file->heredoc_fd != -1) // Wenn dieser Heredoc-FD bereits geöffnet ist
+	{
+		close(file->heredoc_fd); // Schließe ihn
+		file->heredoc_fd = -1; // Setze den Wert zurück
+	}
+	file->heredoc_fd = fork_heredoc(file->filename, env, file->heredoc_quote); // Erstelle neuen Heredoc-FD
+	if (file->heredoc_fd == -1) // Fehlerbehandlung
+		return (-1);
+	*last = file->heredoc_fd; // Aktualisiere den letzten Heredoc-FD
+	return (0);
 }
 
 static int	process_cmd_heredocs(t_cmd_node *cmd, t_env_list *env)
@@ -56,7 +41,7 @@ static int	process_cmd_heredocs(t_cmd_node *cmd, t_env_list *env)
 	t_file_node	*file;
 	int			last_hd_fd;
 
-	if (!cmd || !cmd->files)
+	if (!cmd || !cmd->files) // Keine Dateien zum Verarbeiten
 		return (0);
 	file = cmd->files->head;
 	last_hd_fd = -1;
@@ -64,61 +49,28 @@ static int	process_cmd_heredocs(t_cmd_node *cmd, t_env_list *env)
 	{
 		if (file->redir_type == NODE_HEREDOC)
 		{
-			close_last_hd(&last_hd_fd);
-			if (file->heredoc_fd != -1)
-			{
-				close(file->heredoc_fd);
-				file->heredoc_fd = -1;
-			}
-			file->heredoc_fd = fork_heredoc(file->filename, env, file->heredoc_quote);
-			if (file->heredoc_fd == -1)
+			if (process_heredoc_file(file, env, &last_hd_fd) == -1) // Fehlerbehandlung
 				return (-1);
-			last_hd_fd = file->heredoc_fd;
 		}
-		else if (file->redir_type == NODE_INPUT)
-			close_last_hd(&last_hd_fd);
+		else if (file->redir_type == NODE_INPUT) // Wenn Input-Redirektion
+			close_last_hd(&last_hd_fd); // Schließe den letzten Heredoc-FD
 		file = file->next;
 	}
 	return (0);
 }
 
-int	pre_process_heredocs(t_cmd_list *list, t_env_list *env)
+static int	pre_process_heredocs(t_cmd_list *list, t_env_list *env)
 {
 	t_cmd_node	*current;
 
 	current = list->head;
 	while (current)
 	{
-			if (process_cmd_heredocs(current, env) == -1)
-					return (-1);
-			current = current->next;
+		if (process_cmd_heredocs(current, env) == -1)
+			return (-1);
+		current = current->next;
 	}
 	return (0);
-}
-
-static void	close_all_heredocs(t_cmd_list *list)
-{
-	t_cmd_node	*cmd;
-	t_file_node	*file;
-
-	cmd = list->head;
-	while (cmd)
-	{
-		if (cmd->files)
-		{
-			file = cmd->files->head;
-			while (file)
-			{
-				if (file->redir_type == NODE_HEREDOC && file->heredoc_fd != -1)
-				{
-					close(file->heredoc_fd);
-					file->heredoc_fd = -1;
-				}
-				file = file->next;
-			}
-		}
-		cmd = cmd->next;
-	}
 }
 
 void	execute_command_list(t_cmd_list *list, t_env_list *env)

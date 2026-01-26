@@ -3,101 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   4_heredoc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 15:51:16 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 19:25:56 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
-static char	*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote)
-{
-	char	*new_line;
-	int		i;
-
-	if (heredoc_quote)
-		return (ft_strdup(line));
-	new_line = ft_strdup("");
-	if (!new_line)
-		return (NULL);
-	i = 0;
-	while (line && line[i])
-	{
-		if (line[i] == '$' && line[i + 1]
-			&& (ft_isalnum(line[i + 1]) || line[i + 1] == '_'))
-			new_line = append_var(line, &i, env, new_line);
-		else
-			new_line = append_char(line, &i, new_line);
-	}
-	return (new_line);
-}
-
-static void	heredoc_cleanup_and_exit(t_env_list *env, int pipe_fd, int status)
-{
-	if (pipe_fd >= 0)
-		close(pipe_fd);
-	free_env_list(env);
-	gc_free();
-	exit(status);
-}
-
-static void	close_inherited_fds(int keep_fd)
-{
-	int	fd;
-
-	fd = 3;
-	while (fd < 1024)
-	{
-		if (fd != keep_fd)
-			close(fd);
-		fd++;
-	}
-}
-
-static void	heredoc_sigint_handler(int sig)
-{
-	(void)sig;
-	g_signal = SIGINT;
-	close(STDIN_FILENO);
-}
-
 static void	heredoc_loop(char *del, t_env_list *env, int pipe_fd, int heredoc_quote)
 {
 	char	*line;
-	char	*expanded;
 	size_t	d_len;
 
 	d_len = ft_strlen(del);
 	close_inherited_fds(pipe_fd);
 	g_signal = 0;
-	signal(SIGINT, heredoc_sigint_handler);
+	signal(SIGINT, heredoc_sigint_handler); // set custom SIGINT handler (if Ctrl+C -> heredoc_handler)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		line = readline("> "); // prompt for heredoc input
-		if (!line)             // EOF encountered
+		line = readline("> ");
+		if (!line) // readline returned NULL (EOF or Signal)
+			handle_heredoc_eof(del, env, pipe_fd);
+		if ((ft_strlen(line) == d_len && ft_strncmp(line, del, d_len) == 0)) // delimiter reached
 		{
-			if (g_signal == SIGINT)
-				heredoc_cleanup_and_exit(env, pipe_fd, 130);
-			else
-			{
-				ft_putstr_fd("chrispyshell: warning: here-document delimited by end-of-file (wanted `", 2);
-				ft_putstr_fd(del, 2);
-				ft_putstr_fd("')\n", 2);
-				heredoc_cleanup_and_exit(env, pipe_fd, 0);
-			}
-		}
-		if ((ft_strlen(line) == d_len && ft_strncmp(line, del, d_len) == 0)) // delimiter matched
-		{
-			free(line); // free the line before breaking
+			free(line);
 			break ;
 		}
-		expanded = expand_heredoc_line(line, env, heredoc_quote); // expand variables in the line
-		ft_putendl_fd(expanded, pipe_fd); // write expanded line to pipe
-		free(line);
-		free(expanded);
+		process_heredoc_line(line, env, pipe_fd, heredoc_quote);
 	}
 	rl_clear_history();
 	heredoc_cleanup_and_exit(env, pipe_fd, 0);
@@ -133,7 +68,7 @@ int	fork_heredoc(char *delimiter, t_env_list *env, int heredoc_quote)
 	pid = fork();
 	if (pid == 0) // Child process
 	{
-		close(pipe_fds[0]); // Close read end in child
+		close(pipe_fds[0]); // Close read end in child (we only write)
 		heredoc_loop(delimiter, env, pipe_fds[1], heredoc_quote);
 	}
 	close(pipe_fds[1]); // Close write end in parent

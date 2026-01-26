@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 16:28:13 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 20:00:34 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,18 @@
 # include <fcntl.h>
 # include <limits.h>
 
+// Pipe info struct
+typedef struct s_pipe_info
+{
+	int			*pipe_fds;
+	int			prev_read;
+	t_cmd_node	*node;
+}				t_pipe_info;
+
+
 // EXECUTOR CORE
 
 void		execute_command_list(t_cmd_list *list, t_env_list *env);
-void		wait_for_all(t_env_list *env, pid_t last_pid);
 
 int			handle_single_cmd(t_cmd_node *node, t_env_list *env);
 int			execute_builtin(t_cmd_node *node, t_env_list *env, int saved_io[2]);
@@ -47,22 +55,35 @@ int			process_export_arg(t_env_list *env, char *arg);
 int			handle_external_cmd(t_cmd_node *node, t_env_list *env);
 void		execute_binary(t_cmd_node *node, t_env_list *env);
 
-// EXTERNAL UTILITIES
-
 char		*get_cmd_path(char *cmd, t_env_list *env);
 
 // Piping
 
 int			handle_piped_cmd(t_cmd_list *list, t_env_list *env);
+
+// Redirecting
+
 int			handle_redirections(t_cmd_node *node, t_env_list *env);
+
+int			open_file(char *filename, int redir_type);
+void		apply_fd_redir(int fd, int type);
+int			check_is_directory(char *filename, int type);
+
 
 // Heredoc
 
 int			fork_heredoc(char *delimiter, t_env_list *env, int heredoc_quote);
 
+char		*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote);
+void		close_all_heredocs(t_cmd_list *list);
 char		*append_char(char *line, int *i, char *new_line);
 char		*append_var(char *line, int *i, t_env_list *env, char *new_line);
 int			get_var_len(char *str);
+void		close_inherited_fds(int keep_fd);
+void		heredoc_sigint_handler(int sig);
+void		handle_heredoc_eof(char *del, t_env_list *env, int pipe_fd);
+void		process_heredoc_line(char *line, t_env_list *env, int pipe_fd, int hd_quote);
+void		heredoc_cleanup_and_exit(t_env_list *env, int pipe_fd, int status);
 
 // ENV UTILITIES
 
@@ -78,6 +99,7 @@ int			update_env_if_exists(t_env_list *env, char *key, char *value);
 
 // OTHER UTILITIES
 
+void		wait_for_all(t_env_list *env, pid_t last_pid);
 int			is_numeric(char *str);
 int			err_msg(char *msg, int status);
 int			get_exit_status(int status);

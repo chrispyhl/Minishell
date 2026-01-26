@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 16:43:08 by chris             #+#    #+#             */
-/*   Updated: 2026/01/21 16:42:29 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 19:54:57 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	print_sorted_env(t_env_list *env)
 				env_arr[j] = temp;
 			}
 			j++;
-		}	
+		}
 		print_export_line(env_arr[i]);
 		i++;
 	}

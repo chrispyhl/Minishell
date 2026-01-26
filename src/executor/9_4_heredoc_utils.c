@@ -3,14 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   9_4_heredoc_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 15:38:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 16:28:06 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 19:15:38 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
+
+char	*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote)
+{
+	char	*new_line;
+	int		i;
+
+	if (heredoc_quote) // no expansion needed
+		return (ft_strdup(line));
+	new_line = ft_strdup(""); // start with empty string
+	if (!new_line)
+		return (NULL);
+	i = 0;
+	while (line && line[i])
+	{
+		if (line[i] == '$' && line[i + 1]
+			&& (ft_isalnum(line[i + 1]) || line[i + 1] == '_'))
+			new_line = append_var(line, &i, env, new_line);
+		else
+			new_line = append_char(line, &i, new_line);
+	}
+	return (new_line);
+}
+
+void	close_all_heredocs(t_cmd_list *list)
+{
+	t_cmd_node	*cmd;
+	t_file_node	*file;
+
+	cmd = list->head;
+	while (cmd)
+	{
+		if (cmd->files)
+		{
+			file = cmd->files->head;
+			while (file)
+			{
+				if (file->redir_type == NODE_HEREDOC && file->heredoc_fd != -1)
+				{
+					close(file->heredoc_fd);
+					file->heredoc_fd = -1;
+				}
+				file = file->next;
+			}
+		}
+		cmd = cmd->next;
+	}
+}
 
 char	*append_char(char *line, int *i, char *new_line)
 {
