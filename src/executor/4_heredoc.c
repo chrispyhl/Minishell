@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 15:55:49 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 15:25:47 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,9 @@ static void	close_inherited_fds(int keep_fd)
 
 static void	heredoc_sigint_handler(int sig)
 {
-	int	fd;
-
 	(void)sig;
-	fd = 3;
-	while (fd < 1024)
-		close(fd++);
-	exit(130);
+	g_signal = SIGINT;
+	close(STDIN_FILENO);
 }
 
 static void	heredoc_loop(char *del, t_env_list *env, int pipe_fd, int heredoc_quote)
@@ -75,13 +71,19 @@ static void	heredoc_loop(char *del, t_env_list *env, int pipe_fd, int heredoc_qu
 
 	d_len = ft_strlen(del);
 	close_inherited_fds(pipe_fd);
+	g_signal = 0;
 	signal(SIGINT, heredoc_sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		line = readline("> "); // prompt for heredoc input
 		if (!line)             // EOF encountered
-			break ;
+		{
+			if (g_signal == 130)
+				heredoc_cleanup_and_exit(env, pipe_fd, 130);
+			else
+				heredoc_cleanup_and_exit(env, pipe_fd, 0);
+		}
 		if ((ft_strlen(line) == d_len && ft_strncmp(line, del, d_len) == 0)) // delimiter matched
 		{
 			free(line); // free the line before breaking
