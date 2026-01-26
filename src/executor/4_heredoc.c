@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 13:11:12 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 15:25:47 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 15:51:16 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,15 @@ static void	heredoc_loop(char *del, t_env_list *env, int pipe_fd, int heredoc_qu
 		line = readline("> "); // prompt for heredoc input
 		if (!line)             // EOF encountered
 		{
-			if (g_signal == 130)
+			if (g_signal == SIGINT)
 				heredoc_cleanup_and_exit(env, pipe_fd, 130);
 			else
+			{
+				ft_putstr_fd("chrispyshell: warning: here-document delimited by end-of-file (wanted `", 2);
+				ft_putstr_fd(del, 2);
+				ft_putstr_fd("')\n", 2);
 				heredoc_cleanup_and_exit(env, pipe_fd, 0);
+			}
 		}
 		if ((ft_strlen(line) == d_len && ft_strncmp(line, del, d_len) == 0)) // delimiter matched
 		{

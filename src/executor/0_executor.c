@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 16:17:12 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 15:42:54 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@ void	wait_for_all(t_env_list *env, pid_t last_pid)
 	int	status;
 	int	last_status;
 	int	res;
-	int	was_signaled;
 
 	last_status = 0;
-	was_signaled = 0;
 	if (last_pid == -1)
 		return ;
 	while (1)
@@ -30,11 +28,14 @@ void	wait_for_all(t_env_list *env, pid_t last_pid)
 			break ; // beende die Schleife
 		if (res == last_pid) // wenn es der letzte Prozess ist,
 			last_status = status; // speichere seinen Status
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT) // wenn ein Prozess durch SIGINT beendet wurde
-			was_signaled = 1; // merke es
+		if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGINT)
+				write(1, "\n", 1);
+			else if (WTERMSIG(status) == SIGQUIT)
+				write(1, "Quit (core dumped)\n", 19);
+		}
 	}
-	if (was_signaled)
-		write(1, "\n", 1); // neue Zeile bei SIGINT
 	if (WIFSIGNALED(last_status))
 		env->exit_status = WTERMSIG(last_status) + 128;
 	else
