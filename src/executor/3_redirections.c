@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 16:05:26 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 16:29:03 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static int	open_file(char *filename, int type)
 	int			fd;
 	struct stat	info;
 
+	if (!filename || !*filename)
+		return (-1);
 	if ((type == NODE_OUTPUT || type == NODE_APPEND)
 		&& stat(filename, &info) == 0 && S_ISDIR(info.st_mode))
 	{
@@ -59,7 +61,7 @@ static int	apply_node_redir(t_file_node *current, t_env_list *env)
 		{
 			if (dup2(current->heredoc_fd, STDIN_FILENO) == -1)
 				return (perror("chrispyshell: dup2"), -1);
-			close(current->heredoc_fd); // child no longer needs the heredoc FD after dup2
+			close(current->heredoc_fd);
 			current->heredoc_fd = -1;
 		}
 		return (0);
@@ -74,54 +76,57 @@ static int	apply_node_redir(t_file_node *current, t_env_list *env)
 	return (0);
 }
 
-int	handle_redirections(t_cmd_node *node, t_env_list *env)
+static int	validate_redirections(t_file_list *files, t_env_list *env)
 {
 	t_file_node	*current;
-	t_file_node	*last_input;
 	int			fd;
 
-	if (!node || !node->files)
-		return (0);
-	// Find the last INPUT or HEREDOC redirection (they conflict)
-	// Only the last one should be applied
-	last_input = NULL;
-	current = node->files->head;
+	current = files->head;
 	while (current)
 	{
-		if (current->redir_type == NODE_INPUT || current->redir_type == NODE_HEREDOC)
-			last_input = current;
-		current = current->next;
-	}
-	// First pass: validate all redirections (check for errors)
-	current = node->files->head;
-	while (current)
-	{
-		if (current->redir_type == NODE_HEREDOC)
-		{
-			if (current->heredoc_fd == -1)
-			{
-				env->exit_status = 1;
-				return (-1);
-			}
-		}
-		else
+		if (current->redir_type == NODE_HEREDOC
+			&& current->heredoc_fd == -1)
+			return (env->exit_status = 1, -1);
+		if (current->redir_type != NODE_HEREDOC)
 		{
 			fd = open_file(current->filename, current->redir_type);
 			if (fd == -1)
-			{
-				env->exit_status = 1;
-				return (-1);
-			}
+				return (env->exit_status = 1, -1);
 			close(fd);
 		}
 		current = current->next;
 	}
-	// Second pass: apply redirections (we know they're valid now)
-	current = node->files->head;
+	return (0);
+}
+
+static t_file_node	*find_last_input(t_file_list *files)
+{
+	t_file_node	*current;
+	t_file_node	*last_input;
+
+	last_input = NULL;
+	current = files->head;
 	while (current)
 	{
-		if (!((current->redir_type == NODE_INPUT || current->redir_type == NODE_HEREDOC)
-			&& current != last_input))
+		if (current->redir_type == NODE_INPUT
+			|| current->redir_type == NODE_HEREDOC)
+			last_input = current;
+		current = current->next;
+	}
+	return (last_input);
+}
+
+static int	apply_redirections(t_file_list *files, t_file_node *last_input,
+		t_env_list *env)
+{
+	t_file_node	*current;
+
+	current = files->head;
+	while (current)
+	{
+		if (!((current->redir_type == NODE_INPUT
+					|| current->redir_type == NODE_HEREDOC)
+				&& current != last_input))
 		{
 			if (apply_node_redir(current, env) == -1)
 				return (-1);
@@ -129,4 +134,13 @@ int	handle_redirections(t_cmd_node *node, t_env_list *env)
 		current = current->next;
 	}
 	return (0);
+}
+
+int	handle_redirections(t_cmd_node *node, t_env_list *env)
+{
+	if (!node || !node->files)
+		return (0);
+	if (validate_redirections(node->files, env) == -1)
+		return (-1);
+	return (apply_redirections(node->files, find_last_input(node->files), env));
 }

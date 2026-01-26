@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 16:22:49 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 16:26:59 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ static void	pipe_child(t_cmd_list *list, int *pipe_fds, int prev_read,
 		ret = execute_builtin(node, env, NULL);
 		full_cleanup(env);
 		exit(ret);
+	}
+	if (node->cmd == NULL || node->cmd[0] == NULL)
+	{
+		full_cleanup(env);
+		exit(0);
 	}
 	execute_binary(node, env);
 }
