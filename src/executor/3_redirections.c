@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_redirections.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 13:45:38 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 16:05:26 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	handle_redirections(t_cmd_node *node, t_env_list *env)
 {
 	t_file_node	*current;
 	t_file_node	*last_input;
+	int			fd;
 
 	if (!node || !node->files)
 		return (0);
@@ -91,7 +92,31 @@ int	handle_redirections(t_cmd_node *node, t_env_list *env)
 			last_input = current;
 		current = current->next;
 	}
-	// Apply redirections, but skip non-last input/heredoc
+	// First pass: validate all redirections (check for errors)
+	current = node->files->head;
+	while (current)
+	{
+		if (current->redir_type == NODE_HEREDOC)
+		{
+			if (current->heredoc_fd == -1)
+			{
+				env->exit_status = 1;
+				return (-1);
+			}
+		}
+		else
+		{
+			fd = open_file(current->filename, current->redir_type);
+			if (fd == -1)
+			{
+				env->exit_status = 1;
+				return (-1);
+			}
+			close(fd);
+		}
+		current = current->next;
+	}
+	// Second pass: apply redirections (we know they're valid now)
 	current = node->files->head;
 	while (current)
 	{
