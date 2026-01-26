@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_builtins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 17:49:49 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 16:36:16 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,13 @@ int	handle_cd(t_cmd_node *node, t_env_list *env)
 	path = node->cmd[1];
 	if (!path || !*path) // kein Argument gegeben oder leeres Argument
 		return (err_msg("HOME not set", 1));
+	if (path && ft_strncmp(path, "-", 2) == 0) // cd - zu OLDPWD wechseln
+	{
+		path = get_env_value(env, "OLDPWD");
+		if (!path)
+			return (err_msg("OLDPWD not set", 1));
+		ft_putendl_fd(path, 1); // gebe neues Verzeichnis aus
+	}
 	if (chdir(path) != 0) // wechsle das Verzeichnis
 		return (perror("chrispyshell: cd"), 1);
 	update_env_pwd(env, old_pwd); // aktualisiere PWD und OLDPWD in der Umgebung

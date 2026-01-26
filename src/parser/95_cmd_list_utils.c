@@ -121,7 +121,7 @@ char	**tokens_to_array(t_token_node *token_node)
 t_cmd_type	set_cmd_type(char *cmd)
 {
 	static const char	*builtins[] = {"echo", "cd", "pwd", "export", "unset",
-		"env", "exit", NULL};
+		"env", "exit", ".", NULL};
 	int					i;
 	size_t				cmd_len;
 

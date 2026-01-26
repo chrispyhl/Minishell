@@ -37,6 +37,8 @@ static int	builtin_redir(t_cmd_node *node, t_env_list *env)
 
 int	execute_builtin(t_cmd_node *node, t_env_list *env, int saved_io[2])
 {
+	if (ft_strncmp(*node->cmd, ".", 2) == 0)
+		return (err_msg("filename argument required", 1));
 	if (ft_strncmp(*node->cmd, "cd", 3) == 0)
 		return (handle_cd(node, env));
 	if (ft_strncmp(*node->cmd, "echo", 5) == 0)

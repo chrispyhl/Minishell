@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_3exec_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:17:15 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/21 18:09:48 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 16:45:32 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ char	*get_cmd_path(char *cmd, t_env_list *env)
 	struct stat	path_stat;
 
 	if (!cmd)
+		return (NULL);
+	if (cmd[0] == '.' && (!cmd[1] || cmd[1] == '/' || (cmd[1] == '.' && (!cmd[2] || cmd[2] == '/'))))
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
