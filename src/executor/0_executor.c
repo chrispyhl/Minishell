@@ -142,8 +142,8 @@ void	execute_command_list(t_cmd_list *list, t_env_list *env)
 	else
 	{
 		last_pid = handle_piped_cmd(list, env);
-		close_all_heredocs(list);
 		wait_for_all(env, last_pid);
 	}
+	close_all_heredocs(list);
 	setup_signals(); // restore signal handlers
 }

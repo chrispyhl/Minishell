@@ -43,6 +43,30 @@ static void	heredoc_cleanup_and_exit(t_env_list *env, int pipe_fd, int status)
 	exit(status);
 }
 
+static void	close_inherited_fds(int keep_fd)
+{
+	int	fd;
+
+	fd = 3;
+	while (fd < 1024)
+	{
+		if (fd != keep_fd)
+			close(fd);
+		fd++;
+	}
+}
+
+static void	heredoc_sigint_handler(int sig)
+{
+	int	fd;
+
+	(void)sig;
+	fd = 3;
+	while (fd < 1024)
+		close(fd++);
+	exit(130);
+}
+
 static void	heredoc_loop(char *del, t_env_list *env, int pipe_fd, int heredoc_quote)
 {
 	char	*line;
@@ -50,8 +74,9 @@ static void	heredoc_loop(char *del, t_env_list *env, int pipe_fd, int heredoc_qu
 	size_t	d_len;
 
 	d_len = ft_strlen(del);
-	signal(SIGINT, SIG_DFL);  // set signal handler for SIGINT to default
-	signal(SIGQUIT, SIG_IGN); // ignore SIGQUIT
+	close_inherited_fds(pipe_fd);
+	signal(SIGINT, heredoc_sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		line = readline("> "); // prompt for heredoc input

@@ -27,14 +27,40 @@ static void	setup_child_io(int *pipe_fds, int prev_read, t_cmd_node *node)
 	}
 }
 
-static void	pipe_child(int *pipe_fds, int prev_read, t_cmd_node *node, t_env_list *env)
+static void	close_other_heredoc_fds(t_cmd_list *list, t_cmd_node *current_node)
+{
+	t_cmd_node	*cmd;
+	t_file_node	*file;
+
+	if (!list)
+		return ;
+	cmd = list->head;
+	while (cmd)
+	{
+		if (cmd != current_node && cmd->files)
+		{
+			file = cmd->files->head;
+			while (file)
+			{
+				if (file->redir_type == NODE_HEREDOC && file->heredoc_fd != -1)
+					close(file->heredoc_fd);
+				file = file->next;
+			}
+		}
+		cmd = cmd->next;
+	}
+}
+
+static void	pipe_child(t_cmd_list *list, int *pipe_fds, int prev_read,
+		t_cmd_node *node, t_env_list *env)
 {
 	int	ret;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	setup_child_io(pipe_fds, prev_read, node);
-	if (handle_redirections(node, env) == -1) // Redictions überschreiben die Pipes (haben Vorrang) z.b. bei "<" oder ">"
+	close_other_heredoc_fds(list, node);
+	if (handle_redirections(node, env) == -1)
 	{
 		full_cleanup(env);
 		exit(1);
@@ -85,7 +111,7 @@ int	handle_piped_cmd(t_cmd_list *list, t_env_list *env)
 		if (pid == -1)
 			return (perror("chrispyshell: fork"), 1);
 		if (pid == 0)
-			pipe_child(pipe_fds, prev_read, current, env);
+			pipe_child(list, pipe_fds, prev_read, current, env);
 		pipe_parent(pipe_fds, &prev_read, current);
 		current = current->next;
 	}

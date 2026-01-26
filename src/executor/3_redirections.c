@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   3_redirections.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:48:54 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 16:22:02 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/26 13:45:38 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static int	apply_node_redir(t_file_node *current, t_env_list *env)
 		{
 			if (dup2(current->heredoc_fd, STDIN_FILENO) == -1)
 				return (perror("chrispyshell: dup2"), -1);
+			close(current->heredoc_fd); // child no longer needs the heredoc FD after dup2
+			current->heredoc_fd = -1;
 		}
 		return (0);
 	}
@@ -75,14 +77,30 @@ static int	apply_node_redir(t_file_node *current, t_env_list *env)
 int	handle_redirections(t_cmd_node *node, t_env_list *env)
 {
 	t_file_node	*current;
+	t_file_node	*last_input;
 
 	if (!node || !node->files)
 		return (0);
+	// Find the last INPUT or HEREDOC redirection (they conflict)
+	// Only the last one should be applied
+	last_input = NULL;
 	current = node->files->head;
 	while (current)
 	{
-		if (apply_node_redir(current, env) == -1)
-			return (-1);
+		if (current->redir_type == NODE_INPUT || current->redir_type == NODE_HEREDOC)
+			last_input = current;
+		current = current->next;
+	}
+	// Apply redirections, but skip non-last input/heredoc
+	current = node->files->head;
+	while (current)
+	{
+		if (!((current->redir_type == NODE_INPUT || current->redir_type == NODE_HEREDOC)
+			&& current != last_input))
+		{
+			if (apply_node_redir(current, env) == -1)
+				return (-1);
+		}
 		current = current->next;
 	}
 	return (0);
