@@ -93,3 +93,5 @@ obj/parser/99_token_list_utils.o
 obj/executor/4_heredoc.o
 obj/executor/9_4_heredoc_utils.o
 obj/executor/9_b_utils.o
+obj/executor/9_3_1_redir_utils.o
+obj/executor/9_4_2heredoc_utils.o
