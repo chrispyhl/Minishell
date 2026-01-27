@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/23 11:42:22 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 11:32:31 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ int						insert_value(t_token_node *current, char *key_pt,
 int						expand_token(t_token_node *current,
 							t_env_list *env_list, int *i);
 int						check_var_start(char c);
-// expander util 2
 int						remove_quotes(t_token_node *node);
 int						handle_expansion(t_token_node *current,
 							t_env_list *env_list);

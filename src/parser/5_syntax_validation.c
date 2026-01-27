@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   4_syntax_validation.c                              :+:      :+:    :+:   */
+/*   5_syntax_validation.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:20:23 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/19 12:20:26 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 11:34:11 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static int	check_pipe(t_token_node *current)
 {
 	if (!current->next)
 	{
-		// TODO: IMPORTANTE! clarify if MULTILINE HANDLING is mandatory!
 		ft_putstr_fd("chrispyshell: syntax error near unexpected\
 			token 'newline'\n", 2);
 		return (0);

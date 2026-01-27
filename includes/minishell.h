@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/23 11:40:23 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 11:33:39 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # endif
 
 # define _XOPEN_SOURCE 700 // to keep vs code from flaggin struct sigaction
-// TEST WITHOUT THIS BEFORE SUBMITTING! erorr might just be cosmetic
 
 # include "../libft/src/libft.h"
 # include "garbage_collector.h"
@@ -39,9 +38,6 @@ extern volatile sig_atomic_t	g_signal;
 #  define PATH_MAX 4096
 # endif
 
-// FILE STRUCTS
-// -------------------
-// this is not part of Daniel's guide but nice to have imo
 typedef enum e_redir_type
 {
 	NODE_INPUT,  // <
@@ -58,11 +54,7 @@ typedef struct s_file_node
 	int							heredoc_quote;
 	struct s_file_node			*next;
 }								t_file_node;
-/*
-filename = string with filename
-redir_type = shows what kind of operator
-next = pointer to next node
-*/
+
 typedef struct s_file_list
 {
 	t_file_node					*head;
@@ -71,9 +63,6 @@ typedef struct s_file_list
 }								t_file_list;
 // -------------------
 
-// COMMAND STRUCTS
-// -------------------
-// this is not part of Daniel's guide but nice to have imo
 typedef enum e_cmd_type
 {
 	BUILTIN,
@@ -88,12 +77,7 @@ typedef struct s_cmd_node
 	t_file_list					*files;
 	struct s_cmd_node			*next;
 }								t_cmd_node;
-/*
-cmd_type = specifies type of command
-cmd = array of strings for command arguments
-files = pointer to meta struct
-next = pointer to next node in list
-*/
+
 typedef struct s_cmd_list
 {
 	t_cmd_node					*head;
@@ -101,10 +85,7 @@ typedef struct s_cmd_list
 	ssize_t						size;
 	int							heredoc_quote;
 }								t_cmd_list;
-// -------------------
 
-// OUR OWN STRUCTS
-// ~~~~~~~~~~~~~~~~~~~
 typedef struct s_env_node
 {
 	char						*key;
@@ -119,17 +100,15 @@ typedef struct s_env_list
 	ssize_t						size;
 	int							exit_status;
 }								t_env_list;
-// ~~~~~~~~~~~~~~~~~~~
 
-// PARSER
-// maybe the only parser function we need in this header
+// parser
 t_cmd_list						*parser(char *input, t_env_list *env_list);
 
-// EXECUTOR
+// executor
 void							execute_command_list(t_cmd_list *list,
 									t_env_list *env);
 
-// ENVIRONMENTAL VARIABLES LIST
+// envar list
 t_env_node						*new_env_node(char *key, char *value);
 void							env_list_add_back(t_env_list *list,
 									t_env_node *new_node);
