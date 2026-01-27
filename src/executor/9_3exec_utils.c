@@ -6,11 +6,26 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 20:17:15 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/27 11:35:15 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 11:36:49 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
+
+static void	free_string_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
 
 static char	*find_path_in_dirs(char **dirs, char *cmd)
 {
