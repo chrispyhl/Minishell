@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:14:29 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/23 11:42:16 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 10:48:00 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ int	handle_exit(t_cmd_node *node, t_env_list *env, int saved_io[2])
 	}
 	if (!node->cmd[1]) // kein Argument
 		exit_with_status(env, env->exit_status);
-	if (node->cmd[2]) // zu viele Argumente
-		exit_with_status(env, err_msg("too many arguments", 1));
 	error = 0;
 	status = ft_atoll(node->cmd[1], &error);
 	if (error || !is_numeric(node->cmd[1]))
 		exit_with_status(env, err_msg("numeric argument required", 2));
+	if (node->cmd[2]) // zu viele Argumente
+		return(err_msg("too many arguments", 1));
 	exit_with_status(env, (unsigned char)status);
 	return (0);
 }

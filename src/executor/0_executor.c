@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   0_executor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 19:03:23 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 10:23:01 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	execute_command_list(t_cmd_list *list, t_env_list *env)
 	}
 	signal(SIGINT, SIG_IGN); // ignore SIGINT in parent during processing
 	signal(SIGQUIT, SIG_IGN); // ignore SIGQUIT in parent during processing
+	signal(SIGTSTP, SIG_IGN); 
 	current = list->head;
 	if (!current)
 		return ;
