@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:30:50 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/27 10:23:01 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:02:22 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 static void	close_last_hd(int *last_hd_fd)
 {
-	if (*last_hd_fd != -1) // Wenn ein letzter Heredoc-FD existiert
+	if (*last_hd_fd != -1)
 	{
-		close(*last_hd_fd); // Schließe ihn
-		*last_hd_fd = -1; // Setze den Wert zurück
+		close(*last_hd_fd);
+		*last_hd_fd = -1;
 	}
 }
 
-static int	process_heredoc_file(t_file_node *file, t_env_list *env, int *last)
+static int	p_hd_file(t_file_node *file, t_env_list *env, int *last)
 {
-	close_last_hd(last); // Schließe den vorherigen Heredoc-FD, falls vorhanden
-	if (file->heredoc_fd != -1) // Wenn dieser Heredoc-FD bereits geöffnet ist
+	close_last_hd(last);
+	if (file->heredoc_fd != -1)
 	{
-		close(file->heredoc_fd); // Schließe ihn
-		file->heredoc_fd = -1; // Setze den Wert zurück
+		close(file->heredoc_fd);
+		file->heredoc_fd = -1;
 	}
-	file->heredoc_fd = fork_heredoc(file->filename, env, file->heredoc_quote); // Erstelle neuen Heredoc-FD
-	if (file->heredoc_fd == -1) // Fehlerbehandlung
+	file->heredoc_fd = fork_heredoc(file->filename, env, file->heredoc_quote);
+	if (file->heredoc_fd == -1)
 		return (-1);
-	*last = file->heredoc_fd; // Aktualisiere den letzten Heredoc-FD
+	*last = file->heredoc_fd;
 	return (0);
 }
 
@@ -41,7 +41,7 @@ static int	process_cmd_heredocs(t_cmd_node *cmd, t_env_list *env)
 	t_file_node	*file;
 	int			last_hd_fd;
 
-	if (!cmd || !cmd->files) // Keine Dateien zum Verarbeiten
+	if (!cmd || !cmd->files)
 		return (0);
 	file = cmd->files->head;
 	last_hd_fd = -1;
@@ -49,11 +49,11 @@ static int	process_cmd_heredocs(t_cmd_node *cmd, t_env_list *env)
 	{
 		if (file->redir_type == NODE_HEREDOC)
 		{
-			if (process_heredoc_file(file, env, &last_hd_fd) == -1) // Fehlerbehandlung
+			if (p_hd_file(file, env, &last_hd_fd) == -1)
 				return (-1);
 		}
-		else if (file->redir_type == NODE_INPUT) // Wenn Input-Redirektion
-			close_last_hd(&last_hd_fd); // Schließe den letzten Heredoc-FD
+		else if (file->redir_type == NODE_INPUT)
+			close_last_hd(&last_hd_fd);
 		file = file->next;
 	}
 	return (0);
@@ -78,16 +78,16 @@ void	execute_command_list(t_cmd_list *list, t_env_list *env)
 	t_cmd_node	*current;
 	pid_t		last_pid;
 
-	if (!list || !list->head) // Prüfe, ob die Liste leer ist
+	if (!list || !list->head)
 		return ;
-	if (pre_process_heredocs(list, env) == -1) // verarbeite alle Heredocs vor dem Ausführen der Befehle
+	if (pre_process_heredocs(list, env) == -1)
 	{
-		close_all_heredocs(list); // wenn error, schließe alle Heredocs
+		close_all_heredocs(list);
 		return ;
 	}
-	signal(SIGINT, SIG_IGN); // ignore SIGINT in parent during processing
-	signal(SIGQUIT, SIG_IGN); // ignore SIGQUIT in parent during processing
-	signal(SIGTSTP, SIG_IGN); 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
 	current = list->head;
 	if (!current)
 		return ;
@@ -99,5 +99,5 @@ void	execute_command_list(t_cmd_list *list, t_env_list *env)
 		wait_for_all(env, last_pid);
 	}
 	close_all_heredocs(list);
-	setup_signals(); // restore signal handlers
+	setup_signals();
 }

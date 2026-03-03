@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:47 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/27 11:33:39 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:13:12 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ extern volatile sig_atomic_t	g_signal;
 
 typedef enum e_redir_type
 {
-	NODE_INPUT,  // <
-	NODE_OUTPUT, // >
-	NODE_APPEND, // >>
-	NODE_HEREDOC // <<
+	NODE_INPUT,
+	NODE_OUTPUT,
+	NODE_APPEND,
+	NODE_HEREDOC
 }								t_redir_type;
 
 typedef struct s_file_node

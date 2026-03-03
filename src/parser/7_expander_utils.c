@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:20:36 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/27 11:28:05 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:55 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static t_expander_state	get_state(char letter, t_expander_state mode_curr)
 		if (letter == '\"')
 			return (STATE_DEFAULT);
 	}
-	// if nothing fits, original value is returned
 	return (mode_curr);
 }
 
@@ -104,10 +103,6 @@ int	handle_expansion(t_token_node *current, t_env_list *env_list)
 	while (current->token[i])
 	{
 		state = get_state(current->token[i], state);
-		// we encounter a $-sign
-		// --> are we in single-quote-mode?
-		// no? is it a viable envar? (depending on following char)
-		// 1) yes = expand; 2) no = just increment, keep as is
 		if (current->token[i] == '$' && state != STATE_SINGLE
 			&& check_var_start(current->token[i + 1]) == 1)
 		{

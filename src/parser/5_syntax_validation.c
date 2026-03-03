@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 12:20:23 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/27 11:34:11 by craabe           ###   ########.fr       */
+/*   Updated: 2026/03/03 14:59:48 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static int	check_pipe(t_token_node *current)
 	if (!current->next)
 	{
 		ft_putstr_fd("chrispyshell: syntax error near unexpected\
-			token 'newline'\n", 2);
+			token 'newline'\n",
+						2);
 		return (0);
 	}
 	if (current->next->token_type == T_PIPE)
@@ -33,8 +34,9 @@ static int	check_redir(t_token_node *current)
 {
 	if (!current->next)
 	{
-		ft_putstr_fd("chrispyshell: syntax error near unexpected\
-			token 'newline'\n", 2);
+		ft_putstr_fd("chrispyshell: syntax error near unexpected "
+						"token 'newline'\n",
+						2);
 		return (0);
 	}
 	if (current->next->token_type != T_WORD)
@@ -60,11 +62,9 @@ int	check_token_syntax(t_token_list *token_list)
 	}
 	while (current)
 	{
-		// if the current token is a pipe,
 		if (current->token_type == T_PIPE)
 			if (check_pipe(current) == 0)
 				return (0);
-		// if the current token is a redir/heredoc
 		if (current->token_type >= T_REDIR_IN
 			&& current->token_type <= T_HEREDOC)
 			if (check_redir(current) == 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_handle_builtins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:11:53 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 19:57:05 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:06:40 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ static void	update_env_pwd(t_env_list *env, char *old_pwd)
 {
 	char	*new_pwd;
 
-	new_pwd = getcwd(NULL, 0); // Hole das aktuelle Arbeitsverzeichnis
+	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
 		return ;
-	set_env_value(env, "OLDPWD", old_pwd); // Aktualisiere OLDPWD
-	set_env_value(env, "PWD", new_pwd); // Aktualisiere PWD
+	set_env_value(env, "OLDPWD", old_pwd);
+	set_env_value(env, "PWD", new_pwd);
 	free(new_pwd);
 }
 
@@ -45,23 +45,23 @@ int	handle_cd(t_cmd_node *node, t_env_list *env)
 	char	*path;
 	char	old_pwd[1024];
 
-	if (node->cmd[1] && node->cmd[2]) // Zu viele Argumente
+	if (node->cmd[1] && node->cmd[2])
 		return (err_msg("too many arguments", 1));
-	if (!getcwd(old_pwd, sizeof(old_pwd))) // speichere das aktuelle Verzeichnis
+	if (!getcwd(old_pwd, sizeof(old_pwd)))
 		return (1);
 	path = node->cmd[1];
-	if (!path || !*path) // kein Argument gegeben oder leeres Argument
+	if (!path || !*path)
 		return (err_msg("HOME not set", 1));
-	if (path && ft_strncmp(path, "-", 2) == 0) // cd - zu OLDPWD wechseln
+	if (path && ft_strncmp(path, "-", 2) == 0)
 	{
 		path = get_env_value(env, "OLDPWD");
 		if (!path)
 			return (err_msg("OLDPWD not set", 1));
-		ft_putendl_fd(path, 1); // gebe neues Verzeichnis aus
+		ft_putendl_fd(path, 1);
 	}
-	if (chdir(path) != 0) // wechsle das Verzeichnis
+	if (chdir(path) != 0)
 		return (perror("chrispyshell: cd"), 1);
-	update_env_pwd(env, old_pwd); // aktualisiere PWD und OLDPWD in der Umgebung
+	update_env_pwd(env, old_pwd);
 	return (0);
 }
 
@@ -70,22 +70,22 @@ int	handle_echo(t_cmd_node *node)
 	int		i;
 	int		n;
 
-	n = 1; // standardmäßig new line ausgeben
-	i = 1; // starte bei erstem Argument
-	while (node->cmd[i] && is_valid_n(node->cmd[i])) // schleife durch alle -n Argumente
+	n = 1;
+	i = 1;
+	while (node->cmd[i] && is_valid_n(node->cmd[i]))
 	{
-		n = 0; // kein new line ausgeben
+		n = 0;
 		i++;
 	}
-	while (node->cmd[i]) // gebe alle restlichen Argumente aus
+	while (node->cmd[i])
 	{
 		ft_putstr_fd(node->cmd[i], 1);
 		if (node->cmd[i + 1])
-			ft_putstr_fd(" ", 1); // leerzeichen zwischen Argumenten
+			ft_putstr_fd(" ", 1);
 		i++;
 	}
 	if (n == 1)
-		ft_putstr_fd("\n", 1); // new line am Ende, falls -n nicht gesetzt ist
+		ft_putstr_fd("\n", 1);
 	return (0);
 }
 
@@ -95,9 +95,9 @@ int	handle_export(t_cmd_node *node, t_env_list *env)
 	int	exit_status;
 
 	exit_status = 0;
-	if (!node->cmd[1]) // kein Argument
+	if (!node->cmd[1])
 	{
-		print_sorted_env(env); // gebe alle Umgebungsvariablen sortiert aus
+		print_sorted_env(env);
 		return (0);
 	}
 	i = 1;

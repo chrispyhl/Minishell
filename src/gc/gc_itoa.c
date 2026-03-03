@@ -6,12 +6,11 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 12:57:20 by cpohl             #+#    #+#             */
-/*   Updated: 2025/12/30 15:31:15 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:12:10 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "garbage_collector.h"
-
 
 static unsigned int	handle_neg(int n, char *result)
 {

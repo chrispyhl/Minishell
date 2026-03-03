@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_2_1more_env_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 16:43:08 by chris             #+#    #+#             */
-/*   Updated: 2026/01/26 19:54:57 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:04:55 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	append_env_value(t_env_list *env, char *key, char *value)
 	current = env->head;
 	while (current)
 	{
-		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0) // Schlüssel gefunden
+		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
 		{
 			if (!value)
 				return (1);

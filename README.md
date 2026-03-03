@@ -62,8 +62,6 @@ valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=
 
 TL;DR: When testing the program via Valgrind, follow the two instructions marked with [!] above.
 
-[NOCH WAS? SUBJECT SCHLÄGT VOR: usage examples, feature list, technical choices]
-
 Technical Choices:
 Heredoc Pre-Processing
 A significant architectural decision was to handle all Heredocs before initiating the command execution pipeline. We collect all required inputs in the parent process, storing the resulting file descriptors directly within the command nodes. This prevents terminal conflicts during piped execution and ensures that signal handling (e.g., Ctrl+C to cancel a heredoc) remains stable and predictable.

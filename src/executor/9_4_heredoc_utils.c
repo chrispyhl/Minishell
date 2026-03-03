@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   9_4_heredoc_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 15:38:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 19:15:38 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:13:25 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 
-char	*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote)
+char	*expand_hd_line(char *line, t_env_list *env, int heredoc_quote)
 {
 	char	*new_line;
 	int		i;
 
-	if (heredoc_quote) // no expansion needed
+	if (heredoc_quote)
 		return (ft_strdup(line));
-	new_line = ft_strdup(""); // start with empty string
+	new_line = ft_strdup("");
 	if (!new_line)
 		return (NULL);
 	i = 0;

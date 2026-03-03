@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_0_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 19:29:10 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 18:54:57 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:04:44 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static void	handle_signal_output(int status)
 {
-	if (WIFSIGNALED(status)) // wenn durch Signal beendet
+	if (WIFSIGNALED(status))
 	{
-		if (WTERMSIG(status) == SIGINT) // Ctrl+C
-			write(1, "\n", 1); // neue Zeile ausgeben
-		else if (WTERMSIG(status) == SIGQUIT) // Ctrl+'\'
+		if (WTERMSIG(status) == SIGINT)
+			write(1, "\n", 1);
+		else if (WTERMSIG(status) == SIGQUIT)
 			write(1, "Quit (core dumped)\n", 19);
 	}
 }
@@ -34,14 +34,14 @@ void	wait_for_all(t_env_list *env, pid_t last_pid)
 		return ;
 	while (1)
 	{
-		res = waitpid(-1, &status, 0); // auf beliebigen Kindprozess warten
-		if (res <= 0) // Fehler oder keine Kindprozesse mehr
+		res = waitpid(-1, &status, 0);
+		if (res <= 0)
 			break ;
-		if (res == last_pid) // letzter Prozess
-			last_status = status; // Status speichern
-		handle_signal_output(status); // Signalausgabe behandeln
+		if (res == last_pid)
+			last_status = status;
+		handle_signal_output(status);
 	}
-	env->exit_status = get_exit_status(last_status); // Exit-Status setzen
+	env->exit_status = get_exit_status(last_status);
 }
 
 int	err_msg(char *msg, int status)

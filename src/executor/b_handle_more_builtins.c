@@ -6,7 +6,7 @@
 /*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:14:29 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/27 10:48:00 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:10:12 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	handle_env(t_env_list *env)
 	current = env->head;
 	while (current != NULL)
 	{
-		if (current->value != NULL) // nur Variablen mit Werten drucken
+		if (current->value != NULL)
 		{
 			ft_putstr_fd(current->key, 1);
 			ft_putstr_fd("=", 1);
@@ -44,21 +44,21 @@ int	handle_exit(t_cmd_node *node, t_env_list *env, int saved_io[2])
 	long long	status;
 	int			error;
 
-	if (saved_io) // falls es von einem builtin aufgerufen wurde
+	if (saved_io)
 	{
 		if (saved_io[0] != -1)
 			close(saved_io[0]);
 		if (saved_io[1] != -1)
 			close(saved_io[1]);
 	}
-	if (!node->cmd[1]) // kein Argument
+	if (!node->cmd[1])
 		exit_with_status(env, env->exit_status);
 	error = 0;
 	status = ft_atoll(node->cmd[1], &error);
 	if (error || !is_numeric(node->cmd[1]))
 		exit_with_status(env, err_msg("numeric argument required", 2));
-	if (node->cmd[2]) // zu viele Argumente
-		return(err_msg("too many arguments", 1));
+	if (node->cmd[2])
+		return (err_msg("too many arguments", 1));
 	exit_with_status(env, (unsigned char)status);
 	return (0);
 }
@@ -82,7 +82,7 @@ int	handle_pwd(void)
 {
 	char	*cwd;
 
-	cwd = getcwd(NULL, 0); // get current working directory
+	cwd = getcwd(NULL, 0);
 	if (cwd != NULL)
 	{
 		ft_putstr_fd(cwd, 1);

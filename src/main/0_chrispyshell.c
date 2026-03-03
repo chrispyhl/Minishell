@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   chrispyshell.c                                     :+:      :+:    :+:   */
+/*   0_chrispyshell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:28:28 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/21 17:58:00 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 11:58:30 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 volatile sig_atomic_t	g_signal = 0;
-// volatile: tells compiler optimization:
-// "don't skip scanning this value again for better effiency! might change anytime!"
-// sig_atomic_t: integer type that guarantees uninterrupted reading,
-// regardless of hardware
 
 static int	main_setup(char *argv[], char **envp, t_env_list **env_list)
 {
@@ -49,11 +45,7 @@ static int	chrispyshell_loop(t_env_list *env_list)
 	char		*input;
 	t_cmd_list	*cmd_list;
 
-	// note: this sync BEFORE readline is only necessary if
-	// UI is supposed to change (color changes for example)
-	// sync_exit_status(env_list);
 	input = readline(TEAL "chrispyshell$ " RESET);
-	// handles ctrl + D
 	sync_exit_status(env_list);
 	if (!input)
 	{
@@ -69,7 +61,7 @@ static int	chrispyshell_loop(t_env_list *env_list)
 		free(input);
 	}
 	else
-		free(input); // free input upon after blank line ENTER
+		free(input);
 	gc_free();
 	return (0);
 }

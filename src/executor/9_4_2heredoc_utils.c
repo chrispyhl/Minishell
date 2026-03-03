@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_4_2heredoc_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 19:08:45 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 19:18:34 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:13:19 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ void	handle_heredoc_eof(char *del, t_env_list *env, int pipe_fd)
 	heredoc_cleanup_and_exit(env, pipe_fd, 0);
 }
 
-void	process_heredoc_line(char *line, t_env_list *env, int pipe_fd, int hd_quote)
+void	p_hd_line(char *line, t_env_list *env, int pipe_fd, int hd_quote)
 {
 	char	*expanded;
 
-	expanded = expand_heredoc_line(line, env, hd_quote); // expand line
-	ft_putendl_fd(expanded, pipe_fd); // write to pipe
+	expanded = expand_hd_line(line, env, hd_quote);
+	ft_putendl_fd(expanded, pipe_fd);
 	free(line);
 	free(expanded);
 }

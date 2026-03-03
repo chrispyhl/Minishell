@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 16:38:26 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/27 11:32:31 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:13:37 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 
 typedef enum e_token_type
 {
-	T_WORD,      // general text (cmds, args, filenames)
-	T_PIPE,      // |
-	T_REDIR_IN,  // <
-	T_REDIR_OUT, // >
-	T_REDIR_APP, // >>
-	T_HEREDOC    // <<
+	T_WORD,
+	T_PIPE,
+	T_REDIR_IN,
+	T_REDIR_OUT,
+	T_REDIR_APP,
+	T_HEREDOC
 }						t_token_type;
 
 typedef struct s_token_node

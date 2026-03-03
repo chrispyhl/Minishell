@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   7_expander_utils.c                                 :+:      :+:    :+:   */
+/*   8_expander_utils_2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:29 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/27 11:27:44 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:01:07 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 
-// helper is needed to find the value corresponding to the key in the token_node
 char	*find_env_value(t_env_list *env_list, char *token, int len)
 {
 	t_env_node	*current;
@@ -28,20 +27,16 @@ char	*find_env_value(t_env_list *env_list, char *token, int len)
 	return (NULL);
 }
 
-// little helper is needed to get the right key string len
-// starts with $, ends with space, equal sign or null term
 int	get_key_len(char *token)
 {
 	int	i;
 
-	i = 1; // start at 1 to skip $
-	// edge cases $? and $1, $2, $3 ...
+	i = 1;
 	if (token[i] == '?' || ft_isdigit(token[i]) == 1)
 		return (1);
-	// aside from ?, envars consist of num. and alph. chars
 	while (ft_isalnum(token[i]) == 1 || token[i] == '_')
 		i++;
-	return (i - 1); // -1 since we do not want to include null term
+	return (i - 1);
 }
 
 int	insert_value(t_token_node *current, char *key_pt, char *value, int key_len)

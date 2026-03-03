@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   98_lexer_utils.c                                   :+:      :+:    :+:   */
+/*   6_lexer_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:34 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/12 13:48:14 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:46 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	find_quote_end(char *seg, int *j)
 	(*j)++;
 	while (seg[*j] && seg[*j] != type)
 		(*j)++;
-	// increment once more so that ft_substr includes the double quote
 	if (seg[*j] == type)
 		(*j)++;
 	else
@@ -31,8 +30,6 @@ int	find_quote_end(char *seg, int *j)
 	return (0);
 }
 
-// populates nodes with the respective characters
-// depending on the passed string segment
 int	create_redir_node_content(char *seg, char **node_content,
 		t_token_type *redir_type)
 {

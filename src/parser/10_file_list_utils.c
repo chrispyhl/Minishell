@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   96_file_list_utils.c                               :+:      :+:    :+:   */
+/*   10_file_list_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:24 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/23 12:37:10 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:01:44 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ t_file_node	*create_file_node(t_token_node *current, t_redir_type redir_type)
 	file_node = ft_malloc(1, sizeof(t_file_node));
 	if (!file_node)
 		return (NULL);
-	// copy instead of assignment so that filename can be freed while this stays
 	file_node->filename = gc_strdup(filename);
 	if (!file_node->filename)
 		return (NULL);
@@ -56,9 +55,7 @@ void	file_list_add_back(t_file_list *file_list, t_file_node *file_node)
 	}
 	else
 	{
-		// add new_node to chain, targeting old tail
 		file_list->tail->next = file_node;
-		// new_node = new tail
 		file_list->tail = file_node;
 	}
 	file_list->size++;

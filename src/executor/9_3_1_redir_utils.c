@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   9_3_1_redir_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 19:29:58 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 19:54:10 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:05:10 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int	check_is_directory(char *filename, int type)
 {
 	struct stat	info;
 
-	if ((type == NODE_OUTPUT || type == NODE_APPEND) // nur für Output und Append
-		&& stat(filename, &info) == 0 && S_ISDIR(info.st_mode)) // stat erfolgreich und ist Verzeichnis
-	{ // (stat holt meta daten -> 0, -1) || S_ISDIR prüft ob Verzeichnis
+	if ((type == NODE_OUTPUT || type == NODE_APPEND)
+		&& stat(filename, &info) == 0 && S_ISDIR(info.st_mode))
+	{
 		ft_putstr_fd("chrispyshell: ", 2);
 		ft_putstr_fd(filename, 2);
 		ft_putendl_fd(": Is a directory", 2);

@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 13:08:06 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/27 11:34:00 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:21:29 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct s_pipe_info
 	int			prev_read;
 	t_cmd_node	*node;
 }				t_pipe_info;
-
 
 // EXECUTOR CORE
 
@@ -69,12 +68,11 @@ int			open_file(char *filename, int redir_type);
 void		apply_fd_redir(int fd, int type);
 int			check_is_directory(char *filename, int type);
 
-
 // Heredoc
 
 int			fork_heredoc(char *delimiter, t_env_list *env, int heredoc_quote);
 
-char		*expand_heredoc_line(char *line, t_env_list *env, int heredoc_quote);
+char		*expand_hd_line(char *line, t_env_list *env, int heredoc_quote);
 void		close_all_heredocs(t_cmd_list *list);
 char		*append_char(char *line, int *i, char *new_line);
 char		*append_var(char *line, int *i, t_env_list *env, char *new_line);
@@ -82,7 +80,7 @@ int			get_var_len(char *str);
 void		close_inherited_fds(int keep_fd);
 void		heredoc_sigint_handler(int sig);
 void		handle_heredoc_eof(char *del, t_env_list *env, int pipe_fd);
-void		process_heredoc_line(char *line, t_env_list *env, int pipe_fd, int hd_quote);
+void		p_hd_line(char *line, t_env_list *env, int pipe_fd, int hd_quote);
 void		heredoc_cleanup_and_exit(t_env_list *env, int pipe_fd, int status);
 
 // ENV UTILITIES
@@ -105,7 +103,5 @@ int			err_msg(char *msg, int status);
 int			get_exit_status(int status);
 void		full_cleanup(t_env_list *env);
 void		update_underscore(t_env_list *env, char **cmd);
-
-// Vorrübergehend
 
 #endif

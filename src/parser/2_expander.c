@@ -6,7 +6,7 @@
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:32:15 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/23 14:02:52 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:12 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,11 @@ static int	handle_tilde(t_token_node *current, t_env_list *env_list)
 	return (0);
 }
 
-// static int	handle_heredoc_expansion(t_token_node *current,
-// 		t_env_list *env_list)
-// {
-// 	if (ft_strchr(current->token, '\'') || ft_strchr(current->token, '\"'))
-// 		current->heredoc_quote = 1;
-// 	// only expand delimiter if no quotes where found
-// 	if (current->heredoc_quote == 0)
-// 		if (handle_expansion(current, env_list) == -1)
-// 			return (-1);
-// 	return (0);
-// }
-
 static int	expand_word(t_token_node *current, t_env_list *env_list,
 		int *heredoc_found)
 {
 	if (*heredoc_found == 1)
 	{
-		// if (handle_heredoc_expansion(current, env_list) == -1)
-		// 	return (-1);
 		if (ft_strchr(current->token, '\'') || ft_strchr(current->token, '\"'))
 			current->heredoc_quote = 1;
 		*heredoc_found = 0;
@@ -75,7 +61,6 @@ int	expander(t_token_list *token_list, t_env_list *env_list)
 	heredoc_found = 0;
 	while (current)
 	{
-		// current->heredoc_quote = quotes_found;
 		if (current->token_type == T_HEREDOC)
 			heredoc_found = 1;
 		else if (current->token_type != T_WORD)
@@ -87,7 +72,6 @@ int	expander(t_token_list *token_list, t_env_list *env_list)
 		else if (current->token_type == T_WORD)
 			if (expand_word(current, env_list, &heredoc_found) == -1)
 				return (-1);
-		// quotes_found = current->heredoc_quote;
 		current = current->next;
 	}
 	return (0);

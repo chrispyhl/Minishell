@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   2_piping.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpohl <cpohl@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cpohl <cpohl@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 13:32:02 by cpohl             #+#    #+#             */
-/*   Updated: 2026/01/26 20:06:35 by cpohl            ###   ########.fr       */
+/*   Updated: 2026/01/27 12:07:23 by cpohl            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
-
 
 static void	setup_child_io(t_pipe_info *info)
 {
@@ -38,7 +37,7 @@ static void	close_other_heredoc_fds(t_cmd_list *list, t_cmd_node *current_node)
 	cmd = list->head;
 	while (cmd)
 	{
-		if (cmd != current_node && cmd->files) // nur andere Befehle
+		if (cmd != current_node && cmd->files)
 		{
 			file = cmd->files->head;
 			while (file)
@@ -71,28 +70,28 @@ static void	pipe_child(t_cmd_list *list, t_pipe_info *info, t_env_list *env)
 		full_cleanup(env);
 		exit(ret);
 	}
-	if (info->node->cmd == NULL || info->node->cmd[0] == NULL) // empty command
+	if (info->node->cmd == NULL || info->node->cmd[0] == NULL)
 	{
 		full_cleanup(env);
 		exit(0);
 	}
-	execute_binary(info->node, env); // execute external command
+	execute_binary(info->node, env);
 }
 
 static int	pipe_parent(int *pipe_fds, int *prev_read, t_cmd_node *node)
 {
-	if (*prev_read >= 0) // wenn es ein vorheriges Lese-Ende der Pipe gibt
-		close(*prev_read); // schließe den vorherigen Lese-Ende der Pipe
+	if (*prev_read >= 0)
+		close(*prev_read);
 	if (node->next)
 	{
-		if (pipe_fds[1] >= 0) // wenn es eine nächste Pipe gibt
-			close(pipe_fds[1]); // schließe das Schreib-Ende der aktuellen Pipe im Parent
-		*prev_read = pipe_fds[0]; // speichere das Lese-Ende für den nächsten Befehl
+		if (pipe_fds[1] >= 0)
+			close(pipe_fds[1]);
+		*prev_read = pipe_fds[0];
 	}
 	else
 	{
 		if (pipe_fds[0] >= 0)
-			close(pipe_fds[0]); // schließe das Lese-Ende der aktuellen Pipe im Parent
+			close(pipe_fds[0]);
 	}
 	return (0);
 }
@@ -111,12 +110,12 @@ int	handle_piped_cmd(t_cmd_list *list, t_env_list *env)
 	info.pipe_fds = pipe_fds;
 	while (current)
 	{
-		if (current->next && pipe(pipe_fds) == -1) // Wenn noch ein Befehl folgt, erstelle eine Pipe
+		if (current->next && pipe(pipe_fds) == -1)
 			return (perror("chrispyshell: pipe"), 1);
-		pid = fork(); // Erstelle einen neuen Prozess
+		pid = fork();
 		if (pid == -1)
 			return (perror("chrispyshell: fork"), 1);
-		info.node = current; // Setze den aktuellen Knoten im Pipe-Info
+		info.node = current;
 		if (pid == 0)
 			pipe_child(list, &info, env);
 		pipe_parent(pipe_fds, &info.prev_read, current);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   99_token_list_utils.c                              :+:      :+:    :+:   */
+/*   11_token_list_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craabe <craabe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:19:39 by craabe            #+#    #+#             */
-/*   Updated: 2026/01/21 11:58:15 by craabe           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:05:19 by craabe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,6 @@ t_token_node	*create_token_node(char *content, t_token_type type)
 {
 	t_token_node	*node;
 
-	/*
-	malloc: calculates the total bytes needed for your 4 fields:
-	pointer *token, enum type, pointer *next, pointer *prev.
-	*/
 	node = (t_token_node *)ft_malloc(1, sizeof(t_token_node));
 	if (!node)
 		return (NULL);
