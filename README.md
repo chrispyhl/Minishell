@@ -73,7 +73,7 @@ The subject states:
 
 > The readline() function may cause memory leaks, but you are not required to fix them. However, this does not mean your own code, yes the code you wrote, can have memory leaks.
 
-**[!]** To suppress memory leak warnings concerning `readline()`, create a `sub.sub` file on root level containing the following lines:
+To suppress memory leak warnings concerning `readline()`, create a `sub.sub` file on root level containing the following lines:
 
 ```
 {
@@ -84,13 +84,12 @@ The subject states:
 }
 ```
 
-**[!]** Execute Valgrind in terminal via:
+Execute Valgrind in terminal via:
 
 ```bash
 valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=sub.sub ./minishell
 ```
 
-**TL;DR:** When testing the program via Valgrind, follow the two instructions marked with **[!]** above.
 
 ## Technical Choices
 
