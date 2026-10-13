@@ -38,13 +38,11 @@ The terminal prompt should change to a teal `chrispyshell$`, meaning the program
 
 ## Resources
 
-We used the very helpful Notion page of two 42 peer students (dreule, gzovkic; with their explicit permission) for orientation while starting to work on the project. We primarily adapted their git commit commentary practices and some of their structs into our project.
-
-Link: <https://foregoing-loan-6f5.notion.site/Minishell-75e85da6eec74129b14eac810c01c686>
+We used the very helpful [Notion page](https://foregoing-loan-6f5.notion.site/Minishell-75e85da6eec74129b14eac810c01c686) of two 42 peer students (dreule, gzovkic; with their explicit permission) for orientation while starting to work on the project. We primarily adapted their git commit commentary practices and some of their structs into our project.
 
 Regarding use of AI, we mainly worked with Gemini for guidance through this project, which proved to have an enormous scope for our experience level. We strictly forbid Gemini from providing us with completed code and solely asked for guiding instructions. All the code contained in this project is self-written. Furthermore, Gemini was used to automate minor chores (such as extracting function declarations from a `.c` file for use in a header) or to quickly clarify unknown programming-related concepts.
 
-To ensure the robustness of chrispyshell, we utilized the minishell_tester from LucasKuhn (<https://github.com/LucasKuhn/minishell_tester>), alongside custom stress tests. We focused heavily on:
+To ensure the robustness of chrispyshell, we utilized a [minishell_tester by LucasKuhn](https://github.com/LucasKuhn/minishell_tester), alongside custom stress tests. We focused heavily on:
 
 - **File Descriptor Management:** Ensuring all pipes and redirections are closed even during execution failures or early exits.
 - **Signal Consistency:** Verifying that the parent shell remains responsive after child processes are terminated by signals.
