@@ -67,8 +67,6 @@ We would like to credit dreule and gzovkic for their conceptual guidance and ins
 
 ### Memory Leak Checks via Valgrind
 
-(TL;DR at the bottom)
-
 The subject states:
 
 > The readline() function may cause memory leaks, but you are not required to fix them. However, this does not mean your own code, yes the code you wrote, can have memory leaks.
